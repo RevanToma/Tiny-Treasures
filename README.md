@@ -1,4 +1,4 @@
-# Tiny Treasure
+# Tiny Treasures
 
 ### Description
 
