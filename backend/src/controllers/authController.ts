@@ -3,6 +3,7 @@ import { catchAsync } from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import User, { UserDocument } from '../models/userModel';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
+import passport from 'passport';
 import { CustomRequest } from '../utils/expressInterfaces';
 
 interface DecodedJwt extends JwtPayload {
@@ -21,7 +22,8 @@ const createAndSendJWT = (
   statusCode: number,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
+  redirect: boolean = false
 ): void => {
   const token = signToken(user.id);
   if (!token)
@@ -40,13 +42,17 @@ const createAndSendJWT = (
 
   user.password = undefined;
 
-  res.status(statusCode).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  });
+  if (redirect) {
+    res.redirect('/profile');
+  } else {
+    res.status(statusCode).json({
+      status: 'success',
+      token,
+      data: {
+        user,
+      },
+    });
+  }
 };
 
 export const signUp = catchAsync(
@@ -55,6 +61,7 @@ export const signUp = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    if (req.body.method) delete req.body.method;
     const newUser: UserDocument = await User.create(req.body);
 
     createAndSendJWT(newUser, 200, req, res, next);
@@ -68,6 +75,17 @@ export const signIn = catchAsync(
     next: NextFunction
   ): Promise<void> => {
     createAndSendJWT(req.user, 200, req, res, next);
+  }
+);
+
+// FIXME:
+export const googleAuthCallback = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    createAndSendJWT(req.user, 200, req, res, next, true);
   }
 );
 

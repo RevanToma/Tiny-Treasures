@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs';
 import AppError from '../utils/appError';
 
 export interface UserDocument extends Document {
+  method: string;
+  googleId: string;
   name: string;
   email: string;
   password: string | undefined;
@@ -22,6 +24,12 @@ export interface UserDocument extends Document {
 
 const userSchema = new Schema<UserDocument>(
   {
+    method: {
+      type: String,
+      enum: ['google', 'email'],
+      default: 'email',
+    },
+    googleId: String,
     name: {
       type: String,
       required: [true, 'Please provide a name.'],
@@ -35,13 +43,13 @@ const userSchema = new Schema<UserDocument>(
     },
     password: {
       type: String,
-      required: [true, 'Please provide a password.'],
+      // required: [true, 'Please provide a password.'],
       minLength: [8, 'Passwords must have at least 8 characters'],
       select: false,
     },
     passwordConfirm: {
       type: String,
-      required: [true, 'Please confirm your password.'],
+      // required: [true, 'Please confirm your password.'],
       minLength: [8, 'Passwords must have at least 8 characters'],
       select: false,
     },
@@ -80,8 +88,11 @@ const userSchema = new Schema<UserDocument>(
 // });
 
 userSchema.pre('save', async function (next) {
-  console.log(2);
-  if (!this.isNew) return next();
+  if (!this.isNew || this.method === 'google') return next();
+
+  if (!this.password || !this.passwordConfirm) {
+    return next(new AppError('Please provide and confirm your password', 400));
+  }
 
   if (this.password !== this.passwordConfirm) {
     return next(new AppError('The provided passwords do not match!', 400));
