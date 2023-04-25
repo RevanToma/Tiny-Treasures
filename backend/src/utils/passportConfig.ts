@@ -12,6 +12,7 @@ export const passportConfig = (passport: passport.PassportStatic) => {
       {
         clientID: process.env.OA_CLIENT_ID!,
         clientSecret: process.env.OA_CLIENT_SECRET!,
+        // FIXME:  PROD
         callbackURL: 'http://localhost:8000/auth/google/callback',
         passReqToCallback: true,
       },

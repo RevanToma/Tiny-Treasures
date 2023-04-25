@@ -23,6 +23,7 @@ const sendErrorProd: ErrorRequestHandler = (err, req, res): void => {
   }
 };
 
+// TODO:  Handle specific error messages
 export const globalErrorHandler: ErrorRequestHandler = (
   err,
   req,

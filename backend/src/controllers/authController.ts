@@ -24,12 +24,15 @@ const createAndSendJWT = (
   next: NextFunction,
   redirect: boolean = false
 ): void => {
+  // create new token
   const token = signToken(user.id);
-  if (!token)
+  if (!token) {
     return next(
       new AppError('There was a problem signing you in. Try again later', 400)
     );
+  }
 
+  // create cookie
   const jwtExpires = process.env.JWT_COOKIE_EXPIRES_IN
     ? parseInt(process.env.JWT_COOKIE_EXPIRES_IN)
     : 90;
@@ -39,8 +42,10 @@ const createAndSendJWT = (
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
 
+  // remove password from response
   user.password = undefined;
 
+  // redirect if logged in from google
   if (redirect) {
     res.redirect('/profile');
   } else {
@@ -60,7 +65,9 @@ export const signUp = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    // Removes the method property if user tries to add it
     if (req.body.method) delete req.body.method;
+
     const newUser: UserDocument = await User.create(req.body);
 
     createAndSendJWT(newUser, 200, req, res, next);
@@ -77,7 +84,7 @@ export const signIn = catchAsync(
   }
 );
 
-// FIXME:
+// FIXME: Don't really need catchAsync but getting errors without
 export const googleAuthCallback = catchAsync(
   async (
     req: CustomRequest,
@@ -89,6 +96,7 @@ export const googleAuthCallback = catchAsync(
 );
 
 export const logout: RequestHandler = (req, res, next): void => {
+  // renames cookie to invalidate and sets to expire in 10s
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -152,6 +160,7 @@ export const verifyPassword = catchAsync(
       return next(new AppError('Pleease provide your password!', 401));
     }
 
+    // builds query for change email or change password
     const query = email ? User.findOne({ email }) : User.findById(req.user.id);
 
     const user: UserDocument | null = await query.select('+password');
@@ -160,11 +169,14 @@ export const verifyPassword = catchAsync(
       return next(new AppError('User not found!', 401));
     }
 
+    // verifies old password
     if (!(await user.correctPassword(password, user.password!))) {
       return next(new AppError('Your current password is wrong.', 401));
     }
 
+    // TODO: Why do we need this??
     if (!req.user) req.user = user;
+
     next();
   }
 );
@@ -177,6 +189,7 @@ export const protect = catchAsync(
   ): Promise<void> => {
     let token: string = '';
 
+    // pulls jwt off headers (api) or from cookie (app)
     if (req.headers.authorization?.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     } else if (req.cookies.jwt) {
@@ -194,6 +207,7 @@ export const protect = catchAsync(
 
     const secret = process.env.JWT_SECRET as Secret;
 
+    // verifies token
     const verifyJwt = (
       token: string,
       secret: Secret
