@@ -3,7 +3,6 @@ import { catchAsync } from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import User, { UserDocument } from '../models/userModel';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
-import passport from 'passport';
 import { CustomRequest } from '../utils/expressInterfaces';
 
 interface DecodedJwt extends JwtPayload {

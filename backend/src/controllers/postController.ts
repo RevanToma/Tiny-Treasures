@@ -64,12 +64,33 @@ export const updatePost = async (
   req: Express.Request,
   res: Express.Response
 ) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    const post = await PostModel.findByIdAndUpdate(id, req.body);
+    if (!post) {
+      return res
+        .status(404)
+        .json({ message: `could not find product with id: ${id}` });
+    }
+    const updatedPost = await PostModel.findById(id);
+    res.status(200).json(updatedPost);
+  } catch (error: any) {
+    res.status(500).json({ errorMessage: error.message });
+  }
 };
 
 export const deletePost = async (
   req: Express.Request,
   res: Express.Response
 ) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    const post = await PostModel.findByIdAndDelete(id);
+    if (!post) {
+      return res.status(200).json({ message: `Could not delete post: ${id}` });
+    }
+    res.status(200);
+  } catch (error: any) {
+    res.status(404).json({ errorMessage: error.message });
+  }
 };
