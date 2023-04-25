@@ -1,14 +1,25 @@
-/* import express from "express";
-import * as postsController from "../controllers/userController";
+import express from 'express';
+import * as authController from '../controllers/authController';
 
-export const postsRouter = express.Router();
+export const userRouter = express.Router();
 
-userRouter.post("/user/", userController.createPost);
+userRouter.post('/signup', authController.signUp);
+userRouter.post(
+  '/signin',
+  authController.verifyPassword,
+  authController.signIn
+);
+userRouter.post('/logout');
 
-userRouter.get("/user/", userController.getAllUsers);
+userRouter.use(authController.protect);
 
-userRouter.get("/user/:id", userController.getPost);
-
-userRouter.patch("/user/:id", userController.updatePost);
-
-userRouter.delete("/user/:id", userController.deletePost); */
+userRouter.patch(
+  '/updatePassword',
+  authController.verifyPassword,
+  authController.updatePassword
+);
+userRouter.patch(
+  '/updateEmail',
+  authController.verifyPassword,
+  authController.updateEmail
+);
