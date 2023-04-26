@@ -30,8 +30,11 @@ export const userChats = async (req: Request, res: Response): Promise<void> => {
 export const findChat = async (req: Request, res: Response): Promise<void> => {
   try {
     const chat = await ChatRoomModel.findOne({
-      members: { $all: [req.params.firstId, req.params.secondId] },
+      members: {
+        $all: [req.params.firstId.trim(), req.params.secondId.trim()],
+      },
     });
+
     res.status(200).json(chat);
   } catch (error) {
     res.status(500).json(error);

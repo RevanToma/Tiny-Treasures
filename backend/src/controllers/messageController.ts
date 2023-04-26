@@ -7,14 +7,14 @@ export const addMessage = async (
 ): Promise<void> => {
   const { chatId, senderId, text } = req.body;
   try {
-    // Find the chat room with the given ID
+    // find the chat room with the right ID
     const chat = await ChatRoomModel.findById(chatId);
     if (!chat) {
       res.status(404).json({ error: "Chat room not found" });
       return;
     }
 
-    // Add the new message to the chat room's messages array
+    // add the new message to the chat rooms messages arrayu
     chat.messages.push({ senderId, text });
     await chat.save();
 
