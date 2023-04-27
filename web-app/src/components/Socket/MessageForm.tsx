@@ -43,11 +43,6 @@ const MessageForm: React.FC = () => {
       setMessages([...messages, data]);
       console.log("instant", data);
     });
-
-    socket.on("create-chat", (data) => {
-      console.log(data);
-      setMessages([...messages, ...data.messages]);
-    });
   }, [messages]);
 
   useEffect(() => {
