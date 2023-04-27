@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import ChatRoomModel from "../models/chatRoomModel";
+import ChatModel from "../models/chatRoomModel";
 
 export const createChat = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const newChat = new ChatRoomModel({
+  const newChat = new ChatModel({
     members: [req.body.senderId, req.body.receiverId],
   });
   try {
@@ -18,7 +18,7 @@ export const createChat = async (
 
 export const userChats = async (req: Request, res: Response): Promise<void> => {
   try {
-    const chat = await ChatRoomModel.find({
+    const chat = await ChatModel.find({
       members: { $in: [req.params.userId] },
     });
     res.status(200).json(chat);
@@ -29,12 +29,9 @@ export const userChats = async (req: Request, res: Response): Promise<void> => {
 
 export const findChat = async (req: Request, res: Response): Promise<void> => {
   try {
-    const chat = await ChatRoomModel.findOne({
-      members: {
-        $all: [req.params.firstId.trim(), req.params.secondId.trim()],
-      },
-    });
-
+    const { id } = req.params;
+    console.log(id);
+    const chat = await ChatModel.findById(id);
     res.status(200).json(chat);
   } catch (error) {
     res.status(500).json(error);

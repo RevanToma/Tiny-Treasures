@@ -33,7 +33,7 @@ app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/", webRouter);
 app.use("/chat", chatRouter);
-app.use("/message", messageRouter);
+// app.use("/message", messageRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl}!`, 404));
