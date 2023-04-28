@@ -15,7 +15,7 @@ import { chatRouter } from "./routes/chat.router";
 import { messageRouter } from "./routes/message.router";
 // CONFIG
 dotenv.config({ path: `${__dirname}/../config.env` });
-// passportConfig(passport);
+passportConfig(passport);
 
 export const app = express();
 

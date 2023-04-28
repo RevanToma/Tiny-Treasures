@@ -2,8 +2,9 @@ import { connectToMongoDB } from "./db/mongoose_connection";
 import { app } from "./app";
 import http from "http";
 import { Server } from "socket.io";
-import { MessageModel } from "./models/messageModal";
+import { MessageModel } from "./models/messageModel";
 import ChatModel from "./models/chatRoomModel";
+import mongoose from "mongoose";
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
@@ -26,7 +27,6 @@ start();
 
 io.on("connection", (socket) => {
   socket.on("create-chat", async (data) => {
-    console.log("DATA", data);
     const { recieverId, userToken: userId } = data;
 
     let chatRoom;
@@ -38,34 +38,38 @@ io.on("connection", (socket) => {
     });
 
     if (!chatRoom) {
-      chatRoom = ChatModel.create({
+      chatRoom = await ChatModel.create({
         members: [recieverId, userId],
         messages: [],
+        // _id: mongoose.Types.ObjectId,
       });
-
-      console.log("NEW CHAT");
     }
-    socket.emit("create-chat", chatRoom);
+
+    const id = chatRoom._id.toString();
+
+    socket.join(id);
+
+    // socket.emit("create-chat", id);
+    io.to(id).emit("create-chat", chatRoom);
+    // socket.to(chatRoom._id).emit("create-chat", chatRoom);
   });
 
   console.log("a user connected");
   socket.on("chat-message", (msg) => {
-    console.log(msg);
-    const { text, id, senderId } = msg;
+    console.log(socket.id);
+    // console.log(socket.rooms);
+    const chatRoomId = [...socket.rooms][1];
+    // console.log(chatRoomId);
+    const { text, senderId, socketId } = msg;
+    // console.log(chatRoomId);
 
-    ChatModel.findById(id).then((chat) => {
+    ChatModel.findById(chatRoomId).then((chat) => {
       chat?.messages.push({ senderId, text });
       chat?.save().then(() => {
-        io.emit("chat-message", msg);
-        console.log(text);
+        io.to(chatRoomId).emit("chat-message", msg);
+        socket.broadcast.to(socketId).emit("chat-message", msg);
+        console.log("TEXT", text);
       });
     });
   });
 });
-
-/*  getChatRoom(recieverId, userId).then((chatroom) => {
-      console.log("-------");
-      console.log(chatroom);
-      console.log("-------");
-      socket.emit("output-messages", chatroom);
-    }); */

@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 export const MessageSchema = new mongoose.Schema(
   {
     id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
     },
     senderId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     text: {
       type: String,

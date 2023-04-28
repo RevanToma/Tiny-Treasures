@@ -1,6 +1,6 @@
-import { MessageModel } from "../models/messageModal";
+/* import { MessageModel } from "../models/messageModal";
 import ChatModel from "../models/chatRoomModel";
-import { Request, Response } from "express";
+import { Request, Response } from "express"; */
 
 // export const addMessage = async (
 //   req: Request,
