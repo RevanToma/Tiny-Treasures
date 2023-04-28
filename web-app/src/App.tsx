@@ -28,7 +28,16 @@ function App() {
     <>
       <ConnectionManager />
       <SocketState isConnected={isConnected} />
-      <MessageForm />
+      <MessageForm
+        socketId="9xUch3wUf3UGJtYhAAAH"
+        userToken="614a74ec4f43f38d1c9054d8"
+        recieverId="614a74ec4f43f38d1c9054d8"
+      />
+      <MessageForm
+        socketId="rnj-uxL7FnIHCY82AAAF"
+        userToken="614a74ec4f43f38d1c9054d8"
+        recieverId="614a74ec4f43f38d1c9054d8"
+      />
     </>
   );
 }

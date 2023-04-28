@@ -3,47 +3,59 @@ import { socket } from "../../Sockets/Message.socket";
 
 type Message = {
   senderId: string;
-  id: string;
   text: string;
 };
 
 type ChatRoomConnection = {
   userToken: string;
   recieverId: string;
+  socketId: string;
 };
 
-const MessageForm: React.FC = () => {
+type Props = {
+  userToken: string;
+  recieverId: string;
+  socketId: string;
+};
+
+const MessageForm: React.FC<Props> = ({ userToken, recieverId, socketId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
+
   const [chatRoomConnection, setChatRoomConnection] =
     useState<ChatRoomConnection>({
-      userToken: "614a74ec4f43f38d1c9054d1",
-      recieverId: "614a74ec4f43f38d1c9054d2",
+      userToken: userToken,
+      recieverId: recieverId,
+      socketId: socketId,
     });
 
   const [message, setMessage] = useState<Message>({
     text: "",
     senderId: "614a74ec4f43f38d1c9054d1",
-    id: "6449689b342c2e9942f086f3",
   });
 
   function onSubmit(event: any) {
     event.preventDefault();
-
+    console.log(message);
     if (!message) return null;
-    socket.emit("chat message", message);
+    socket.emit("chat-message", message);
   }
 
   const handleCreateNewChat = () => {
-    console.log(chatRoomConnection);
     socket.emit("create-chat", chatRoomConnection);
   };
 
   useEffect(() => {
-    socket.on("chat message", (data) => {
+    socket.on("chat-message", (data) => {
       setMessages([...messages, data]);
       console.log("instant", data);
     });
   }, [messages]);
+
+  useEffect(() => {
+    socket.on("create-chat", (data) => {
+      console.log("CHAT CREATED", data);
+    });
+  }, [chatRoomConnection]);
 
   useEffect(() => {
     socket.on("output-messages", (data) => {
@@ -64,6 +76,7 @@ const MessageForm: React.FC = () => {
         <button type="submit">Submit</button>
       </form>
       <button onClick={handleCreateNewChat}>create chat</button>
+
       <div>
         {messages.map((message, i) => (
           <div key={i}>
