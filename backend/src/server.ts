@@ -50,13 +50,23 @@ io.on("connection", (socket) => {
     socket.join(id);
 
     // socket.emit("create-chat", id);
-    io.to(id).emit("create-chat", chatRoom);
+    socket.emit("create-chat", chatRoom);
     // socket.to(chatRoom._id).emit("create-chat", chatRoom);
+  });
+
+  socket.on("join-rooms", async (userToken) => {
+    const chats = await ChatModel.find({ members: { $all: [userToken] } });
+    console.log(chats);
+    chats.map((chat) => {
+      socket.join(chat.id);
+    });
+    socket.emit("join-rooms", chats);
   });
 
   console.log("a user connected");
   socket.on("chat-message", (msg) => {
     console.log(socket.id);
+
     // console.log(socket.rooms);
     const chatRoomId = [...socket.rooms][1];
     // console.log(chatRoomId);
@@ -67,7 +77,8 @@ io.on("connection", (socket) => {
       chat?.messages.push({ senderId, text });
       chat?.save().then(() => {
         io.to(chatRoomId).emit("chat-message", msg);
-        socket.broadcast.to(socketId).emit("chat-message", msg);
+        //socket.broadcast.to(socketId).emit("chat-message", msg);
+
         console.log("TEXT", text);
       });
     });
