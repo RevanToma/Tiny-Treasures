@@ -41,46 +41,41 @@ io.on("connection", (socket) => {
       chatRoom = await ChatModel.create({
         members: [recieverId, userId],
         messages: [],
-        // _id: mongoose.Types.ObjectId,
       });
     }
 
     const id = chatRoom._id.toString();
-
     socket.join(id);
-
-    // socket.emit("create-chat", id);
     socket.emit("create-chat", chatRoom);
-    // socket.to(chatRoom._id).emit("create-chat", chatRoom);
   });
 
   socket.on("join-rooms", async (userToken) => {
     const chats = await ChatModel.find({ members: { $all: [userToken] } });
-    console.log(chats);
+
     chats.map((chat) => {
       socket.join(chat.id);
     });
     socket.emit("join-rooms", chats);
   });
 
-  console.log("a user connected");
+  socket.on("typing", (typingInfo) => {
+    const { chatRoomId } = typingInfo;
+    io.to(chatRoomId).emit("typing", typingInfo);
+  });
+
   socket.on("chat-message", (msg) => {
-    console.log(socket.id);
+    const { text, senderId, chatRoomId } = msg;
 
-    // console.log(socket.rooms);
-    const chatRoomId = [...socket.rooms][1];
-    // console.log(chatRoomId);
-    const { text, senderId, socketId } = msg;
-    // console.log(chatRoomId);
+    const checkChatRoomId: string | undefined = [...socket.rooms].find(
+      (room) => room === chatRoomId
+    );
+    if (!checkChatRoomId) return;
 
-    ChatModel.findById(chatRoomId).then((chat) => {
+    io.to(checkChatRoomId).emit("chat-message", msg);
+
+    ChatModel.findById(checkChatRoomId).then((chat) => {
       chat?.messages.push({ senderId, text });
-      chat?.save().then(() => {
-        io.to(chatRoomId).emit("chat-message", msg);
-        //socket.broadcast.to(socketId).emit("chat-message", msg);
-
-        console.log("TEXT", text);
-      });
+      chat?.save();
     });
   });
 });
