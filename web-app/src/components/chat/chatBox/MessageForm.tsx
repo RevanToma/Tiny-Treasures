@@ -1,12 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import { socket } from "../../Sockets/Message.socket";
-
-type Message = {
-  senderId: string;
-  text: string;
-  chatRoomId: string;
-  sentByMe?: boolean;
-};
+import { socket } from "../../../Sockets/Message.socket";
+import Message from "../Message/Message";
+import { IMessage } from "../../../types";
+import * as S from "./styled";
+import TypingAnimation from "../TypingAnimation/TypingAnimation";
 
 type ChatRoomConnection = {
   userToken: string;
@@ -19,7 +16,7 @@ type Props = {
 };
 
 const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [rooms, setRooms] = useState();
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -30,17 +27,21 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
       recieverId: recieverId,
     });
 
-  const [message, setMessage] = useState<Message>({
+  const [message, setMessage] = useState<IMessage>({
     text: "",
     senderId: userToken,
     chatRoomId: "",
+    _id: "",
   });
 
   function onSubmit(event: any) {
     event.preventDefault();
     // console.log(message);
-    if (!message) return null;
+    if (!message || !chatInputRef.current?.value) return null;
     socket.emit("chat-message", message);
+    if (chatInputRef.current) {
+      chatInputRef.current.value = "";
+    }
   }
 
   const handleCreateNewChat = () => {
@@ -94,6 +95,8 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
       const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
       setMessages(updateMsg);
     });
+
+    chatInputRef.current?.scrollIntoView();
   }, [messages, userToken]);
 
   useEffect(() => {
@@ -115,25 +118,20 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
 
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input ref={chatInputRef} onChange={(e) => handleChatInput(e)} />
-        <button type="submit">Submit</button>
-      </form>
       <button onClick={handleCreateNewChat}>OPEN CHAT WITH RECIEVER</button>
-      <div>
-        {messages.map((message, i) => (
-          <div key={i}>
-            <h4 style={{ textAlign: message.sentByMe ? "right" : "left" }}>
-              sent by: {message.sentByMe && "SENT BY ME"}
-            </h4>
-            <p style={{ textAlign: message.sentByMe ? "right" : "left" }}>
-              {message.text}
-            </p>
-            <div style={{ height: "2px", backgroundColor: "black" }}></div>
-          </div>
+      <S.ChatContainer>
+        {messages.map((message) => (
+          <Message message={message} />
         ))}
-      </div>
-      {typing && <div>{userToken} is typing...</div>}
+        {typing && <TypingAnimation />}
+        <S.MessageInputForm onSubmit={onSubmit}>
+          <S.MessageInput
+            ref={chatInputRef}
+            onChange={(e) => handleChatInput(e)}
+          />
+          <S.SendButton type="submit">Submit</S.SendButton>
+        </S.MessageInputForm>
+      </S.ChatContainer>
     </>
   );
 };

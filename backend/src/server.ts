@@ -2,9 +2,7 @@ import { connectToMongoDB } from "./db/mongoose_connection";
 import { app } from "./app";
 import http from "http";
 import { Server } from "socket.io";
-import { MessageModel } from "./models/messageModel";
 import ChatModel from "./models/chatRoomModel";
-import mongoose from "mongoose";
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);

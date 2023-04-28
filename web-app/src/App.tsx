@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
-import MessageForm from "./components/Socket/MessageForm";
+import MessageForm from "./components/chat/chatBox/MessageForm";
 
 function App() {
   const [myUserId, setMyUserId] = useState("");
@@ -50,17 +50,6 @@ function App() {
       </form>
 
       {myUserId && <MessageForm userToken={myUserId} recieverId={reciverId} />}
-
-      {/* <MessageForm
-        socketId="rnj-uxL7FnIHCY82AAAF"
-        userToken="614a74ec4f43f38d1c9054d8"
-        recieverId="614a74ec4f43f38d1c9054d8"
-      />
-      <MessageForm
-        socketId="rnj-uxL7FnIHCY82AAAF"
-        userToken="614a74ec4f43f38d1c9054d8"
-        recieverId="614a74ec4f43f38d1c9054d8"
-      /> */}
     </>
   );
 }
