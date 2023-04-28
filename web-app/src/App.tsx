@@ -3,7 +3,11 @@ import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
 import MessageForm from "./components/Socket/MessageForm";
+
 function App() {
+  const [myUserId, setMyUserId] = useState("");
+
+  const [reciverId, setReciverId] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
@@ -24,12 +28,31 @@ function App() {
     };
   }, []);
 
+  const submitHandler = (event: any) => {
+    event.preventDefault();
+    setMyUserId(event.target["user_id"].value);
+
+    setReciverId(event.target["r_id"].value);
+  };
+
+  // 644798e9c829c53744a8ae49
+  // 6447e5dd3f1fca8a6a257d86
+  // 6447e8696312cbecc42ebaab
+  // 64493c98d9bc5bcf3b01a8d9
   return (
     <>
       <ConnectionManager />
       <SocketState isConnected={isConnected} />
-      <MessageForm
-        socketId="9xUch3wUf3UGJtYhAAAH"
+      <form onSubmit={(e) => submitHandler(e)}>
+        <input type="text" name="" id="user_id" placeholder="My user id" />
+        <input type="text" name="" id="r_id" placeholder="Receiver id" />
+        <button type="submit">Login and set Reciever id</button>
+      </form>
+
+      {myUserId && <MessageForm userToken={myUserId} recieverId={reciverId} />}
+
+      {/* <MessageForm
+        socketId="rnj-uxL7FnIHCY82AAAF"
         userToken="614a74ec4f43f38d1c9054d8"
         recieverId="614a74ec4f43f38d1c9054d8"
       />
@@ -37,7 +60,7 @@ function App() {
         socketId="rnj-uxL7FnIHCY82AAAF"
         userToken="614a74ec4f43f38d1c9054d8"
         recieverId="614a74ec4f43f38d1c9054d8"
-      />
+      /> */}
     </>
   );
 }
