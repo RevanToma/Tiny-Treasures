@@ -20,6 +20,7 @@ type Props = {
 
 const MessageForm: React.FC<Props> = ({ userToken, recieverId, socketId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [rooms, setRooms] = useState();
 
   const [chatRoomConnection, setChatRoomConnection] =
     useState<ChatRoomConnection>({
@@ -58,14 +59,14 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId, socketId }) => {
   }, [chatRoomConnection]);
 
   useEffect(() => {
-    socket.on("output-messages", (data) => {
-      console.log(data);
-      setMessages([...messages, ...data[0].messages]);
-      console.log({ ...data });
-    });
-  }, [messages]);
+    socket.emit("join-rooms", userToken);
+  }, [userToken]);
 
-  console.log(messages);
+  useEffect(() => {
+    socket.on("join-rooms", (rooms) => {
+      setRooms(rooms);
+    });
+  }, []);
 
   return (
     <>
