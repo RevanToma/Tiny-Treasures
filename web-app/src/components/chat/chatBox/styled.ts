@@ -1,7 +1,13 @@
 import styled from "styled-components";
 
+export const ChatRoomContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  flex-direction: column;
+`;
+
 export const ChatContainer = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
   background-color: #161616;
@@ -14,10 +20,10 @@ export const ChatContainer = styled.div`
 `;
 
 export const MessageInputForm = styled.form`
-  position: absolute;
-  bottom: 10px;
   display: flex;
+  justify-content: center;
   width: 100%;
+  margin: 10px;
   gap: 10px;
 `;
 
@@ -25,6 +31,9 @@ export const MessageInput = styled.input`
   bottom: 0;
   width: 100%;
   border-radius: 10px;
+  border: none;
+  padding: 10px;
+  background-color: #bdd0df;
   &:focus {
     outline: none;
   }
@@ -33,4 +42,11 @@ export const MessageInput = styled.input`
 export const SendButton = styled.button`
   padding: 10px;
   border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: #d9d6d6;
+
+  &:hover {
+    background-color: #d7bdbd;
+  }
 `;

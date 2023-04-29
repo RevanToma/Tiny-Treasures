@@ -26,24 +26,6 @@ const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
     _id: "",
   });
 
-  function onSubmit(event: any) {
-    event.preventDefault();
-    // console.log(message);
-    if (!message || !chatInputRef.current?.value) return null;
-    socket.emit("chat-message", message);
-    if (chatInputRef.current) {
-      chatInputRef.current.value = "";
-    }
-  }
-
-  const handleCreateNewChat = () => {
-    socket.emit("create-chat", chatMembers);
-  };
-
-  const handleChatInput = (e: any) => {
-    setMessage({ ...message, text: e.target.value });
-  };
-
   useEffect(() => {
     const typingInfo = {
       userId: chatMembers.userId,
@@ -97,23 +79,41 @@ const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
     });
   }, [chatMembers, message]);
 
+  function onSubmit(event: any) {
+    event.preventDefault();
+    // console.log(message);
+    if (!message || !chatInputRef.current?.value) return null;
+    socket.emit("chat-message", message);
+    if (chatInputRef.current) {
+      chatInputRef.current.value = "";
+    }
+  }
+
+  const handleCreateNewChat = () => {
+    socket.emit("create-chat", chatMembers);
+  };
+
+  const handleChatInput = (e: any) => {
+    setMessage({ ...message, text: e.target.value });
+  };
+
   return (
-    <>
+    <S.ChatRoomContainer>
       <button onClick={handleCreateNewChat}>OPEN CHAT WITH RECIEVER</button>
       <S.ChatContainer>
         {messages.map((message) => (
           <Message message={message} />
         ))}
         {typing && <TypingAnimation />}
-        <S.MessageInputForm onSubmit={onSubmit}>
-          <S.MessageInput
-            ref={chatInputRef}
-            onChange={(e) => handleChatInput(e)}
-          />
-          <S.SendButton type="submit">Submit</S.SendButton>
-        </S.MessageInputForm>
       </S.ChatContainer>
-    </>
+      <S.MessageInputForm onSubmit={onSubmit}>
+        <S.MessageInput
+          ref={chatInputRef}
+          onChange={(e) => handleChatInput(e)}
+        />
+        <S.SendButton type="submit">Submit</S.SendButton>
+      </S.MessageInputForm>
+    </S.ChatRoomContainer>
   );
 };
 
