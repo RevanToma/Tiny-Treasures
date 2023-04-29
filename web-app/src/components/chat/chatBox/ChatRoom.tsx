@@ -5,31 +5,24 @@ import { IMessage } from "../../../types";
 import * as S from "./styled";
 import TypingAnimation from "../TypingAnimation/TypingAnimation";
 
-type ChatRoomConnection = {
-  userToken: string;
+type ChatMembers = {
+  userId: string;
   recieverId: string;
 };
 
 type Props = {
-  userToken: string;
-  recieverId: string;
+  chatMembers: ChatMembers;
 };
 
-const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
+const MessageForm: React.FC<Props> = ({ chatMembers }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [rooms, setRooms] = useState();
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
 
-  const [chatRoomConnection, setChatRoomConnection] =
-    useState<ChatRoomConnection>({
-      userToken: userToken,
-      recieverId: recieverId,
-    });
-
   const [message, setMessage] = useState<IMessage>({
     text: "",
-    senderId: userToken,
+    senderId: chatMembers.userId,
     chatRoomId: "",
     _id: "",
   });
@@ -45,7 +38,7 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
   }
 
   const handleCreateNewChat = () => {
-    socket.emit("create-chat", chatRoomConnection);
+    socket.emit("create-chat", chatMembers);
   };
 
   const handleChatInput = (e: any) => {
@@ -54,7 +47,7 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
 
   useEffect(() => {
     const typingInfo = {
-      userToken,
+      userId: chatMembers.userId,
       chatRoomId: message.chatRoomId,
     };
     let timeout: ReturnType<typeof setTimeout>;
@@ -79,44 +72,41 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
       chatInputRef.current?.removeEventListener("keydown", handleKeyDown);
       chatInputRef.current?.removeEventListener("keyup", handleKeyUp);
     };
-  }, [message.chatRoomId, userToken]);
+  }, [message.chatRoomId, chatMembers.userId]);
 
   useEffect(() => {
     socket.on("typing", (data) => {
-      const { typing, userToken } = data;
-      const iAmTyping = userToken === chatRoomConnection.recieverId && typing;
+      const { typing, userId } = data;
+      const iAmTyping = userId === chatMembers.recieverId && typing;
       setTyping(iAmTyping);
     });
   }, []);
 
   useEffect(() => {
     socket.on("chat-message", (data) => {
-      const isSentByMe = data.senderId === userToken;
+      const isSentByMe = data.senderId === chatMembers.userId;
       const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
       setMessages(updateMsg);
     });
 
     chatInputRef.current?.scrollIntoView();
-  }, [messages, userToken]);
+  }, [messages, chatMembers.userId]);
 
   useEffect(() => {
     socket.on("create-chat", (data) => {
-      // console.log("CHAT CREATED", data);
       setMessage({ ...message, chatRoomId: data._id });
     });
-  }, [chatRoomConnection]);
+  }, [chatMembers, message]);
 
   useEffect(() => {
-    socket.emit("join-rooms", userToken);
-  }, [userToken]);
+    socket.emit("join-rooms", chatMembers.userId);
+  }, [chatMembers.userId]);
 
   useEffect(() => {
     socket.on("join-rooms", (rooms) => {
       setRooms(rooms);
     });
-  }, [userToken]);
-
-  console.log(messages);
+  }, [chatMembers.userId]);
 
   return (
     <>

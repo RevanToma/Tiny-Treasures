@@ -5,9 +5,9 @@ import SocketState from "./components/Socket/SocketState";
 import MessageForm from "./components/chat/chatBox/ChatRoom";
 
 function App() {
-  const [myUserId, setMyUserId] = useState("");
+  const [userId, setUserId] = useState("");
 
-  const [reciverId, setReciverId] = useState("");
+  const [recieverId, setReciverId] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function App() {
 
   const submitHandler = (event: any) => {
     event.preventDefault();
-    setMyUserId(event.target["user_id"].value);
+    setUserId(event.target["user_id"].value);
 
     setReciverId(event.target["r_id"].value);
   };
@@ -49,7 +49,7 @@ function App() {
         <button type="submit">Login and set Reciever id</button>
       </form>
 
-      {myUserId && <MessageForm userToken={myUserId} recieverId={reciverId} />}
+      {userId && <MessageForm chatMembers={{ userId, recieverId }} />}
     </>
   );
 }

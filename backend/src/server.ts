@@ -25,7 +25,7 @@ start();
 
 io.on("connection", (socket) => {
   socket.on("create-chat", async (data) => {
-    const { recieverId, userToken: userId } = data;
+    const { recieverId, userId } = data;
 
     let chatRoom;
 
@@ -47,8 +47,8 @@ io.on("connection", (socket) => {
     socket.emit("create-chat", chatRoom);
   });
 
-  socket.on("join-rooms", async (userToken) => {
-    const chats = await ChatModel.find({ members: { $all: [userToken] } });
+  socket.on("join-rooms", async (userId) => {
+    const chats = await ChatModel.find({ members: { $all: [userId] } });
 
     chats.map((chat) => {
       socket.join(chat.id);
