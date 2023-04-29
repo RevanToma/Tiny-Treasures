@@ -3,10 +3,11 @@ import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
 import ChatRoom from "./components/chat/chatBox/ChatRoom";
+import ChatRoomList from "./components/chat/ChatRoomList/ChatRoomList";
 
 function App() {
   const [userId, setUserId] = useState("");
-  const [rooms, setRooms] = useState();
+  const [chatRooms, setChatRooms] = useState();
   const [recieverId, setReciverId] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -35,7 +36,8 @@ function App() {
 
   useEffect(() => {
     socket.on("join-rooms", (rooms) => {
-      setRooms(rooms);
+      console.log(rooms);
+      setChatRooms(rooms);
     });
   }, []);
 
@@ -45,6 +47,8 @@ function App() {
 
     setReciverId(event.target["r_id"].value);
   };
+
+  console.log(chatRooms);
 
   // 644798e9c829c53744a8ae49
   // 6447e5dd3f1fca8a6a257d86
@@ -59,7 +63,7 @@ function App() {
         <input type="text" name="" id="r_id" placeholder="Receiver id" />
         <button type="submit">Login and set Reciever id</button>
       </form>
-
+      {/*  {chatRooms && <ChatRoomList chatRooms={chatRooms} />} */}
       {userId && <ChatRoom chatMembers={{ userId, recieverId }} />}
     </>
   );

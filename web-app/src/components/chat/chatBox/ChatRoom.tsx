@@ -1,23 +1,20 @@
 import React, { useEffect, useState, useRef } from "react";
 import { socket } from "../../../Sockets/Message.socket";
 import Message from "../Message/Message";
-import { IMessage } from "../../../types";
+import { IChatMembers, IMessage } from "../../../types";
 import * as S from "./styled";
 import TypingAnimation from "../TypingAnimation/TypingAnimation";
 
-type ChatMembers = {
-  userId: string;
-  recieverId: string;
-};
-
 type Props = {
-  chatMembers: ChatMembers;
+  chatMembers: IChatMembers;
 };
 
 const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
+
+  console.log(chatMembers);
 
   const [message, setMessage] = useState<IMessage>({
     text: "",
