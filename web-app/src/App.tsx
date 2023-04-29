@@ -6,7 +6,7 @@ import MessageForm from "./components/chat/chatBox/ChatRoom";
 
 function App() {
   const [userId, setUserId] = useState("");
-
+  const [rooms, setRooms] = useState();
   const [recieverId, setReciverId] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -26,6 +26,17 @@ function App() {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
     };
+  }, []);
+
+  useEffect(() => {
+    if (userId.length < 1) return;
+    socket.emit("join-rooms", userId);
+  }, [userId]);
+
+  useEffect(() => {
+    socket.on("join-rooms", (rooms) => {
+      setRooms(rooms);
+    });
   }, []);
 
   const submitHandler = (event: any) => {

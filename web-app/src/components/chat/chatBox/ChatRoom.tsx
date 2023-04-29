@@ -16,7 +16,6 @@ type Props = {
 
 const MessageForm: React.FC<Props> = ({ chatMembers }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
-  const [rooms, setRooms] = useState();
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
 
@@ -97,16 +96,6 @@ const MessageForm: React.FC<Props> = ({ chatMembers }) => {
       setMessage({ ...message, chatRoomId: data._id });
     });
   }, [chatMembers, message]);
-
-  useEffect(() => {
-    socket.emit("join-rooms", chatMembers.userId);
-  }, [chatMembers.userId]);
-
-  useEffect(() => {
-    socket.on("join-rooms", (rooms) => {
-      setRooms(rooms);
-    });
-  }, [chatMembers.userId]);
 
   return (
     <>
