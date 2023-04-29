@@ -11,8 +11,7 @@ import webRouter from "./routes/web.router";
 import AppError from "./utils/appError";
 import { globalErrorHandler } from "./utils/errorHandler";
 import { passportConfig } from "./utils/passportConfig";
-import { chatRouter } from "./routes/chat.router";
-import { messageRouter } from "./routes/message.router";
+
 // CONFIG
 dotenv.config({ path: `${__dirname}/../config.env` });
 passportConfig(passport);
@@ -32,8 +31,6 @@ app.use(cookieParser());
 app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/", webRouter);
-app.use("/chat", chatRouter);
-// app.use("/message", messageRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl}!`, 404));

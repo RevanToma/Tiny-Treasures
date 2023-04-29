@@ -3,6 +3,7 @@ import styled from "styled-components";
 type MessageContainerProps = {
   sentByMe: boolean | undefined;
 };
+
 export const MessageContainer = styled.div<MessageContainerProps>`
   border-radius: 10px;
   background-color: ${({ sentByMe }) => (sentByMe ? "#1982FC" : "#3f3f3f")};

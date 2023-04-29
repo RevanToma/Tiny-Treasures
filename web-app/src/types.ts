@@ -4,4 +4,5 @@ export type IMessage = {
   chatRoomId: string;
   sentByMe?: boolean;
   _id: "";
+  createdAt?: Date;
 };

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
-import MessageForm from "./components/chat/chatBox/MessageForm";
+import MessageForm from "./components/chat/chatBox/ChatRoom";
 
 function App() {
   const [myUserId, setMyUserId] = useState("");

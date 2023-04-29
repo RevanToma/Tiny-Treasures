@@ -116,6 +116,8 @@ const MessageForm: React.FC<Props> = ({ userToken, recieverId }) => {
     });
   }, [userToken]);
 
+  console.log(messages);
+
   return (
     <>
       <button onClick={handleCreateNewChat}>OPEN CHAT WITH RECIEVER</button>
