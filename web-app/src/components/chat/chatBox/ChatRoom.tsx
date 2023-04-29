@@ -14,7 +14,7 @@ type Props = {
   chatMembers: ChatMembers;
 };
 
-const MessageForm: React.FC<Props> = ({ chatMembers }) => {
+const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -117,4 +117,4 @@ const MessageForm: React.FC<Props> = ({ chatMembers }) => {
   );
 };
 
-export default MessageForm;
+export default ChatRoom;

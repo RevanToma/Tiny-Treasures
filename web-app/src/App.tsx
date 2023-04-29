@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
-import MessageForm from "./components/chat/chatBox/ChatRoom";
+import ChatRoom from "./components/chat/chatBox/ChatRoom";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -60,7 +60,7 @@ function App() {
         <button type="submit">Login and set Reciever id</button>
       </form>
 
-      {userId && <MessageForm chatMembers={{ userId, recieverId }} />}
+      {userId && <ChatRoom chatMembers={{ userId, recieverId }} />}
     </>
   );
 }
