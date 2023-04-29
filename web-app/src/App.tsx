@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
-import ChatRoom from "./components/chat/chatBox/ChatRoom";
+import ChatRoom from "./components/chat/ChatRoom/ChatRoom";
 import ChatRoomList from "./components/chat/ChatRoomList/ChatRoomList";
 
 function App() {

@@ -1,6 +1,6 @@
 import React from "react";
 import { IChatRoom } from "../../../types";
-import ChatRoom from "../chatBox/ChatRoom";
+import ChatRoom from "../ChatRoom/ChatRoom";
 
 type ChatRoomListProps = {
   chatRooms: IChatRoom[];
