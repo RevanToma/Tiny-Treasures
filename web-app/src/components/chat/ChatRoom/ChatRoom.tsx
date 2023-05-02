@@ -8,9 +8,10 @@ import TypingAnimation from "../TypingAnimation/TypingAnimation";
 type Props = {
   room: IChatRoom;
   userId: string;
+  receiverId?: string;
 };
 
-const ChatRoom: React.FC<Props> = ({ room, userId }) => {
+const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -18,12 +19,13 @@ const ChatRoom: React.FC<Props> = ({ room, userId }) => {
   const [message, setMessage] = useState<IMessage>({
     text: "",
     senderId: userId,
-    chatRoomId: room._id,
+    receiverId,
   });
 
   useEffect(() => {
     const typingInfo = {
-      userId: userId,
+      userId,
+      receiverId,
       chatRoomId: room._id,
     };
     let timeout: ReturnType<typeof setTimeout>;
@@ -53,8 +55,8 @@ const ChatRoom: React.FC<Props> = ({ room, userId }) => {
   useEffect(() => {
     socket.on("typing", (data) => {
       const { typing, userId: typingId } = data;
-      const iAmTyping = userId !== typingId && typing;
-      setTyping(iAmTyping);
+      const receiverIsTyping = userId !== typingId && typing;
+      setTyping(receiverIsTyping);
     });
     socket.onAny((event, ...args) => {
       console.log(event, args);
@@ -63,10 +65,10 @@ const ChatRoom: React.FC<Props> = ({ room, userId }) => {
 
   useEffect(() => {
     socket.on("chat-message", (data) => {
+      console.log(data);
       const isSentByMe = data.senderId === userId;
       const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
 
-      if (data.chatRoomId !== room._id) return null;
       setMessages(updateMsg);
       socket.onAny((event, ...args) => {
         console.log(event, args);
@@ -97,14 +99,14 @@ const ChatRoom: React.FC<Props> = ({ room, userId }) => {
           <Message message={message} />
         ))}
         {typing && <TypingAnimation />}
+        <S.MessageInputForm onSubmit={onSubmit}>
+          <S.MessageInput
+            ref={chatInputRef}
+            onChange={(e) => handleChatInput(e)}
+          />
+          <S.SendButton type="submit">Submit</S.SendButton>
+        </S.MessageInputForm>
       </S.ChatContainer>
-      <S.MessageInputForm onSubmit={onSubmit}>
-        <S.MessageInput
-          ref={chatInputRef}
-          onChange={(e) => handleChatInput(e)}
-        />
-        <S.SendButton type="submit">Submit</S.SendButton>
-      </S.MessageInputForm>
     </S.ChatRoomContainer>
   );
 };

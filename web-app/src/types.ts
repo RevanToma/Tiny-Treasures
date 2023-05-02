@@ -1,18 +1,14 @@
 export type IMessage = {
   senderId: string;
   text: string;
-  chatRoomId: string;
+  receiverId: string;
   sentByMe?: boolean;
   createdAt?: Date;
+  _id?: string;
 };
 
 export type IChatRoom = {
-  members: IChatMembers;
+  members: string[];
   messages: IMessage[];
   _id: string;
-};
-
-export type IChatMembers = {
-  userId: string;
-  recieverId: string;
 };
