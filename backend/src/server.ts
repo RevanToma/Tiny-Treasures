@@ -23,57 +23,60 @@ const start = async () => {
 
 start();
 
+const connectedUsers: { [key: string]: string } = {};
+
 io.on("connection", (socket) => {
   socket.on("create-chat", async (data) => {
-    const { recieverId, userId } = data;
+    console.log(data);
+    const { receiverId, userId } = data;
+    connectedUsers[userId] = socket.id;
+    console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
 
     let chatRoom;
 
     chatRoom = await ChatModel.findOne({
       members: {
-        $all: [recieverId, userId],
+        $all: [receiverId, userId],
       },
     });
 
     if (!chatRoom) {
       chatRoom = await ChatModel.create({
-        members: [recieverId, userId],
+        members: [receiverId, userId],
         messages: [],
       });
     }
 
-    const id = chatRoom._id.toString();
-    socket.join(id);
-    socket.emit("create-chat", chatRoom);
-  });
+    /* const filteredMessages = chatRoom.messages.map((message) => {
+      const sentByMe = message.senderId == userId;
 
-  socket.on("join-rooms", async (userId) => {
-    const chats = await ChatModel.find({ members: { $all: [userId] } });
+      return { ...message, sentByMe };
+    }); */
 
-    chats.map((chat) => {
-      socket.join(chat.id);
-    });
-    socket.emit("join-rooms", chats);
+    // const newChatRoom = { ...chatRoom, {...messages, } };
+
+    socket.emit("create-chat");
   });
 
   socket.on("typing", (typingInfo) => {
-    const { chatRoomId } = typingInfo;
-    io.to(chatRoomId).emit("typing", typingInfo);
+    const { senderId, receiverId } = typingInfo;
+    io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
+      "typing",
+      typingInfo
+    );
   });
 
   socket.on("chat-message", (msg) => {
-    const { text, senderId, chatRoomId } = msg;
-    console.log(msg);
+    const { text, senderId, receiverId } = msg;
 
-    const checkChatRoomId: string | undefined = [...socket.rooms].find(
-      (room) => room === chatRoomId
-    );
-    if (!checkChatRoomId) return;
+    io.to(connectedUsers[senderId]).emit("chat-message", msg);
+    io.to(connectedUsers[receiverId]).emit("chat-message", msg);
 
-    io.to(checkChatRoomId).emit("chat-message", msg);
-    console.log("roomid, ", checkChatRoomId, "messageroom", chatRoomId);
-
-    ChatModel.findById(checkChatRoomId).then((chat) => {
+    ChatModel.findOne({
+      members: {
+        $all: [receiverId, senderId],
+      },
+    }).then((chat) => {
       chat?.messages.push({ senderId, text });
       chat?.save();
     });

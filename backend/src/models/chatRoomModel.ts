@@ -34,6 +34,10 @@ const chatRoomSchema = new mongoose.Schema(
   }
 );
 
+MessageSchema.virtual("sentByMe").get(function (userId: string) {
+  return this.senderId?.toString() === userId;
+});
+
 const ChatModel = mongoose.model("Chat-room", chatRoomSchema);
 
 export default ChatModel;
