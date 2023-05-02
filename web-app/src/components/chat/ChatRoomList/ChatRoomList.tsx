@@ -4,13 +4,15 @@ import ChatRoom from "../ChatRoom/ChatRoom";
 
 type ChatRoomListProps = {
   chatRooms: IChatRoom[];
+  userId: string;
 };
 
-const ChatRoomList: React.FC<ChatRoomListProps> = ({ chatRooms }) => {
+const ChatRoomList: React.FC<ChatRoomListProps> = ({ chatRooms, userId }) => {
+  console.log(chatRooms);
   return (
     <div>
       {chatRooms.map((room) => {
-        return <ChatRoom chatMembers={room.members}></ChatRoom>;
+        return <ChatRoom userId={userId} room={room}></ChatRoom>;
       })}
     </div>
   );

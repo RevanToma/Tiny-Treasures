@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { socket } from "./Sockets/Message.socket";
 import ConnectionManager from "./components/Socket/ConnectionManager";
 import SocketState from "./components/Socket/SocketState";
-import ChatRoom from "./components/chat/ChatRoom/ChatRoom";
 import ChatRoomList from "./components/chat/ChatRoomList/ChatRoomList";
+import { IChatRoom } from "./types";
 
 function App() {
   const [userId, setUserId] = useState("");
-  const [chatRooms, setChatRooms] = useState();
+  const [chatRooms, setChatRooms] = useState<IChatRoom[]>([]);
   const [recieverId, setReciverId] = useState("");
   const [isConnected, setIsConnected] = useState(socket.connected);
 
@@ -48,7 +48,15 @@ function App() {
     setReciverId(event.target["r_id"].value);
   };
 
-  console.log(chatRooms);
+  const handleCreateNewChat = () => {
+    socket.emit("create-chat", { userId, recieverId });
+  };
+
+  useEffect(() => {
+    socket.on("create-chat", (newRoom) => {
+      setChatRooms((prev) => [...prev, newRoom]);
+    });
+  }, []);
 
   // 644798e9c829c53744a8ae49
   // 6447e5dd3f1fca8a6a257d86
@@ -63,8 +71,9 @@ function App() {
         <input type="text" name="" id="r_id" placeholder="Receiver id" />
         <button type="submit">Login and set Reciever id</button>
       </form>
-      {/*  {chatRooms && <ChatRoomList chatRooms={chatRooms} />} */}
-      {userId && <ChatRoom chatMembers={{ userId, recieverId }} />}
+      <button onClick={handleCreateNewChat}>OPEN CHAT WITH RECIEVER</button>
+      {chatRooms && <ChatRoomList userId={userId} chatRooms={chatRooms} />}
+      {/* {userId && <ChatRoom chatMembers={{ userId, recieverId }} />} */}
     </>
   );
 }

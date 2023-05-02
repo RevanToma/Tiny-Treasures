@@ -1,32 +1,30 @@
 import React, { useEffect, useState, useRef } from "react";
 import { socket } from "../../../Sockets/Message.socket";
 import Message from "../Message/Message";
-import { IChatMembers, IMessage } from "../../../types";
+import { IChatRoom, IMessage } from "../../../types";
 import * as S from "./styled";
 import TypingAnimation from "../TypingAnimation/TypingAnimation";
 
 type Props = {
-  chatMembers: IChatMembers;
+  room: IChatRoom;
+  userId: string;
 };
 
-const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
+const ChatRoom: React.FC<Props> = ({ room, userId }) => {
+  const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
 
-  console.log(chatMembers);
-
   const [message, setMessage] = useState<IMessage>({
     text: "",
-    senderId: chatMembers.userId,
-    chatRoomId: "",
-    _id: "",
+    senderId: userId,
+    chatRoomId: room._id,
   });
 
   useEffect(() => {
     const typingInfo = {
-      userId: chatMembers.userId,
-      chatRoomId: message.chatRoomId,
+      userId: userId,
+      chatRoomId: room._id,
     };
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -50,31 +48,33 @@ const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
       chatInputRef.current?.removeEventListener("keydown", handleKeyDown);
       chatInputRef.current?.removeEventListener("keyup", handleKeyUp);
     };
-  }, [message.chatRoomId, chatMembers.userId]);
+  }, [room._id, userId]);
 
   useEffect(() => {
     socket.on("typing", (data) => {
-      const { typing, userId } = data;
-      const iAmTyping = userId === chatMembers.recieverId && typing;
+      const { typing, userId: typingId } = data;
+      const iAmTyping = userId !== typingId && typing;
       setTyping(iAmTyping);
     });
-  }, []);
+    socket.onAny((event, ...args) => {
+      console.log(event, args);
+    });
+  }, [userId]);
 
   useEffect(() => {
     socket.on("chat-message", (data) => {
-      const isSentByMe = data.senderId === chatMembers.userId;
+      const isSentByMe = data.senderId === userId;
       const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
+
+      if (data.chatRoomId !== room._id) return null;
       setMessages(updateMsg);
+      socket.onAny((event, ...args) => {
+        console.log(event, args);
+      });
     });
 
     chatInputRef.current?.scrollIntoView();
-  }, [messages, chatMembers.userId]);
-
-  useEffect(() => {
-    socket.on("create-chat", (data) => {
-      setMessage({ ...message, chatRoomId: data._id });
-    });
-  }, [chatMembers, message]);
+  }, [messages, userId]);
 
   function onSubmit(event: any) {
     event.preventDefault();
@@ -86,17 +86,12 @@ const ChatRoom: React.FC<Props> = ({ chatMembers }) => {
     }
   }
 
-  const handleCreateNewChat = () => {
-    socket.emit("create-chat", chatMembers);
-  };
-
   const handleChatInput = (e: any) => {
     setMessage({ ...message, text: e.target.value });
   };
 
   return (
     <S.ChatRoomContainer>
-      <button onClick={handleCreateNewChat}>OPEN CHAT WITH RECIEVER</button>
       <S.ChatContainer>
         {messages.map((message) => (
           <Message message={message} />

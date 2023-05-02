@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat-message", (msg) => {
     const { text, senderId, chatRoomId } = msg;
+    console.log(msg);
 
     const checkChatRoomId: string | undefined = [...socket.rooms].find(
       (room) => room === chatRoomId
@@ -70,6 +71,7 @@ io.on("connection", (socket) => {
     if (!checkChatRoomId) return;
 
     io.to(checkChatRoomId).emit("chat-message", msg);
+    console.log("roomid, ", checkChatRoomId, "messageroom", chatRoomId);
 
     ChatModel.findById(checkChatRoomId).then((chat) => {
       chat?.messages.push({ senderId, text });

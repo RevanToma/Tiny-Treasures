@@ -3,7 +3,6 @@ export type IMessage = {
   text: string;
   chatRoomId: string;
   sentByMe?: boolean;
-  _id: "";
   createdAt?: Date;
 };
 
