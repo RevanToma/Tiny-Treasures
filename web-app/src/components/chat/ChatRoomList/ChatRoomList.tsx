@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IChatRoom } from "../../../types";
 import ChatRoom from "../ChatRoom/ChatRoom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useChats } from "../../../hooks/useChats";
-import { socket } from "../../../Sockets/Message.socket";
+import { socket, Socket } from "../../../Sockets/Message.socket";
 
 type ChatRoomListProps = {
   userId: string;
@@ -16,6 +16,14 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
 
   const { data: chats, isLoading, error } = useChats(userId);
 
+  useEffect(() => {
+    if (Socket.getInstance()) {
+      socket().on("chat-message", (data) => {
+        console.log("chat-message received", data);
+      });
+    }
+  }, []);
+
   if (isLoading && userId) return <h1>is loading...</h1>;
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!chats) return null;
@@ -24,7 +32,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
     const switchedReceiverId = room.members.find((member) => member !== userId);
     setReceiverId(switchedReceiverId);
     setCurrentRoom(room);
-    socket.emit("create-chat", { userId, receiverId: switchedReceiverId });
+    socket().emit("create-chat", { userId, receiverId: switchedReceiverId });
     console.log(room._id);
   };
 
@@ -32,7 +40,9 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
     <div>
       {chats.map((room) => {
         return (
-          <div onClick={() => handleSwitchChat(room)}>ROOMS: {room._id}</div>
+          <div key={room._id} onClick={() => handleSwitchChat(room)}>
+            ROOMS: {room._id}
+          </div>
         );
       })}
       {currentRoom && (

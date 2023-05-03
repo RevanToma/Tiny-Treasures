@@ -26,10 +26,16 @@ start();
 const connectedUsers: { [key: string]: string } = {};
 
 io.on("connection", (socket) => {
-  socket.on("create-chat", async (data) => {
-    console.log(data);
-    const { receiverId, userId } = data;
+  const userId: string | undefined = socket.handshake.query?.userId?.toString();
+
+  if (userId) {
     connectedUsers[userId] = socket.id;
+  }
+
+  socket.on("create-chat", async (data) => {
+    //console.log(data);
+    const { receiverId, userId } = data;
+
     console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
 
     let chatRoom;
@@ -51,18 +57,24 @@ io.on("connection", (socket) => {
   });
 
   socket.on("typing", (typingInfo) => {
-    const { senderId, receiverId } = typingInfo;
-    io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
-      "typing",
-      typingInfo
-    );
+    const { receiverId } = typingInfo;
+    //console.log(`${senderId} typing ${receiverId}`);
+    io.to(connectedUsers[receiverId]).emit("typing", typingInfo);
   });
 
   socket.on("chat-message", (msg) => {
     const { text, senderId, receiverId } = msg;
-    console.log(msg);
-    io.to(connectedUsers[senderId]).emit("chat-message", msg);
-    io.to(connectedUsers[receiverId]).emit("chat-message", msg);
+    /*console.log(
+      "sender",
+      connectedUsers[senderId],
+      "receiver",
+      connectedUsers[receiverId]
+    );
+    console.log(msg);*/
+    io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
+      "chat-message",
+      msg
+    );
 
     ChatModel.findOne({
       members: {

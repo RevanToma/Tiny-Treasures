@@ -29,7 +29,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
 
   useEffect(() => {
     const typingInfo = {
-      userId,
+      senderId: userId,
       receiverId,
       chatRoomId: room._id,
     };
@@ -37,14 +37,14 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
 
     const handleKeyDown = (e: any) => {
       if (e.key != "enter") {
-        socket.emit("typing", { ...typingInfo, typing: true });
+        socket().emit("typing", { ...typingInfo, typing: true });
         clearTimeout(timeout);
       }
     };
 
     const handleKeyUp = () => {
       timeout = setTimeout(() => {
-        socket.emit("typing", { ...typingInfo, typing: false });
+        socket().emit("typing", { ...typingInfo, typing: false });
       }, 3000);
     };
 
@@ -58,19 +58,24 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   }, [room._id, userId, receiverId]);
 
   useEffect(() => {
-    socket.on("typing", (data) => {
-      const { typing, userId: typingId } = data;
-      const receiverIsTyping = userId !== typingId && typing;
-      setTyping(receiverIsTyping);
+    socket().on("typing", (data) => {
+      console.log(userId, " is typing");
+      if (data.senderId == receiverId) {
+        const { typing, userId: typingId } = data;
+        const receiverIsTyping = userId !== typingId && typing;
+        setTyping(receiverIsTyping);
+      }
     });
   }, [userId]);
 
   useEffect(() => {
-    socket.on("chat-message", (data) => {
+    socket().on("chat-message", (data) => {
       console.log("chat-message received", data);
-      const isSentByMe = data.senderId === userId;
-      const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
-      setMessages(updateMsg);
+      if (data.senderId == receiverId) {
+        const isSentByMe = data.senderId === userId;
+        const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
+        setMessages(updateMsg);
+      }
     });
 
     chatInputRef.current?.scrollIntoView();
@@ -79,7 +84,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   function onSubmit(event: any) {
     event.preventDefault();
     if (!message || !chatInputRef.current?.value) return null;
-    socket.emit("chat-message", message);
+    socket().emit("chat-message", message);
     if (chatInputRef.current) {
       chatInputRef.current.value = "";
     }
@@ -93,7 +98,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
     <S.ChatRoomContainer>
       <S.ChatContainer>
         {messages.map((message) => (
-          <Message message={message} />
+          <Message key={message._id} message={message} />
         ))}
         {typing && <TypingAnimation />}
         <S.MessageInputForm onSubmit={onSubmit}>
