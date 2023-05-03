@@ -1,8 +1,6 @@
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signInUser } from "../../store/user/userSlice";
 import { useState } from "react";
-import { AppDispatch } from "../../store/store";
 import { useAppDispatch } from "../../hooks/useDispatch";
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
