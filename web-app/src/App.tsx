@@ -3,6 +3,10 @@ import ChatRoomList from "./components/chat/ChatRoomList/ChatRoomList";
 import { socket, Socket } from "./Sockets/Message.socket";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "./api/requests";
+import { Route, Routes } from "react-router";
+import SignIn from "./routes/signIn/signIn.component";
+import { BrowserRouter } from "react-router-dom";
+import Home from "./routes/home/home.component";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -35,8 +39,8 @@ function App() {
   // 64493c98d9bc5bcf3b01a8d9
 
   return (
-    <>
-      <form onSubmit={(e) => handleLogIn(e)}>
+    <BrowserRouter>
+      {/* <form onSubmit={(e) => handleLogIn(e)}>
         <input type="text" name="" id="user_id" placeholder="My user id" />
         <button
           type="submit"
@@ -64,8 +68,12 @@ function App() {
         <button type="submit">Open chat with other user</button>
       </form>
       <div>userId: {userId}</div>
-      {userId && <ChatRoomList userId={userId} />}
-    </>
+      {userId && <ChatRoomList userId={userId} />} */}
+      <Routes>
+        <Route index element={<Home />} />
+        <Route path="signin" element={<SignIn />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

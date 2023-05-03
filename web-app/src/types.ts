@@ -12,3 +12,12 @@ export type IChatRoom = {
   messages: IMessage[];
   _id: string;
 };
+export interface UserState {
+  user: object;
+  isLoading: boolean;
+  error: null;
+}
+export type SignInInfo = {
+  email: string;
+  password: string;
+};
