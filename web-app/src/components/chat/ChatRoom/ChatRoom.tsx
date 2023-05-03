@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
-  const [messages, setMessages] = useState<IMessage[]>(room.messages);
+  const [messages, setMessages] = useState<IMessage[]>([]);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
 
@@ -21,6 +21,11 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
     senderId: userId,
     receiverId,
   });
+
+  useEffect(() => {
+    console.log("room updated", room);
+    setMessages(room.messages);
+  }, [room]);
 
   useEffect(() => {
     const typingInfo = {
@@ -50,7 +55,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
       chatInputRef.current?.removeEventListener("keydown", handleKeyDown);
       chatInputRef.current?.removeEventListener("keyup", handleKeyUp);
     };
-  }, [room._id, userId]);
+  }, [room._id, userId, receiverId]);
 
   useEffect(() => {
     socket.on("typing", (data) => {
@@ -58,21 +63,14 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
       const receiverIsTyping = userId !== typingId && typing;
       setTyping(receiverIsTyping);
     });
-    socket.onAny((event, ...args) => {
-      console.log(event, args);
-    });
   }, [userId]);
 
   useEffect(() => {
     socket.on("chat-message", (data) => {
-      console.log(data);
+      console.log("chat-message received", data);
       const isSentByMe = data.senderId === userId;
       const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
-
       setMessages(updateMsg);
-      socket.onAny((event, ...args) => {
-        console.log(event, args);
-      });
     });
 
     chatInputRef.current?.scrollIntoView();
@@ -80,7 +78,6 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
 
   function onSubmit(event: any) {
     event.preventDefault();
-    // console.log(message);
     if (!message || !chatInputRef.current?.value) return null;
     socket.emit("chat-message", message);
     if (chatInputRef.current) {

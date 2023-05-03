@@ -47,14 +47,6 @@ io.on("connection", (socket) => {
       });
     }
 
-    /* const filteredMessages = chatRoom.messages.map((message) => {
-      const sentByMe = message.senderId == userId;
-
-      return { ...message, sentByMe };
-    }); */
-
-    // const newChatRoom = { ...chatRoom, {...messages, } };
-
     socket.emit("create-chat");
   });
 
@@ -68,7 +60,7 @@ io.on("connection", (socket) => {
 
   socket.on("chat-message", (msg) => {
     const { text, senderId, receiverId } = msg;
-
+    console.log(msg);
     io.to(connectedUsers[senderId]).emit("chat-message", msg);
     io.to(connectedUsers[receiverId]).emit("chat-message", msg);
 
