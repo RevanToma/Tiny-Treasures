@@ -16,8 +16,6 @@ export type IChatRoom = {
 };
 export interface UserState {
   user: object;
-  isLoading: boolean;
-  error: string | null;
 }
 export type SignInInfo = {
   email: string;
