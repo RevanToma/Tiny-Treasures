@@ -42,3 +42,4 @@ if (process.argv[2] === '--import') {
 }
 
 //  node build\dev\import-dev-data.js --import
+//  node build\dev\import-dev-data.js --delete
