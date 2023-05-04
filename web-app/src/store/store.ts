@@ -8,7 +8,9 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     process.env.NODE_ENV === "development"
-      ? getDefaultMiddleware().concat(logger)
+      ? getDefaultMiddleware({
+          serializableCheck: false,
+        }).concat(logger)
       : getDefaultMiddleware(),
 });
 
