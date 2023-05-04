@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
-import userReducer from "./user/userSlice";
+import userReducer, { signSuccess } from "./user/userSlice";
 
 const store = configureStore({
   reducer: {

@@ -15,7 +15,8 @@ export type IChatRoom = {
   _id: string;
 };
 export interface UserState {
-  user: object;
+  user: User;
+  isSignedIn: boolean;
 }
 export type SignInInfo = {
   email: string;
@@ -26,6 +27,7 @@ export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  token: string;
 }
 export interface SignUpInfo {
   name: string;

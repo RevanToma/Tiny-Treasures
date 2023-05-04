@@ -6,3 +6,8 @@ export const selectUser = createSelector(
   [userSlice],
   (userSlice) => userSlice.user
 );
+
+export const selectIsSignedIn = createSelector(
+  [userSlice],
+  (userSlice) => userSlice.isSignedIn
+);

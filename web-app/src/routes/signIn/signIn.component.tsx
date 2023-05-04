@@ -28,7 +28,6 @@ const SignIn: React.FC = () => {
       }
     );
   };
-
   return (
     <div>
       {signInWithEmailMutation.isLoading ? (
