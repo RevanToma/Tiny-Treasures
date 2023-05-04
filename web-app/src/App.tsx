@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router";
 import SignIn from "./routes/signIn/signIn.component";
 import { BrowserRouter } from "react-router-dom";
 import Home from "./routes/home/home.component";
+import { SignUp } from "./routes/signUp/signUp.component";
 
 function App() {
   const [userId, setUserId] = useState("");
@@ -72,6 +73,7 @@ function App() {
       <Routes>
         <Route index element={<Home />} />
         <Route path="signin" element={<SignIn />} />
+        <Route path="signup" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
   );

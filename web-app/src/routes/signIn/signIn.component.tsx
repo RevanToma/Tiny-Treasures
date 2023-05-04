@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { signInUser } from "../../store/user/userSlice";
+import { signInWithEmailAsync } from "../../store/user/userSlice";
 import { useState } from "react";
 import { useAppDispatch } from "../../hooks/useDispatch";
 const SignIn: React.FC = () => {
@@ -7,11 +6,10 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState("");
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const signIn = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    await dispatch(signInUser({ email, password }));
+    await dispatch(signInWithEmailAsync({ email, password }));
   };
 
   return (
@@ -31,7 +29,6 @@ const SignIn: React.FC = () => {
         />
         <button>Sign in</button>
       </form>
-      <button onClick={() => navigate("/")}>Home</button>
     </div>
   );
 };
