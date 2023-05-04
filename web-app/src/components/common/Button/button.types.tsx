@@ -15,13 +15,13 @@ interface Buttons {
     color?: string; // default: #fff
     background: string;
     width?: string; // default: fit-content
-    height?: string;
+    height?: string; // default: 4.5rem
     border?: string; // default: none
     hoverBackground: string;
-    hoverColor?: string;
+    hoverColor?: string; //  default: #fff
     activeBackground: string;
-    activeColor?: string;
-    activeBorder?: string;
+    activeColor?: string; //  default: #fff
+    activeBorder?: string; //  default: none
   };
 }
 
