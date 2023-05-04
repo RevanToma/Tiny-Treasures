@@ -36,6 +36,7 @@ type DivProps = {
 
 export const Div = styled.div<DivProps>`
   display: flex;
+  gap: ${({ gap }) => gap || "none"};
   justify-content: ${({ justifyContent }) => justifyContent || "flex-start"};
   flex-direction: ${({ flexDirection }) => flexDirection || "column"};
   flex-grow: ${({ flexGrow }) => flexGrow || 0};
