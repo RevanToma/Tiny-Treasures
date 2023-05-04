@@ -12,6 +12,7 @@ import AppError from "./utils/appError";
 import { globalErrorHandler } from "./utils/errorHandler";
 import { passportConfig } from "./utils/passportConfig";
 import { chatRouter } from "./routes/chat.router";
+import ErrorHandler from "./middlewares/errorMiddleware";
 
 // CONFIG
 dotenv.config({ path: `${__dirname}/../config.env` });
@@ -29,12 +30,12 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
 // ROUTES
+app.use(ErrorHandler);
 app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/users", userRouter);
 
 app.use("/api/v1/chat", chatRouter);
 app.use("/", webRouter);
-
 app.all("*", (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl}!`, 404));
 });

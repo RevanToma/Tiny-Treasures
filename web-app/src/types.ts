@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export type IMessage = {
   senderId: string;
   text: string;
@@ -12,3 +14,30 @@ export type IChatRoom = {
   messages: IMessage[];
   _id: string;
 };
+export interface IUser {
+  data: {
+    user: User;
+  };
+  token: string;
+  isSignedIn?: boolean;
+}
+export type SignInInfo = {
+  email: string;
+  password: string;
+};
+interface User {
+  _id?: string;
+  email: string;
+  firstName: string;
+  credits: number;
+  name: string;
+  location?: {
+    coordinates: [];
+  };
+}
+export interface SignUpInfo {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
