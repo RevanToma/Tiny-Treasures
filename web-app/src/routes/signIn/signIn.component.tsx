@@ -4,6 +4,8 @@ import { useAppDispatch } from "../../hooks/useDispatch";
 import { useMutation } from "@tanstack/react-query";
 import { ApiPostSignInUser } from "../../api/requests";
 import { AxiosError } from "axios";
+import type { IUser } from "../../types";
+import Spinner from "../../components/common/spinner/spinner.component";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -19,8 +21,9 @@ const SignIn: React.FC = () => {
     signInWithEmailMutation.mutate(
       { email, password },
       {
-        onSuccess: (data) => {
+        onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
+          console.log(data);
         },
         onError: (error) => {
           if (error instanceof AxiosError) alert(error.message);
@@ -31,7 +34,7 @@ const SignIn: React.FC = () => {
   return (
     <div>
       {signInWithEmailMutation.isLoading ? (
-        "Signing in..."
+        <Spinner />
       ) : (
         <form onSubmit={signIn}>
           <label htmlFor="email">Email</label>

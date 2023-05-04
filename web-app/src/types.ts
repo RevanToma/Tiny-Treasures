@@ -14,20 +14,26 @@ export type IChatRoom = {
   messages: IMessage[];
   _id: string;
 };
-export interface UserState {
-  user: User;
-  isSignedIn: boolean;
+export interface IUser {
+  data: {
+    user: User;
+  };
+  token: string;
+  isSignedIn?: boolean;
 }
 export type SignInInfo = {
   email: string;
   password: string;
 };
-export interface User {
-  _id: string;
+interface User {
+  _id?: string;
   email: string;
   firstName: string;
-  lastName: string;
-  token: string;
+  credits: number;
+  name: string;
+  location?: {
+    coordinates: [];
+  };
 }
 export interface SignUpInfo {
   name: string;

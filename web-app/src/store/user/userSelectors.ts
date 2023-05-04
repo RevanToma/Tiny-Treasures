@@ -4,7 +4,7 @@ const userSlice = (state: RootState) => state.user;
 
 export const selectUser = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user
+  (userSlice) => userSlice.data.user
 );
 
 export const selectIsSignedIn = createSelector(
