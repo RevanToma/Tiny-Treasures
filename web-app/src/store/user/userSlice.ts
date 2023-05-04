@@ -23,11 +23,8 @@ const userSlice = createSlice({
       state.token = payload.token;
       state.isSignedIn = true;
     },
-    setSignedIn: (state, { payload }: PayloadAction<boolean>) => {
-      state.isSignedIn = payload;
-    },
   },
 });
 
-export const { signSuccess, setSignedIn } = userSlice.actions;
+export const { signSuccess } = userSlice.actions;
 export default userSlice.reducer;
