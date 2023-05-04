@@ -30,12 +30,12 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
 // ROUTES
+app.use(ErrorHandler);
 app.use("/api/v1/posts", postsRouter);
 app.use("/api/v1/users", userRouter);
 
 app.use("/api/v1/chat", chatRouter);
 app.use("/", webRouter);
-app.use(ErrorHandler);
 app.all("*", (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl}!`, 404));
 });
