@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SignInInfo, SignUpInfo, User, UserState } from "../../types";
 import { ApiPostSignInUser, ApiPostSignUpUser } from "../../api/requests";
 
@@ -9,13 +9,12 @@ const initialState: UserState = {
   user: {},
   error: null,
   isLoading: false,
-  errorCode: null,
 };
 
 export const signInWithEmailAsync =
   ({ email, password }: SignInInfo) =>
   async (dispatch: AppDispatch) => {
-    dispatch(singInStart());
+    dispatch(signInStart());
     try {
       const userData = await ApiPostSignInUser(email, password);
       dispatch(signSuccess(userData));
@@ -25,7 +24,7 @@ export const signInWithEmailAsync =
   };
 export const signUpWithEmailAsync =
   (formFields: SignUpInfo) => async (dispatch: AppDispatch) => {
-    dispatch(singInStart());
+    dispatch(signInStart());
     console.log(formFields);
     try {
       const { email, password, passwordConfirm, name } = formFields;
@@ -38,6 +37,7 @@ export const signUpWithEmailAsync =
       dispatch(signSuccess(userData));
     } catch (error) {
       dispatch(signFailed(error as AxiosError));
+      console.log(error);
     }
   };
 
@@ -45,7 +45,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    singInStart: (state) => {
+    signInStart: (state) => {
       state.isLoading = true;
     },
     signSuccess: (state, { payload }: PayloadAction<User>) => {
@@ -53,15 +53,10 @@ const userSlice = createSlice({
       state.user = payload;
     },
     signFailed: (state, { payload }: PayloadAction<AxiosError>) => {
-      const errorMessage =
-        payload.response?.data || payload.message || "Unknown error";
-      const errorCode = payload.response?.status || null;
-
       state.isLoading = false;
-      state.error = errorMessage ? errorMessage.toString() : null;
-      state.errorCode = errorCode;
+      state.error = payload.message;
     },
   },
 });
-export const { singInStart, signSuccess, signFailed } = userSlice.actions;
+export const { signInStart, signSuccess, signFailed } = userSlice.actions;
 export default userSlice.reducer;

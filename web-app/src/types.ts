@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export type IMessage = {
   senderId: string;
   text: string;
@@ -16,7 +18,6 @@ export interface UserState {
   user: object;
   isLoading: boolean;
   error: string | null;
-  errorCode: number | null;
 }
 export type SignInInfo = {
   email: string;
