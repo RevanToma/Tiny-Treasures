@@ -1,15 +1,6 @@
 import { ReactNode, FC } from 'react';
 import * as S from './button.styles';
-
-export enum ButtonType {
-  Trade = 'trade',
-  Messaging = 'messaging',
-  Primary = 'primary',
-  Secondary = 'secondary',
-  Disabled = 'disabled',
-  Pending = 'pending',
-  Completed = 'completed',
-}
+import { ButtonType } from './button.types';
 
 interface ButtonProps {
   buttonType: ButtonType;
