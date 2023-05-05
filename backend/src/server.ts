@@ -64,13 +64,13 @@ io.on("connection", (socket) => {
 
   socket.on("chat-message", (msg) => {
     const { text, senderId, receiverId } = msg;
-    /*console.log(
+    console.log(
       "sender",
       connectedUsers[senderId],
       "receiver",
       connectedUsers[receiverId]
     );
-    console.log(msg);*/
+    console.log(msg);
     io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
       "chat-message",
       msg

@@ -12,22 +12,14 @@ type ChatRoomListProps = {
 const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   const [currentRoom, setCurrentRoom] = useState<IChatRoom>();
   const [receiverId, setReceiverId] = useState<undefined | string>();
-  const queryClient = useQueryClient();
 
   const { data: chats, isLoading, error } = useChats(userId);
-
-  useEffect(() => {
-    if (Socket.getInstance()) {
-      socket().on("chat-message", (data) => {
-        console.log("chat-message received", data);
-      });
-    }
-  }, []);
 
   if (isLoading && userId) return <h1>is loading...</h1>;
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!chats) return null;
 
+  console.log(chats);
   const handleSwitchChat = (room: IChatRoom) => {
     const switchedReceiverId = room.members.find((member) => member !== userId);
     setReceiverId(switchedReceiverId);
