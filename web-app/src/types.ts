@@ -7,12 +7,13 @@ export type IMessage = {
   sentByMe?: boolean;
   createdAt?: Date;
   _id?: string;
+  roomId?: string;
 };
 
 export type IChatRoom = {
   members: string[];
   messages: IMessage[];
-  _id: string;
+  _id?: string;
 };
 export interface IUser {
   data: {

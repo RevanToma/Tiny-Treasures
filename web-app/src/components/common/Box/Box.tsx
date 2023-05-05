@@ -2,7 +2,7 @@ import React from "react";
 import * as S from "./styled";
 
 type BoxProps = {
-  children?: any;
+  children?: React.ReactNode;
   className?: string;
   flexDirection?: "row";
   gap?: string;
@@ -35,7 +35,6 @@ type BoxProps = {
   maxHeight?: string;
   minWidth?: string;
   minHeight?: string;
-  ref?: React.RefObject<HTMLDivElement>;
 };
 
 const Box: React.FC<BoxProps> = ({ ...props }) => {
