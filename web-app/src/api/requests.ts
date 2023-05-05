@@ -1,6 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
-import { IChatRoom, SignInInfo, SignUpInfo } from '../types';
-import { Post, PostQueryResult } from '../utils/interfaces';
+import {
+  IChatRoom,
+  Post,
+  PostQueryResult,
+  SignInInfo,
+  SignUpInfo,
+} from '../types';
 import api from './index';
 
 interface ResponseWithData<T> {
@@ -65,7 +70,8 @@ export const fetchPosts = async ({
   pageParam = 1,
   query = '',
 }: getPostParams): Promise<PostQueryResult> => {
-  const limit = 20;
+  console.log(query);
+  const limit = 10;
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
     await axios.get(
       `${baseUrl}/posts/?page=${pageParam}&limit=${limit}&${query}`
