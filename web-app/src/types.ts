@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios';
 
 export type IMessage = {
   senderId: string;
@@ -41,4 +41,47 @@ export interface SignUpInfo {
   email: string;
   password: string;
   passwordConfirm: string;
+}
+
+export interface Post {
+  categories: string[];
+  condition: string;
+  createdAt: Date;
+  description: string;
+  id: string;
+  images: string[];
+  itemCount: number;
+  location: {
+    coordinates: [number, number];
+    type: string;
+  };
+  sizes: number[];
+  title: string;
+  user: string;
+  _id: string;
+}
+
+// REACT QUERY
+export interface QueryClientResults<T> {
+  data: {
+    data: T;
+  };
+}
+
+interface Metadata {
+  nextPage: number;
+  totalPages: number;
+  totalResults: number;
+  _id: null;
+}
+
+export interface PostQueryResult {
+  metadata: Metadata;
+  posts: Post[];
+}
+
+export interface GeoLocation {
+  coordinates: [number, number];
+  type: string;
+  city?: string;
 }
