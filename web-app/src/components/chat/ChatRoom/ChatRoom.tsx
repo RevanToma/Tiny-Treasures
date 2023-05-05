@@ -17,6 +17,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<IMessage>({
     text: "",
     senderId: userId,
