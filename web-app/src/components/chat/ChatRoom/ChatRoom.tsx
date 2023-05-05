@@ -12,20 +12,19 @@ type Props = {
 };
 
 const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
-
   const [message, setMessage] = useState<IMessage>({
     text: "",
     senderId: userId,
     receiverId,
   });
 
-  useEffect(() => {
-    console.log("room updated", room);
-    setMessages(room.messages);
-  }, [room]);
+  // useEffect(() => {
+  //   console.log("room updated", room);
+  //   setMessages(room.messages);
+  // }, [room]);
 
   useEffect(() => {
     const typingInfo = {
@@ -60,6 +59,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   useEffect(() => {
     socket().on("typing", (data) => {
       console.log(userId, " is typing");
+
       if (data.senderId == receiverId) {
         const { typing, userId: typingId } = data;
         const receiverIsTyping = userId !== typingId && typing;
@@ -70,16 +70,20 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
 
   useEffect(() => {
     socket().on("chat-message", (data) => {
-      console.log("chat-message received", data);
-      if (data.senderId == receiverId) {
+      const senderIsMember = room.members.some(
+        (member) => member === data.senderId
+      );
+      const receiverIsMember = room.members.some(
+        (member) => member === receiverId
+      );
+      if (senderIsMember && receiverIsMember) {
         const isSentByMe = data.senderId === userId;
         const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
         setMessages(updateMsg);
       }
     });
-
     chatInputRef.current?.scrollIntoView();
-  }, [messages, userId]);
+  }, [messages, receiverId, room, userId]);
 
   function onSubmit(event: any) {
     event.preventDefault();

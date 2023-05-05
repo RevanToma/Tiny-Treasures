@@ -20,6 +20,7 @@ export interface IUser {
   };
   token: string;
   isSignedIn?: boolean;
+  chats: IChatRoom[];
 }
 export type SignInInfo = {
   email: string;
