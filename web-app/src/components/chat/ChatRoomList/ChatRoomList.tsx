@@ -18,6 +18,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!chats) return null;
 
+  console.log(chats);
   const handleSwitchChat = (room: IChatRoom) => {
     const switchedReceiverId = room.members.find((member) => member !== userId);
     setReceiverId(switchedReceiverId);
