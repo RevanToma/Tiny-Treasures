@@ -1,7 +1,8 @@
 import ChatRoomList from "../../components/chat/ChatRoomList/ChatRoomList";
-
+import react from "react";
 import { selectUser } from "../../store/user/userSelectors";
 import { useSelector } from "react-redux";
+import { socket } from "../../Sockets/Message.socket";
 
 function Chat() {
   const user = useSelector(selectUser);
