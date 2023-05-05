@@ -125,12 +125,11 @@ function getRandomSize(): string {
 
 function getRandomUser(): string {
   const users = [
-    '644acb016a4541fb49c4c2ad',
-    '644acb0c6a4541fb49c4c2af',
-    '644acb186a4541fb49c4c2b1',
-    '644acb2c6a4541fb49c4c2b3',
-    '644acb376a4541fb49c4c2b5',
-    '64500ae2032e065dc8b21180',
+    '644798e9c829c53744a8ae49',
+    '6447e5dd3f1fca8a6a257d86',
+    '6447e8696312cbecc42ebaab',
+    '6453a8a08fc1c78e99917273',
+    '645560a6c623997f87a6d6dc',
   ];
   const randomIndex = Math.floor(Math.random() * users.length); // Get a random index in the array
   return users[randomIndex]; // Return the size at the random index
@@ -193,6 +192,14 @@ function getRandomCoordinatesInSweden(): [number, number] {
   return [lon, lat];
 }
 
+const images = [
+  'http://localhost:8000/photos/posts/user-644acb016a4541fb49c4c2ad-1683236062245.jpeg',
+  'http://localhost:8000/photos/posts/user-644acb016a4541fb49c4c2ad-1683236062248.jpeg',
+  'http://localhost:8000/photos/posts/user-644acb016a4541fb49c4c2ad-1683236062249.jpeg',
+  'http://localhost:8000/photos/posts/user-644acb016a4541fb49c4c2ad-1683236062251.jpeg',
+  'http://localhost:8000/photos/posts/user-644acb016a4541fb49c4c2ad-1683236062253.jpeg',
+];
+
 const createPostost = (id: number) => {
   const item = getRandomMainAndSubCategories();
   return {
@@ -202,10 +209,10 @@ const createPostost = (id: number) => {
     itemCount: getRandomNumber(),
     size: getRandomSize(),
     mainCategory: item[0],
-    subCategories: item[1],
+    subCategory: item[1],
     condition: getRandomCondition(),
     createdAt: getRandomDate(),
-    images: [],
+    images,
     user: getRandomUser(),
     location: {
       type: Point.Point,

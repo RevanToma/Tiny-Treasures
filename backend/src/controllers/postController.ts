@@ -85,6 +85,7 @@ export const getAllPosts = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    console.log(111);
     const query: StringObject = req.query;
 
     const pipeline = new PostFeatures(query, req.user?.location)
