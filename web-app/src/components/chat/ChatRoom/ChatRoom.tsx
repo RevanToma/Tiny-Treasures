@@ -17,11 +17,11 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
-  const lastMessageRef = useRef<HTMLDivElement>(null);
   const [message, setMessage] = useState<IMessage>({
     text: "",
     senderId: userId,
     receiverId,
+    roomId: room._id,
   });
 
   // useEffect(() => {
@@ -69,7 +69,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
         setTyping(receiverIsTyping);
       }
     });
-  }, [userId]);
+  }, [userId, receiverId]);
 
   useEffect(() => {
     socket().on("chat-message", (data) => {
@@ -84,10 +84,8 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
         const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
         setMessages(updateMsg);
         console.log("sent by meeeee");
-        lastMessageRef.current?.scrollIntoView();
       }
     });
-    chatInputRef.current?.scrollIntoView();
   }, [messages, receiverId, room, userId]);
 
   function onSubmit(event: any) {
@@ -110,7 +108,6 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
             <Message key={message._id} message={message} />
           </>
         ))}
-        <Box ref={lastMessageRef} height="1px" width="100%"></Box>
         {typing && <TypingAnimation />}
       </S.ChatContainer>
       <Box flexDirection="row" gap="10px" justifyContent="space-between">
