@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../styles/themes";
 
 export const ChatRoomContainer = styled.div`
   display: flex;
@@ -10,30 +11,26 @@ export const ChatRoomContainer = styled.div`
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #161616;
   padding: 15px;
   color: white;
-  gap: 15px;
+  gap: 5px;
   align-items: center;
   overflow-y: scroll;
   height: 400px;
 `;
 
-export const MessageInputForm = styled.form`
+export const MessageInputForm = styled.div`
   display: flex;
+  flex: 1;
   justify-content: center;
-  width: 100%;
-  margin: 10px;
   gap: 10px;
 `;
 
 export const MessageInput = styled.input`
-  bottom: 0;
   width: 100%;
-  border-radius: 10px;
-  border: none;
+  box-shadow: ${theme.shadow};
+  border: 1px solid gray;
   padding: 10px;
-  background-color: #bdd0df;
   &:focus {
     outline: none;
   }
