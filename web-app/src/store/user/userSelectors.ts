@@ -11,3 +11,8 @@ export const selectIsSignedIn = createSelector(
   [userSlice],
   (userSlice) => userSlice.isSignedIn
 );
+
+export const selectUserChats = createSelector(
+  [userSlice],
+  (userSlice) => userSlice.chats
+);

@@ -14,8 +14,11 @@ export class Socket {
     });
   }
 
-  public static init(userId: string): Socket {
-    Socket.instance = new Socket(userId);
+  public static init(userId: string | undefined): Socket {
+    if (userId) {
+      Socket.instance = new Socket(userId);
+    }
+
     return Socket.instance;
   }
 

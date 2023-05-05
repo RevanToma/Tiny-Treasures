@@ -1,7 +1,7 @@
 import { IChatRoom, SignInInfo, SignUpInfo } from "../types";
 import api from "./index";
 
-export const fetchChats = async (id: string) => {
+export const fetchChats = async (id: any) => {
   const { data } = await api.get<IChatRoom[]>(`/chat/${id}`);
   return data;
 };

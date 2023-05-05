@@ -35,6 +35,7 @@ type BoxProps = {
   maxHeight?: string;
   minWidth?: string;
   minHeight?: string;
+  ref?: React.RefObject<HTMLDivElement>;
 };
 
 const Box: React.FC<BoxProps> = ({ ...props }) => {
@@ -42,5 +43,3 @@ const Box: React.FC<BoxProps> = ({ ...props }) => {
 };
 
 export default Box;
-
-<Box margin="23" flexDirection="row"></Box>;

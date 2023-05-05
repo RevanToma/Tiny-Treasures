@@ -4,6 +4,8 @@ import Message from "../Message/Message";
 import { IChatRoom, IMessage } from "../../../types";
 import * as S from "./styled";
 import TypingAnimation from "../TypingAnimation/TypingAnimation";
+import SendButton from "../../../assets/svg.icons/SendButton";
+import Box from "../../common/Box/Box";
 
 type Props = {
   room: IChatRoom;
@@ -12,20 +14,19 @@ type Props = {
 };
 
 const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
-
   const [message, setMessage] = useState<IMessage>({
     text: "",
     senderId: userId,
     receiverId,
   });
 
-  useEffect(() => {
-    console.log("room updated", room);
-    setMessages(room.messages);
-  }, [room]);
+  // useEffect(() => {
+  //   console.log("room updated", room);
+  //   setMessages(room.messages);
+  // }, [room]);
 
   useEffect(() => {
     const typingInfo = {
@@ -60,6 +61,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   useEffect(() => {
     socket().on("typing", (data) => {
       console.log(userId, " is typing");
+
       if (data.senderId == receiverId) {
         const { typing, userId: typingId } = data;
         const receiverIsTyping = userId !== typingId && typing;
@@ -70,19 +72,24 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
 
   useEffect(() => {
     socket().on("chat-message", (data) => {
-      console.log("chat-message received", data);
-      if (data.senderId == receiverId) {
+      const senderIsMember = room.members.some(
+        (member) => member === data.senderId
+      );
+      const receiverIsMember = room.members.some(
+        (member) => member === receiverId
+      );
+      if (senderIsMember && receiverIsMember) {
         const isSentByMe = data.senderId === userId;
         const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
         setMessages(updateMsg);
+        console.log("sent by meeeee");
+        lastMessageRef.current?.scrollIntoView();
       }
     });
-
     chatInputRef.current?.scrollIntoView();
-  }, [messages, userId]);
+  }, [messages, receiverId, room, userId]);
 
   function onSubmit(event: any) {
-    event.preventDefault();
     if (!message || !chatInputRef.current?.value) return null;
     socket().emit("chat-message", message);
     if (chatInputRef.current) {
@@ -97,18 +104,24 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   return (
     <S.ChatRoomContainer>
       <S.ChatContainer>
-        {messages.map((message) => (
-          <Message key={message._id} message={message} />
+        {messages.map((message, i, arr) => (
+          <>
+            <Message key={message._id} message={message} />
+          </>
         ))}
+        <Box ref={lastMessageRef} height="1px" width="100%"></Box>
         {typing && <TypingAnimation />}
-        <S.MessageInputForm onSubmit={onSubmit}>
+      </S.ChatContainer>
+      <Box flexDirection="row" gap="10px" justifyContent="space-between">
+        <S.MessageInputForm>
           <S.MessageInput
+            placeholder="Message"
             ref={chatInputRef}
             onChange={(e) => handleChatInput(e)}
           />
-          <S.SendButton type="submit">Submit</S.SendButton>
         </S.MessageInputForm>
-      </S.ChatContainer>
+        <SendButton onClick={onSubmit} />
+      </Box>
     </S.ChatRoomContainer>
   );
 };
