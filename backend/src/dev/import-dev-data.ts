@@ -17,7 +17,6 @@ function sortById(arr: { title: number }[]): { title: number }[] {
 }
 
 const importData = async () => {
-  sortById(posts);
   try {
     await Post.create(posts);
     console.log('Data successfully loaded');

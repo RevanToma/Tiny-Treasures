@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from './store/user/userSelectors';
 import { Socket } from './Sockets/Message.socket';
 import Posts from './routes/posts/posts.component';
+import { GlobalStyles } from './styles/GlobalStyles';
 
 const SignIn = lazy(() => import('./routes/signUp/signUp.component'));
 const Chat = lazy(() => import('./routes/chat/chat.component'));
@@ -24,6 +25,7 @@ function App() {
   }, [userId]);
   return (
     <>
+      <GlobalStyles />
       <BrowserRouter>
         <Suspense fallback={<Spinner />}>
           <Routes>

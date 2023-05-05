@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import * as S from './postCardMedium.styles';
 
-import { Post } from '../../../utils/interfaces';
 import Box from '../Box/Box';
 import { theme } from '../../../styles/themes';
+import { Post } from '../../../types';
 
 interface PostCardMediumProps {
   post: Post;

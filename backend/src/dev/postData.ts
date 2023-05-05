@@ -203,8 +203,8 @@ const images = [
 const createPostost = (id: number) => {
   const item = getRandomMainAndSubCategories();
   return {
-    title: id,
-    // title: getRandomTitle(),
+    // title: id,
+    title: getRandomTitle(),
     description: getRandomDescription(),
     itemCount: getRandomNumber(),
     size: getRandomSize(),
