@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { IChatRoom, IMessage } from "../../../types";
+import React, { useState } from "react";
+import { IChatRoom } from "../../../types";
 import ChatRoom from "../ChatRoom/ChatRoom";
 import { useChats } from "../../../hooks/useChats";
-import { socket, Socket } from "../../../Sockets/Message.socket";
-import { useQueryClient } from "@tanstack/react-query";
-import { fetchChats } from "../../../api/requests";
+
+import { useAppDispatch } from "../../../hooks/useDispatch";
+import { setCurrentChatRoom } from "../../../store/user/userSlice";
 
 type ChatRoomListProps = {
   userId: string;
@@ -13,24 +13,9 @@ type ChatRoomListProps = {
 const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   const [currentRoom, setCurrentRoom] = useState<IChatRoom>();
   const [receiverId, setReceiverId] = useState<undefined | string>();
-
-  const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
 
   const { data: chats, isLoading, error } = useChats(userId);
-
-  useEffect(() => {
-    socket().on("chat-message", (data: IMessage) => {
-      console.log(data);
-    });
-  }, [receiverId, currentRoom, userId]);
-
-  useEffect(() => {
-    socket().on("chat-message", (data: IMessage) => {
-      if (data.roomId !== currentRoom || !currentRoom) {
-        queryClient.invalidateQueries([fetchChats.name]);
-      }
-    });
-  }, [receiverId, currentRoom, userId, queryClient]);
 
   if (isLoading && userId) return <h1>is loading...</h1>;
   if (error instanceof Error) return <h1>{error.message}</h1>;
@@ -40,6 +25,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   const handleSwitchChat = (room: IChatRoom) => {
     const switchedReceiverId = room.members.find((member) => member !== userId);
     setReceiverId(switchedReceiverId);
+    dispatch(setCurrentChatRoom(room));
     setCurrentRoom(room);
   };
 

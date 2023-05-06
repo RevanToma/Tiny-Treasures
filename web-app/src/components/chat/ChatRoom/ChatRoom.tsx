@@ -61,8 +61,6 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
 
   useEffect(() => {
     socket().on("typing", (data) => {
-      console.log(userId, " is typing");
-
       if (data.senderId == receiverId) {
         const { typing, userId: typingId } = data;
         const receiverIsTyping = userId !== typingId && typing;
@@ -83,7 +81,6 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
         const isSentByMe = data.senderId === userId;
         const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
         setMessages(updateMsg);
-        console.log("sent by meeeee");
       }
     });
   }, [messages, receiverId, room, userId]);
