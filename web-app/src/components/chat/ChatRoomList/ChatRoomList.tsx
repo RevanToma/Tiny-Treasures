@@ -5,6 +5,7 @@ import { useChats } from "../../../hooks/useChats";
 
 import { useAppDispatch } from "../../../hooks/useDispatch";
 import { setCurrentChatRoom } from "../../../store/user/userSlice";
+import Spinner from "../../common/spinner/spinner.component";
 
 type ChatRoomListProps = {
   userId: string;
@@ -17,7 +18,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
 
   const { data: chats, isLoading, error } = useChats(userId);
 
-  if (isLoading && userId) return <h1>is loading...</h1>;
+  if (isLoading && userId) return <Spinner />;
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!chats) return null;
 

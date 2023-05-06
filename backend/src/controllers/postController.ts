@@ -1,14 +1,14 @@
-import { NextFunction, Response } from 'express';
-import Post, { PostDocument, PostDocumentWithEnums } from '../models/postModel';
-import { catchAsync } from '../utils/catchAsync';
-import { PostFeatures } from '../utils/apiFeatures';
-import { CustomRequest } from '../utils/expressInterfaces';
-import AppError from '../utils/appError';
-import { LocationData, NumberObject, StringObject } from '../utils/interfaces';
-import mongoose, { PipelineStage } from 'mongoose';
-import multer from 'multer';
-import sharp from 'sharp';
-import '../models/enumsModel';
+import { NextFunction, Response } from "express";
+import Post, { PostDocument, PostDocumentWithEnums } from "../models/postModel";
+import { catchAsync } from "../utils/catchAsync";
+import { PostFeatures } from "../utils/apiFeatures";
+import { CustomRequest } from "../utils/expressInterfaces";
+import AppError from "../utils/appError";
+import { LocationData, NumberObject, StringObject } from "../utils/interfaces";
+import mongoose, { PipelineStage } from "mongoose";
+import multer from "multer";
+import sharp from "sharp";
+import "../models/enumsModel";
 
 // multer adds a body to the request object with the values of the form field.  If not using default FF, must create new form and all values on client side.
 // req.file will hold the file, req.body will hold the text fields
@@ -31,7 +31,7 @@ const multerFilter = (
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ): void => {
-  if (file.mimetype.startsWith('image')) {
+  if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {
     cb(null, false);
@@ -52,7 +52,7 @@ const upload = multer({
   limits: multerLimits,
 });
 
-export const uploadPhotos = upload.array('photos', 5);
+export const uploadPhotos = upload.array("photos", 5);
 
 export const resizePhoto = catchAsync(
   async (
@@ -70,7 +70,7 @@ export const resizePhoto = catchAsync(
 
       await sharp(file.buffer)
         .resize({ width: 1000 })
-        .toFormat('jpeg')
+        .toFormat("jpeg")
         .jpeg({ quality: 80 })
         .toFile(`public/photos/posts/${filename}`);
     });
@@ -99,7 +99,7 @@ export const getAllPosts = catchAsync(
     const posts: PostDocument[] = await Post.aggregate(pipeline.stages);
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       results: posts.length,
       data: {
         data: posts,
@@ -116,6 +116,7 @@ export const getPost = catchAsync(
   ): Promise<void> => {
     const { postId } = req.params;
     const location: LocationData | null = req.user.location;
+    console.log("POSTID", postId);
 
     const pipeline: PipelineStage[] = [
       {
@@ -128,11 +129,11 @@ export const getPost = catchAsync(
     const post = await Post.aggregate(pipeline);
 
     if (!post) {
-      return next(new AppError('No post found!', 400));
+      return next(new AppError("No post found!", 400));
     }
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         post,
       },
@@ -147,7 +148,7 @@ export const createPost = catchAsync(
     next: NextFunction
   ): Promise<void> => {
     const images = req.filenames
-      ? [...req.filenames].map(fileName => `/photos/posts/${fileName}`)
+      ? [...req.filenames].map((fileName) => `/photos/posts/${fileName}`)
       : [];
 
     const itemCount = req.body.itemCount && parseInt(req.body.itemCount);
@@ -164,24 +165,24 @@ export const createPost = catchAsync(
       images,
       user: req.user.id,
     };
-    const x = await new Post(postData).populate('enums');
+    const x = await new Post(postData).populate("enums");
 
     const post: PostDocumentWithEnums = await new Post(postData).populate(
-      'enums'
+      "enums"
     );
 
     if (!post) {
-      return next(new AppError('Unable to create post!', 400));
+      return next(new AppError("Unable to create post!", 400));
     }
 
     if (post.enumsAreValid(post)) {
-      return next(new AppError('Invalid categories!', 400));
+      return next(new AppError("Invalid categories!", 400));
     }
 
     post.save();
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         data: post,
       },

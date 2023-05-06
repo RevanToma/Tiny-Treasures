@@ -70,7 +70,6 @@ export const fetchPosts = async ({
   pageParam = 1,
   query = "",
 }: getPostParams): Promise<PostQueryResult> => {
-  console.log(query);
   const limit = 10;
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
     await axios.get(
@@ -78,4 +77,10 @@ export const fetchPosts = async ({
     );
   checkForError(data.data);
   return data.data.data.data[0];
+};
+
+export const fetchPostById = async (id: string) => {
+  const { data } = await api.get(`/posts/${id}`);
+  checkForError(data);
+  return data;
 };
