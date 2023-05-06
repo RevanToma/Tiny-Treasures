@@ -1,4 +1,4 @@
-import { AxiosError } from 'axios';
+import { AxiosError } from "axios";
 
 export type IMessage = {
   senderId: string;
@@ -21,7 +21,7 @@ export interface IUser {
   };
   token: string;
   isSignedIn?: boolean;
-  chats: IChatRoom[];
+  currentChatRoom?: IChatRoom;
 }
 export type SignInInfo = {
   email: string;

@@ -12,7 +12,7 @@ const initialState: IUser = {
   },
   isSignedIn: false,
   token: "",
-  chats: [],
+  currentChatRoom: undefined,
 };
 
 const userSlice = createSlice({
@@ -24,11 +24,11 @@ const userSlice = createSlice({
       state.token = payload.token;
       state.isSignedIn = true;
     },
-    updateChats: (state, { payload }: PayloadAction<IChatRoom[]>) => {
-      state.chats = payload;
+    setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
+      state.currentChatRoom = payload;
     },
   },
 });
 
-export const { signSuccess, updateChats } = userSlice.actions;
+export const { signSuccess, setCurrentChatRoom } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,12 +1,12 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from "axios";
 import {
   IChatRoom,
   Post,
   PostQueryResult,
   SignInInfo,
   SignUpInfo,
-} from '../types';
-import api from './index';
+} from "../types";
+import api from "./index";
 
 interface ResponseWithData<T> {
   status: string;
@@ -23,13 +23,13 @@ interface ResponseWithError {
   stack?: string;
 }
 
-const baseUrl = 'http://localhost:8000/api/v1';
+const baseUrl = "http://localhost:8000/api/v1";
 
 export const checkForError = (
   data: ResponseWithData<Post[] | PostQueryResult[]> | ResponseWithError
 ): void => {
-  if (data.status === 'error' || data.status === 'fail') {
-    throw new Error('Something went wrong!');
+  if (data.status === "error" || data.status === "fail") {
+    throw new Error("Something went wrong!");
   }
 };
 
@@ -39,7 +39,7 @@ export const fetchChats = async (id: any) => {
 };
 
 export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
-  const { data } = await api.post('/users/signin', {
+  const { data } = await api.post("/users/signin", {
     email,
     password,
   });
@@ -52,7 +52,7 @@ export const ApiPostSignUpUser = async ({
   password,
   passwordConfirm,
 }: SignUpInfo) => {
-  const { data } = await api.post('users/signup', {
+  const { data } = await api.post("users/signup", {
     name,
     email,
     password,
@@ -68,7 +68,7 @@ type getPostParams = {
 
 export const fetchPosts = async ({
   pageParam = 1,
-  query = '',
+  query = "",
 }: getPostParams): Promise<PostQueryResult> => {
   console.log(query);
   const limit = 10;

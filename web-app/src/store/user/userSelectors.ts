@@ -12,7 +12,7 @@ export const selectIsSignedIn = createSelector(
   (userSlice) => userSlice.isSignedIn
 );
 
-export const selectUserChats = createSelector(
+export const selectCurrentChatRoom = createSelector(
   [userSlice],
-  (userSlice) => userSlice.chats
+  (userSlice) => userSlice.currentChatRoom
 );
