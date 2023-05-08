@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
       });
     }
 
-    socket.emit("create-chat");
+    socket.emit("create-chat", chatRoom);
   });
 
   socket.on("typing", (typingInfo) => {

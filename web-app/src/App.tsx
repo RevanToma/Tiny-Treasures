@@ -27,13 +27,18 @@ function App() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const refetchChats = () => {
+      queryClient.invalidateQueries([fetchChats.name]);
+    };
+
     if (userId._id) {
       Socket.init(userId._id);
       socket().on("chat-message", (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
-          queryClient.invalidateQueries([fetchChats.name]);
+          refetchChats();
         }
       });
+      socket().on("create-chat", refetchChats);
     }
   }, [userId._id, currentChatRoom, queryClient]);
 

@@ -1,13 +1,6 @@
 import styled from "styled-components";
 import { theme } from "../../../styles/themes";
 
-export const ChatRoomContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 10px;
-  flex-direction: column;
-`;
-
 export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -16,7 +9,6 @@ export const ChatContainer = styled.div`
   gap: 5px;
   align-items: center;
   overflow-y: scroll;
-  height: 400px;
 `;
 
 export const MessageInputForm = styled.div`

@@ -31,7 +31,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   };
 
   return (
-    <div>
+    <>
       {chats.map((room) => {
         return (
           <div key={room._id} onClick={() => handleSwitchChat(room)}>
@@ -47,7 +47,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
           room={currentRoom}
         ></ChatRoom>
       )}
-    </div>
+    </>
   );
 };
 
