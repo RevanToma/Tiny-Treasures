@@ -20,6 +20,7 @@ const Chat = lazy(() => import("./routes/chat/chat.component"));
 const AccountSettings = lazy(
   () => import("./routes/settings/AccountSettings.component")
 );
+const GiveAway = lazy(() => import("./components/GiveAway/GiveAway"));
 function App() {
   const userId = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
@@ -46,6 +47,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="signin" element={<SignIn />} />
               <Route path="account" element={<AccountSettings />} />
+              <Route path="giveaway" element={<GiveAway />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="profile" element={<Profile />} />
               <Route path="post/:id" element={<Post />} />

@@ -77,3 +77,36 @@ export const fetchPosts = async ({
   checkForError(data.data);
   return data.data.data.data[0];
 };
+
+export interface CreatePostData {
+  title: string;
+  description: string;
+  category: string;
+  image?: File | null;
+  itemCount: number;
+  size: string;
+  mainCategory: string;
+  subCategory: string;
+}
+
+export const createPost = async (postData: CreatePostData) => {
+  const formData = new FormData();
+  formData.append("title", postData.title);
+  formData.append("description", postData.description);
+  formData.append("itemCount", postData.itemCount.toString());
+  formData.append("size", postData.size);
+  formData.append("mainCategory", postData.mainCategory);
+  formData.append("subCategory", postData.subCategory);
+
+  if (postData.image !== undefined && postData.image !== null) {
+    formData.append("image", postData.image);
+  }
+
+  const { data } = await api.post("/posts", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return data;
+};

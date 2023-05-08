@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-import { theme } from '../../../styles/themes';
-import Box from '../Box/Box';
+import { theme } from "../../../styles/themes";
+import Box from "../Box/Box";
 
 interface InputProps {
   open: boolean;
@@ -18,12 +18,12 @@ export const BoxExtended = styled(Box)<InputProps>`
     width: 100%;
     padding: 1.2rem;
 
-    background-color: #fff;
+    background-color: ${theme.color.backgroundMain};
     color: ${theme.color.text};
 
     border: none;
 
-    border-radius: ${({ open }) => (open ? ' 10px 10px 0 0' : '10px')};
+    border-radius: ${({ open }) => (open ? " 10px 10px 0 0" : "10px")};
 
     &:focus {
       outline: 2px solid ${theme.color.primary};
