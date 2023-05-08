@@ -2,7 +2,7 @@ import Box from "../../components/common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserCredits } from "../../store/user/userSelectors";
-import LeftCarett from "../../components/common/leftCarett/LeftCarett";
+import LeftOrRightCarett from "../../components/common/leftCarett/LeftOrRightCarett";
 import { BiCoinStack } from "react-icons/bi";
 
 import NavigationItem from "./NavigationItems";
@@ -30,7 +30,7 @@ const AccountSettings = () => {
         <h1>Account</h1>
       </Box>
       <Box>
-        <LeftCarett onClick={() => navigate("/")} />
+        <LeftOrRightCarett left={true} onClick={() => navigate("/")} />
       </Box>
       <Box gap="2rem" margin="2rem">
         <NavigationItem

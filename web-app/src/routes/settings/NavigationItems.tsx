@@ -1,7 +1,6 @@
 import Button from "../../components/common/Button/Button.component";
 import Box from "../../components/common/Box/Box";
-
-import { FaArrowRight } from "react-icons/fa";
+import LeftOrRightCarett from "../../components/common/leftCarett/LeftOrRightCarett";
 import { ButtonType } from "../../components/common/Button/button.types";
 
 interface NavigationItemProps {
@@ -36,7 +35,7 @@ const NavigationItem = ({
         <Box flexDirection="row" alignItems="center">
           {children}
         </Box>
-        {showArrow && <FaArrowRight size={29} />}
+        {showArrow && <LeftOrRightCarett left={false} />}
       </Box>
     </Button>
   );
