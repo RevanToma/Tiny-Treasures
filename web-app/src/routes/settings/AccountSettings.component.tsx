@@ -40,15 +40,19 @@ const AccountSettings = () => {
           buttonType={ButtonType.Secondary}
           onClick={handleAccountSettings}
         >
-          <Box alignItems="flex-start">
+          <Box
+            alignItems="center"
+            flexDirection="row"
+            justifyContent="space-between"
+          >
             Account Settings <IoMdArrowForward size={32} />
           </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleCredits}>
           <Box
+            alignItems="center"
             flexDirection="row"
             justifyContent="space-between"
-            alignItems="center"
           >
             <span>Credits </span>
             <Box alignItems="center" flexDirection="row">
@@ -57,12 +61,20 @@ const AccountSettings = () => {
           </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleMyItems}>
-          <Box alignItems="flex-start">
+          <Box
+            alignItems="center"
+            flexDirection="row"
+            justifyContent="space-between"
+          >
             My items <IoMdArrowForward size={32} />
           </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleFavourites}>
-          <Box alignItems="flex-start">
+          <Box
+            alignItems="center"
+            flexDirection="row"
+            justifyContent="space-between"
+          >
             Favourites <IoMdArrowForward size={32} />
           </Box>
         </Button>
