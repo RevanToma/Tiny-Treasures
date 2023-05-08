@@ -1,13 +1,10 @@
-import Button from "../../components/common/Button/Button.component";
-import { ButtonType } from "../../components/common/Button/button.types";
-
 import Box from "../../components/common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserCredits } from "../../store/user/userSelectors";
 import LeftCarett from "../../assets/svg.icons/LeftCarett";
 import { BiCoinStack } from "react-icons/bi";
-import { IoMdArrowForward } from "react-icons/io";
+
 import NavigationItem from "./NavigationItems";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
