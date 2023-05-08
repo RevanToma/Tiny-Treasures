@@ -1,8 +1,18 @@
 import React from "react";
 import Box from "../../components/common/Box/Box";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectIsSignedIn } from "../../store/user/userSelectors";
+import Navbar from "../../components/Navbar/navbar.component";
+import styled from "styled-components";
+
+const LayoutStyle = styled.div`
+  overflow: hidden;
+`;
+
+const PageStyle = styled.div`
+  overflow-y: auto;
+`;
 
 type LayoutProps = Record<string, never>;
 
@@ -10,22 +20,23 @@ const Layout: React.FC<LayoutProps> = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
 
   return (
-    <Box alignItems="center">
-      <Box>
-        <Outlet />
-      </Box>
-      {userSignedIn && (
-        <nav>
-          <Box gap="10px" flexDirection="row">
-            <Link to="/">Home</Link>
-            <div>Search</div>
-            <Link to="/giveaway">Give away</Link>
-            <Link to="/chat">Chat</Link>
-            <Link to="/account">Account</Link>
+    <LayoutStyle>
+      <Box
+        alignItems="center"
+        height="100vh"
+        maxHeight="100vh"
+        justifyContent="space-between"
+        margin="0"
+      >
+        <PageStyle>
+          <Box>
+            <Outlet />
           </Box>
-        </nav>
-      )}
-    </Box>
+        </PageStyle>
+
+        {userSignedIn && <Navbar />}
+      </Box>
+    </LayoutStyle>
   );
 };
 
