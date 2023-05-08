@@ -72,9 +72,7 @@ export const fetchPosts = async ({
 }: getPostParams): Promise<PostQueryResult> => {
   const limit = 10;
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
-    await axios.get(
-      `${baseUrl}/posts/?page=${pageParam}&limit=${limit}&${query}`
-    );
+    await api.get(`posts/?page=${pageParam}&limit=${limit}&${query}`);
   checkForError(data.data);
   return data.data.data.data[0];
 };

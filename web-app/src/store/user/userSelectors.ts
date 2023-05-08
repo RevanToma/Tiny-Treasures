@@ -16,3 +16,8 @@ export const selectCurrentChatRoom = createSelector(
   [userSlice],
   (userSlice) => userSlice.currentChatRoom
 );
+
+export const selectUserCredits = createSelector(
+  [userSlice],
+  (userSlice) => userSlice.data.user.credits
+);

@@ -18,7 +18,9 @@ import axios from "axios";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
 const Chat = lazy(() => import("./routes/chat/chat.component"));
-
+const AccountSettings = lazy(
+  () => import("./routes/settings/AccountSettings.component")
+);
 function App() {
   const userId = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
@@ -28,7 +30,7 @@ function App() {
     if (userId._id) {
       Socket.init(userId._id);
       socket().on("chat-message", (data: IMessage) => {
-        if (data.roomId !== currentChatRoom || !currentChatRoom) {
+        if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           queryClient.invalidateQueries([fetchChats.name]);
         }
       });
@@ -44,6 +46,7 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="signin" element={<SignIn />} />
+              <Route path="account" element={<AccountSettings />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="profile" element={<Profile />} />
               <Route path="post/:id" element={<Post />} />
