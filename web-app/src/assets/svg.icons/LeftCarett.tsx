@@ -1,6 +1,6 @@
 import { SVGProps } from "react";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { FaArrowLeft } from "react-icons/fa";
 const LeftCarett = (props: SVGProps<SVGSVGElement>) => (
-  <IoMdArrowRoundBack size={32} {...props} />
+  <FaArrowLeft size={29} {...props} />
 );
 export default LeftCarett;
