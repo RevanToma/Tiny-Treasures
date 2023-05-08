@@ -14,6 +14,7 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "./api/requests";
 import { IMessage } from "./types";
+import axios from "axios";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
 const Chat = lazy(() => import("./routes/chat/chat.component"));

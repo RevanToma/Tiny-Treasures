@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
-import * as S from './post.styles';
-import { useEffect, useRef } from 'react';
-import Button from '../../components/common/Button/Button.component';
-import { ButtonType } from '../../components/common/Button/button.types';
-import { fileRefs } from '../../utils/fileRefs';
-import PostList from '../../components/common/PostList/PostList.component';
-import SelectInput from '../../components/common/select-input/SelectInput.component';
-import { clothes } from '../../utils/enums';
-import { theme } from '../../styles/themes';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import Box from '../../components/common/Box/Box';
-import { fetchPosts } from '../../api/requests';
+import * as S from "./post.styles";
+import { useEffect, useRef } from "react";
+import Button from "../../components/common/Button/Button.component";
+import { ButtonType } from "../../components/common/Button/button.types";
+import { fileRefs } from "../../utils/fileRefs";
+import PostList from "../../components/common/PostList/PostList.component";
+import SelectInput from "../../components/common/select-input/SelectInput.component";
+import { clothes } from "../../utils/enums";
+import { theme } from "../../styles/themes";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import Box from "../../components/common/Box/Box";
+import { fetchPosts } from "../../api/requests";
 
 const Posts: React.FC = () => {
   const { startQuery } = useParams();
@@ -28,9 +28,9 @@ const Posts: React.FC = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['posts', query],
+    queryKey: ["posts", query],
     queryFn: ({ pageParam }) => fetchPosts({ pageParam, query }),
-    getNextPageParam: lastPage => {
+    getNextPageParam: (lastPage) => {
       const nextPage = lastPage.metadata.nextPage;
       const totalPages = lastPage.metadata.totalPages;
 
@@ -42,9 +42,9 @@ const Posts: React.FC = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         if (entries[0].isIntersecting) {
-          console.log('INTERSECT');
+          console.log("INTERSECT");
           fetchNextPage();
         }
       },
@@ -92,7 +92,7 @@ const Posts: React.FC = () => {
           optionsArray={clothes}
           initialValue="All"
           label="Category"
-          handleSelect={option => buildQuery('subCategory', option)}
+          handleSelect={(option) => buildQuery("subCategory", option)}
         />
         <SelectInput
           optionsArray={clothes}
@@ -110,10 +110,10 @@ const Posts: React.FC = () => {
         <div ref={LoadMoreButton}>
           <Button buttonType={buttonType} onClick={() => fetchNextPage()}>
             {isFetchingNextPage || isLoading
-              ? 'Loading more...'
+              ? "Loading more..."
               : isError
-              ? 'Error!'
-              : 'No more posts!'}
+              ? "Error!"
+              : "No more posts!"}
           </Button>
           {error instanceof Error && <p> error.message</p>}
         </div>

@@ -80,7 +80,6 @@ export const fetchPosts = async ({
 };
 
 export const fetchPostById = async (id: string) => {
-  const { data } = await api.get(`/posts/${id}`);
-  checkForError(data);
+  const { data } = await api.get<Post>(`/posts/${id}`);
   return data;
 };

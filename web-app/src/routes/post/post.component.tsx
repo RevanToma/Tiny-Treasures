@@ -5,11 +5,14 @@ import Spinner from "../../components/common/spinner/spinner.component";
 const Post = () => {
   const { id } = useParams();
   const postId = id ?? "";
+  console.log("hi");
 
-  const { data: post, isLoading, error } = usePost(postId);
+  const { data: posts, isLoading, error } = usePost(postId);
   if (isLoading && postId) return <Spinner />;
   if (error instanceof Error) return <h1>{error.message}</h1>;
-  if (!post) return null;
+  if (!posts) return null;
+
+  console.log(posts);
 
   return (
     <div>
