@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { selectUserCredits } from "../../store/user/userSelectors";
 import LeftCarett from "../../assets/svg.icons/LeftCarett";
 import { BiCoinStack } from "react-icons/bi";
+import { IoMdArrowForward } from "react-icons/io";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const navigate = useNavigate();
@@ -39,7 +40,9 @@ const AccountSettings = () => {
           buttonType={ButtonType.Secondary}
           onClick={handleAccountSettings}
         >
-          <Box alignItems="flex-start">Account Settings</Box>
+          <Box alignItems="flex-start">
+            Account Settings <IoMdArrowForward size={32} />
+          </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleCredits}>
           <Box
@@ -47,17 +50,21 @@ const AccountSettings = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <span>Credits</span>
+            <span>Credits </span>
             <Box alignItems="center" flexDirection="row">
               {userCredits}x <BiCoinStack />
             </Box>
           </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleMyItems}>
-          <Box alignItems="flex-start">My items</Box>
+          <Box alignItems="flex-start">
+            My items <IoMdArrowForward size={32} />
+          </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleFavourites}>
-          <Box alignItems="flex-start">Favourites</Box>
+          <Box alignItems="flex-start">
+            Favourites <IoMdArrowForward size={32} />
+          </Box>
         </Button>
       </Box>
     </>
