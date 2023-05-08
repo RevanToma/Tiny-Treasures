@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./routes/signUp/signUp.component";
 import Home from "./routes/home/home.component";
-import Post from "./routes/post/post.component";
+import Post from "./routes/post/post/post.component";
 import Profile from "./routes/profile/profile.component";
 import Layout from "./routes/layout/Layout";
 import { lazy, Suspense, useEffect } from "react";

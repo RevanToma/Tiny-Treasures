@@ -15,4 +15,9 @@ postsRouter
     postController.createPost
   );
 
-postsRouter.get("/:postId", postController.getPost);
+postsRouter.get(
+  "/:postId",
+
+  /* userController.attatchUserToReq, */
+  postController.getPost
+);
