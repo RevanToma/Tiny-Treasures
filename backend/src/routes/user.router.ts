@@ -1,25 +1,25 @@
-import express from 'express';
-import * as authController from '../controllers/authController';
+import express from "express";
+import * as authController from "../controllers/authController";
 
 export const userRouter = express.Router();
 
-userRouter.post('/signup', authController.signUp);
+userRouter.post("/signup", authController.signUp);
 userRouter.post(
-  '/signin',
+  "/signin",
   authController.verifyPassword,
   authController.signIn
 );
-userRouter.post('/logout');
+userRouter.post("/logout");
 
 userRouter.use(authController.protect);
 
 userRouter.patch(
-  '/updatePassword',
+  "/updatePassword",
   authController.verifyPassword,
   authController.updatePassword
 );
 userRouter.patch(
-  '/updateEmail',
+  "/updateEmail",
   authController.verifyPassword,
   authController.updateEmail
 );
