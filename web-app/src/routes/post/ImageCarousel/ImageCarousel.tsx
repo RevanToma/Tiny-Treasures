@@ -11,6 +11,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
   const [index, setIndex] = useState(0);
 
   const goToNext = () => {
+    console.log("ge");
     setIndex(index + 1);
   };
 
@@ -19,18 +20,19 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
   };
 
   const imageList = images.map((image, i) => {
-    return <S.Image current={i === index} src={image} alt="" />;
+    const current = i === index;
+    return <S.Image current={current} src={image} />;
   });
 
   return (
-    <Box>
-      <button onClick={goToNext} name="previous" disabled={index === 0}>
+    <Box flexDirection="row" justifyContent="center" alignItems="center">
+      <button onClick={goToPrevious} name="previous" disabled={index === 0}>
         previous
       </button>
       <Box flexDirection="row">{imageList}</Box>
       <button
         disabled={index === imageList.length - 1}
-        onClick={goToPrevious}
+        onClick={goToNext}
         name="next"
       >
         next

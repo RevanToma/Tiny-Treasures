@@ -6,6 +6,6 @@ type ImageProps = {
 
 export const Image = styled.img<ImageProps>`
   width: auto;
-  height: 100px;
+  height: 200px;
   display: ${({ current }) => (current ? "block" : "none")};
 `;

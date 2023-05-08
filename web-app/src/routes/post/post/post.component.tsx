@@ -3,7 +3,6 @@ import { usePost } from "../../../hooks/usePost";
 import Spinner from "../../../components/common/spinner/spinner.component";
 import Box from "../../../components/common/Box/Box";
 import * as S from "./styled";
-import { useState, useEffect } from "react";
 import ImageCarousel from "../ImageCarousel/ImageCarousel";
 
 const Post = () => {
@@ -15,10 +14,13 @@ const Post = () => {
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!post) return null;
 
+  const { images, title, description, condition, createdAt } = post;
+
   return (
-    <Box>
-      <ImageCarousel images={post.images} />
-      <h1>{post.title}</h1>
+    <Box gap="20px" padding="20px">
+      <ImageCarousel images={images} />
+      <h1>{title}</h1>
+      <p>{description}</p>
     </Box>
   );
 };
