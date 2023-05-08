@@ -8,6 +8,7 @@ import { selectUserCredits } from "../../store/user/userSelectors";
 import LeftCarett from "../../assets/svg.icons/LeftCarett";
 import { BiCoinStack } from "react-icons/bi";
 import { IoMdArrowForward } from "react-icons/io";
+import NavigationItem from "./NavigationItems";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const navigate = useNavigate();
@@ -29,55 +30,25 @@ const AccountSettings = () => {
   return (
     <>
       <Box flexDirection="row" justifyContent="center" margin="1rem">
-        <h1> Account</h1>
+        <h1>Account</h1>
       </Box>
       <Box>
         <LeftCarett onClick={() => navigate("/")} />
       </Box>
-
       <Box gap="2rem" margin="2rem">
-        <Button
-          buttonType={ButtonType.Secondary}
+        <NavigationItem
+          text="Account Settings"
           onClick={handleAccountSettings}
+        />
+        <NavigationItem
+          onClick={handleCredits}
+          showArrow={false}
+          text="Credits"
         >
-          <Box
-            alignItems="center"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            Account Settings <IoMdArrowForward size={32} />
-          </Box>
-        </Button>
-        <Button buttonType={ButtonType.Secondary} onClick={handleCredits}>
-          <Box
-            alignItems="center"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            <span>Credits </span>
-            <Box alignItems="center" flexDirection="row">
-              {userCredits}x <BiCoinStack />
-            </Box>
-          </Box>
-        </Button>
-        <Button buttonType={ButtonType.Secondary} onClick={handleMyItems}>
-          <Box
-            alignItems="center"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            My items <IoMdArrowForward size={32} />
-          </Box>
-        </Button>
-        <Button buttonType={ButtonType.Secondary} onClick={handleFavourites}>
-          <Box
-            alignItems="center"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            Favourites <IoMdArrowForward size={32} />
-          </Box>
-        </Button>
+          {userCredits}x<BiCoinStack size={20} />
+        </NavigationItem>
+        <NavigationItem text="My items" onClick={handleMyItems} />
+        <NavigationItem text="Favourites" onClick={handleFavourites} />
       </Box>
     </>
   );
