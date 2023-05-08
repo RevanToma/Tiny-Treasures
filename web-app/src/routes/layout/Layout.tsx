@@ -10,13 +10,13 @@ const Layout: React.FC<LayoutProps> = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
 
   return (
-    <Box alignItems="center">
+    <Box gap="1rem" alignItems="center">
       <Box>
         <Outlet />
       </Box>
       {userSignedIn && (
         <nav>
-          <Box gap="10px" flexDirection="row">
+          <Box gap="1rem" flexDirection="row">
             <Link to="/">Home</Link>
             <div>Search</div>
             <Link to="/giveaway">Give away</Link>

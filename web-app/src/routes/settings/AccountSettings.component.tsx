@@ -1,14 +1,12 @@
-import Button, {
-  ButtonProps,
-} from "../../components/common/Button/Button.component";
+import Button from "../../components/common/Button/Button.component";
 import { ButtonType } from "../../components/common/Button/button.types";
-import * as S from "./AccountSettings.styles";
+
 import Box from "../../components/common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserCredits } from "../../store/user/userSelectors";
 import LeftCarett from "../../assets/svg.icons/LeftCarett";
-import Coins from "../../assets/svg.icons/coin.svg";
+import { BiCoinStack } from "react-icons/bi";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const navigate = useNavigate();
@@ -41,9 +39,7 @@ const AccountSettings = () => {
           buttonType={ButtonType.Secondary}
           onClick={handleAccountSettings}
         >
-          <Box alignItems="flex-start">
-            <S.SettingsLi>Account Settings</S.SettingsLi>
-          </Box>
+          <Box alignItems="flex-start">Account Settings</Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleCredits}>
           <Box
@@ -53,19 +49,15 @@ const AccountSettings = () => {
           >
             <span>Credits</span>
             <Box alignItems="center" flexDirection="row">
-              {userCredits}x <img src={Coins} />
+              {userCredits}x <BiCoinStack />
             </Box>
           </Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleMyItems}>
-          <Box alignItems="flex-start">
-            <S.SettingsLi> My items</S.SettingsLi>
-          </Box>
+          <Box alignItems="flex-start">My items</Box>
         </Button>
         <Button buttonType={ButtonType.Secondary} onClick={handleFavourites}>
-          <Box alignItems="flex-start">
-            <S.SettingsLi>Favourites</S.SettingsLi>
-          </Box>
+          <Box alignItems="flex-start">Favourites</Box>
         </Button>
       </Box>
     </>
