@@ -17,6 +17,7 @@ export const theme = {
     grayLight2: '#E1DFDF',
 
     pending: '#ECBD78, #EAB05B',
+    backgroundMain: '#F3F0E6',
   },
 
   gradient: {

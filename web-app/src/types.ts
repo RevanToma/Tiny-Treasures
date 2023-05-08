@@ -7,12 +7,13 @@ export type IMessage = {
   sentByMe?: boolean;
   createdAt?: Date;
   _id?: string;
+  roomId?: string;
 };
 
 export type IChatRoom = {
   members: string[];
   messages: IMessage[];
-  _id: string;
+  _id?: string;
 };
 export interface IUser {
   data: {
@@ -20,6 +21,7 @@ export interface IUser {
   };
   token: string;
   isSignedIn?: boolean;
+  currentChatRoom?: IChatRoom;
 }
 export type SignInInfo = {
   email: string;
@@ -40,4 +42,47 @@ export interface SignUpInfo {
   email: string;
   password: string;
   passwordConfirm: string;
+}
+
+export interface Post {
+  categories: string[];
+  condition: string;
+  createdAt: Date;
+  description: string;
+  id: string;
+  images: string[];
+  itemCount: number;
+  location: {
+    coordinates: [number, number];
+    type: string;
+  };
+  sizes: number[];
+  title: string;
+  user: string;
+  _id: string;
+}
+
+// REACT QUERY
+export interface QueryClientResults<T> {
+  data: {
+    data: T;
+  };
+}
+
+interface Metadata {
+  nextPage: number;
+  totalPages: number;
+  totalResults: number;
+  _id: null;
+}
+
+export interface PostQueryResult {
+  metadata: Metadata;
+  posts: Post[];
+}
+
+export interface GeoLocation {
+  coordinates: [number, number];
+  type: string;
+  city?: string;
 }

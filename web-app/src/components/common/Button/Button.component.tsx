@@ -1,8 +1,8 @@
-import { ReactNode, FC } from 'react';
-import * as S from './button.styles';
-import { ButtonType } from './button.types';
+import { ReactNode, FC } from "react";
+import * as S from "./button.styles";
+import { ButtonType } from "./button.types";
 
-interface ButtonProps {
+export interface ButtonProps {
   buttonType: ButtonType;
   children: ReactNode;
   onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

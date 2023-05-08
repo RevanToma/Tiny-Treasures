@@ -33,7 +33,6 @@ io.on("connection", (socket) => {
   }
 
   socket.on("create-chat", async (data) => {
-    //console.log(data);
     const { receiverId, userId } = data;
 
     console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
@@ -58,19 +57,13 @@ io.on("connection", (socket) => {
 
   socket.on("typing", (typingInfo) => {
     const { receiverId } = typingInfo;
-    //console.log(`${senderId} typing ${receiverId}`);
+
     io.to(connectedUsers[receiverId]).emit("typing", typingInfo);
   });
 
   socket.on("chat-message", (msg) => {
     const { text, senderId, receiverId } = msg;
-    /*console.log(
-      "sender",
-      connectedUsers[senderId],
-      "receiver",
-      connectedUsers[receiverId]
-    );
-    console.log(msg);*/
+
     io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
       "chat-message",
       msg

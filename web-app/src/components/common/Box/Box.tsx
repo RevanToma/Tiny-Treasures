@@ -1,8 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import * as S from "./styled";
 
 type BoxProps = {
-  children?: any;
+  display?: "grid" | "flex" | "block" | "inline-block" | "none";
+  gridTemplateColumns?: string;
+  children?: ReactNode;
   className?: string;
   flexDirection?: "row";
   gap?: string;
@@ -35,6 +37,16 @@ type BoxProps = {
   maxHeight?: string;
   minWidth?: string;
   minHeight?: string;
+  cursor?: string; // FIXME:
+  objectFit?: string; // FIXME:
+  overflow?: string; // FIXME:
+  objectPosition?: string; // FIXME:
+  position?: string; // FIXME:
+  backgroundColor?: string;
+  borderRadius?: string;
+  boxShadow?: string;
+  ref?: React.RefObject<HTMLDivElement>;
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const Box: React.FC<BoxProps> = ({ ...props }) => {
@@ -42,5 +54,3 @@ const Box: React.FC<BoxProps> = ({ ...props }) => {
 };
 
 export default Box;
-
-<Box margin="23" flexDirection="row"></Box>;

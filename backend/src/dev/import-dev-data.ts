@@ -3,10 +3,13 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { posts } from './postData';
 import Post from '../models/postModel';
+import fs from 'fs';
+import path from 'path';
 
 dotenv.config({ path: './config.env' });
 
-const DB = process.env.DB!.replace('<password>', process.env.DB_PASSWORD!);
+const DB = process.env.DATABASE!;
+
 mongoose.connect(DB).then(() => console.log('DB connection succesful'));
 
 function sortById(arr: { title: number }[]): { title: number }[] {
@@ -14,7 +17,6 @@ function sortById(arr: { title: number }[]): { title: number }[] {
 }
 
 const importData = async () => {
-  sortById(posts);
   try {
     await Post.create(posts);
     console.log('Data successfully loaded');
@@ -41,5 +43,32 @@ if (process.argv[2] === '--import') {
   deleteData();
 }
 
-//  node build\dev\import-dev-data.js --import
-//  node build\dev\import-dev-data.js --delete
+//  node src\dev\import-dev-data.js --import
+//  node src\dev\import-dev-data.js --delete
+//  node src\dev\import-dev-data.js --deleteJS
+
+const src = path.join(__dirname, '../', '../', 'src');
+const controllers = path.join(__dirname, '../', '../', 'src', 'controllers');
+const db = path.join(__dirname, '../', '../', 'src/db');
+const dev = path.join(__dirname, '../', '../', 'src/dev');
+const middlewares = path.join(__dirname, '../', '../', 'src/middlewares');
+const models = path.join(__dirname, '../', '../', 'src/models');
+const routes = path.join(__dirname, '../', '../', 'src/routes');
+const utils = path.join(__dirname, '../', '../', 'src/utils');
+
+const dirs = [src, controllers, db, dev, middlewares, models, routes, utils];
+
+const deleteJS = dirs.forEach(dir => {
+  fs.readdir(dir, (err, files) => {
+    if (err) throw err;
+
+    for (const file of files) {
+      if (file.endsWith('.js')) {
+        fs.unlink(path.join(dir, file), err => {
+          if (err) throw err;
+          console.log(`${file} was deleted`);
+        });
+      }
+    }
+  });
+});

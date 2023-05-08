@@ -2,34 +2,32 @@ import mongoose, { Document, Schema } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
 import AppError from '../utils/appError';
+import {
+  BasicUserData,
+  ChatData,
+  LocationData,
+  UserMsgData,
+} from '../utils/interfaces';
+import { PostDocument } from './postModel';
 
 export interface UserDocument extends Document {
-  method: string;
-  googleId: string;
+  id: string;
   name: string;
   email: string;
   password: string | undefined;
   passwordConfirm: string | undefined;
   createdAt: Date;
-  location: {
-    type: string;
-    coordinates: [number, number];
-    city: string;
-  };
+  location: LocationData;
   // posts: mongoose.Schema.Types.ObjectId[];
   credits: number;
+  favorites: PostDocument[];
+  newMessages: number;
 
   correctPassword(a: string, b: string): Promise<boolean>;
 }
 
 const userSchema = new Schema<UserDocument>(
   {
-    method: {
-      type: String,
-      enum: ['google', 'email'],
-      default: 'email',
-    },
-    googleId: String,
     name: {
       type: String,
       required: [true, 'Please provide a name.'],
@@ -43,13 +41,13 @@ const userSchema = new Schema<UserDocument>(
     },
     password: {
       type: String,
-      // required: [true, 'Please provide a password.'],
+      required: [true, 'Please provide a password.'],
       minLength: [8, 'Passwords must have at least 8 characters'],
       select: false,
     },
     passwordConfirm: {
       type: String,
-      // required: [true, 'Please confirm your password.'],
+      required: [true, 'Please confirm your password.'],
       minLength: [8, 'Passwords must have at least 8 characters'],
       select: false,
     },
@@ -66,33 +64,27 @@ const userSchema = new Schema<UserDocument>(
       coordinates: [Number],
       city: String,
     },
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
     credits: {
       type: Number,
       min: [0, 'A user can not have less than 0 credits!'],
       max: [10, 'A user can not have more than 10 credits at a time.'],
       default: 3,
     },
+  },
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
-  // {
-  //   toJSON: { virtuals: true },
-  //   toObject: { virtuals: true },
-  // }
 );
 
-// userSchema.pre(/^find/, function (next) {
-//   this.populate({
-//     path: 'posts',
-//     select: '-__v',
-//   });
-//   next();
-// });
-
 userSchema.pre('save', async function (next) {
-  if (!this.isNew || this.method === 'google') return next();
-
-  if (!this.password || !this.passwordConfirm) {
-    return next(new AppError('Please provide and confirm your password', 400));
-  }
+  if (!this.isNew) return next();
 
   if (this.password !== this.passwordConfirm) {
     return next(new AppError('The provided passwords do not match!', 400));
@@ -114,6 +106,16 @@ userSchema.methods.correctPassword = async function (
   userPassword: string
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// DATA MANIPULATION
+export const modifyBasicUserData = (userDoc: UserDocument): BasicUserData => {
+  return {
+    id: userDoc._id,
+    name: userDoc.name,
+    email: userDoc.email,
+    location: userDoc.location,
+  };
 };
 
 const User = mongoose.model<UserDocument>('User', userSchema);

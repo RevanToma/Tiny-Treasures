@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUser } from "../../types";
+import { IChatRoom, IUser } from "../../types";
 
 const initialState: IUser = {
   data: {
@@ -12,6 +12,7 @@ const initialState: IUser = {
   },
   isSignedIn: false,
   token: "",
+  currentChatRoom: undefined,
 };
 
 const userSlice = createSlice({
@@ -23,8 +24,11 @@ const userSlice = createSlice({
       state.token = payload.token;
       state.isSignedIn = true;
     },
+    setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
+      state.currentChatRoom = payload;
+    },
   },
 });
 
-export const { signSuccess } = userSlice.actions;
+export const { signSuccess, setCurrentChatRoom } = userSlice.actions;
 export default userSlice.reducer;

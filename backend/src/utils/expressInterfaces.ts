@@ -13,4 +13,8 @@ export interface CustomRequest extends Request {
   body: FilterObj;
   user: UserDocument;
   query: QueryString;
+  userId?: string;
+  file?: any;
+  files?: Express.Multer.File[];
+  filenames: string[];
 }
