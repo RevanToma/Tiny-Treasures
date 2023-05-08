@@ -2,7 +2,7 @@ import Box from "../../components/common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUserCredits } from "../../store/user/userSelectors";
-import LeftCarett from "../../assets/svg.icons/LeftCarett";
+import LeftCarett from "../../components/common/leftCarett/LeftCarett";
 import { BiCoinStack } from "react-icons/bi";
 
 import NavigationItem from "./NavigationItems";
