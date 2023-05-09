@@ -21,7 +21,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
 
   if (isLoading && userId) return <Spinner />;
   if (error instanceof Error) return <h1>{error.message}</h1>;
-  if (!chats) return null;
+  if (!chats) return <h1>No messages here!</h1>;
 
   const handleSwitchChat = (room: IChatRoom) => {
     const postId = room.messages[room.messages.length - 1].postId;
