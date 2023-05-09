@@ -31,7 +31,7 @@ const SignIn: React.FC = () => {
         onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
           console.log(data);
-          document.cookie = `jtw=${data.token}`;
+          document.cookie = `jwt=${data.token}`;
         },
         onError: (error) => {
           if (error instanceof AxiosError) alert(error.message);
