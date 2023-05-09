@@ -29,12 +29,15 @@ const Layout: React.FC<LayoutProps> = () => {
         justifyContent="space-between"
         margin="0"
       >
+        <div id="chat-post-item-portal"></div>
         <PageStyle>
           <Box>
             <Outlet />
           </Box>
         </PageStyle>
-        <div id="chat-input-portal"></div>
+        <Box width="100%" padding="10px 15px">
+          <div id="chat-input-portal"></div>
+        </Box>
         {userSignedIn && <Navbar />}
       </Box>
     </LayoutStyle>

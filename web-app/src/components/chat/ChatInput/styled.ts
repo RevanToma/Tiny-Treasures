@@ -1,27 +1,19 @@
 import styled from "styled-components";
 import { theme } from "../../../styles/themes";
 
-export const ChatContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 15px;
-  color: white;
-  gap: 5px;
-  align-items: center;
-  overflow-y: scroll;
-`;
-
 export const MessageInputForm = styled.div`
   display: flex;
-  flex: 1;
+  width: 100%;
   justify-content: center;
   gap: 10px;
 `;
 
 export const MessageInput = styled.input`
-  width: 100%;
   box-shadow: ${theme.shadow};
-  border: 1px solid gray;
+  height: 50px;
+  font-size: 16px;
+  border: 1px solid lightgray;
+  width: 100%;
   padding: 10px;
   &:focus {
     outline: none;

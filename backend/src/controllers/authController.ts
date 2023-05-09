@@ -254,3 +254,17 @@ export const protect = catchAsync(
     next();
   }
 );
+
+export const getUserNameById = async (res: Response, req: Request) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    if (user?.name) {
+      res.status(200).json(user?.name);
+    } else {
+      res.status(401).send("could not find username");
+    }
+  } catch (error: any) {
+    res.status(500).json({ errorMessage: error.message });
+  }
+};

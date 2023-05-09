@@ -8,6 +8,7 @@ import { setCurrentChatRoom } from "../../../store/user/userSlice";
 import Spinner from "../../common/spinner/spinner.component";
 import Box from "../../common/Box/Box";
 import { useNavigate } from "react-router-dom";
+import ChatListCard from "./ChatListCard/ChatListCard";
 
 type ChatRoomListProps = {
   userId: string;
@@ -34,21 +35,18 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
 
   const chatList = chats.map((room) => {
     const lastMessage = room.messages[room.messages.length - 1]?.text;
-    const lastSenderIsMe =
-      room.messages[room.messages.length - 1]?.senderId === userId;
+    const postOwnerId = room.messages[room.messages.length - 1]?.postOwner;
+    const receiverId = room.members.find((member) => member !== userId);
 
-    const lastSender = lastSenderIsMe ? "You" : "Received";
+    if (!receiverId) return null;
 
     return (
-      <Box
-        gap="10px"
-        flexDirection="row"
-        key={room._id}
-        onClick={() => handleSwitchChat(room)}
-      >
-        <p>{room._id}</p>
-        <h4>{lastMessage && `${lastSender} ${lastMessage}`}</h4>
-      </Box>
+      <ChatListCard
+        receiverId={receiverId}
+        handleSwitchChat={handleSwitchChat}
+        lastMessage={lastMessage}
+        room={room}
+      />
     );
   });
 

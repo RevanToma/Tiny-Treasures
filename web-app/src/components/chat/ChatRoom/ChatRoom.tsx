@@ -4,10 +4,11 @@ import Message from "../Message/Message";
 import { IChatRoom, IMessage, Post } from "../../../types";
 import * as S from "./styled";
 import TypingAnimation from "../TypingAnimation/TypingAnimation";
-import { FaPaperPlane } from "react-icons/fa";
 import Box from "../../common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { createPortal } from "react-dom";
+import ChatInput from "../ChatInput/ChatInput";
+import ChatPostItem from "../ChatPostItem/ChatPostItem";
 
 type Props = {
   room: IChatRoom;
@@ -16,9 +17,9 @@ type Props = {
   post: Post;
 };
 
-const chatInputPlace = document.getElementById("chat-input-portal");
-
 const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
+  const chatInputPlace = document.getElementById("chat-input-portal");
+  const chatPostItemPlace = document.getElementById("chat-post-item-portal");
   const navigate = useNavigate();
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
@@ -29,9 +30,8 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
     receiverId,
     roomId: room._id,
     postId: post._id,
+    postOwner: post.user,
   });
-
-  console.log("place", chatInputPlace);
 
   useEffect(() => {
     const typingInfo = {
@@ -107,9 +107,12 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
 
   return (
     <Box>
-      <Box alignItems="center" onClick={navigateToPost}>
-        {post.title}
-      </Box>
+      {chatPostItemPlace !== null &&
+        createPortal(
+          <ChatPostItem navigateToPost={navigateToPost} post={post} />,
+          chatPostItemPlace
+        )}
+
       <S.ChatContainer>
         {messages.map((message) => (
           <>
@@ -132,30 +135,3 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
 };
 
 export default ChatRoom;
-
-type ChatInputProps = {
-  onSubmit: (event: MouseEvent) => void;
-  handleChatInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  chatInputRef: React.RefObject<HTMLInputElement>;
-};
-
-const ChatInput: React.FC<ChatInputProps> = ({
-  onSubmit,
-  handleChatInput,
-  chatInputRef,
-}) => {
-  return (
-    <Box flexDirection="row" gap="10px" justifyContent="space-between">
-      <S.MessageInputForm>
-        <S.MessageInput
-          ref={chatInputRef}
-          placeholder="Message"
-          onChange={handleChatInput}
-        />
-      </S.MessageInputForm>
-      <Box justifyContent="center" alignItems="center">
-        <FaPaperPlane onClick={onSubmit} />
-      </Box>
-    </Box>
-  );
-};

@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { usePost } from "../../../hooks/usePost";
 import Spinner from "../../../components/common/spinner/spinner.component";
 import Box from "../../../components/common/Box/Box";
-import * as S from "./styled";
 import ImageCarousel from "../ImageCarousel/ImageCarousel";
 import Button from "../../../components/common/Button/Button.component";
 import { ButtonType } from "../../../components/common/Button/button.types";
