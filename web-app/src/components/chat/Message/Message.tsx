@@ -11,7 +11,7 @@ const Message: React.FC<MessageProps> = ({
 }) => {
   return (
     <S.MessageContainer sentByMe={sentByMe} key={_id}>
-      {text},
+      {text}
     </S.MessageContainer>
   );
 };

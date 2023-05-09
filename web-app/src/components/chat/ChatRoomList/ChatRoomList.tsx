@@ -6,6 +6,7 @@ import { useChats } from "../../../hooks/useChats";
 import { useAppDispatch } from "../../../hooks/useDispatch";
 import { setCurrentChatRoom } from "../../../store/user/userSlice";
 import Spinner from "../../common/spinner/spinner.component";
+import Box from "../../common/Box/Box";
 
 type ChatRoomListProps = {
   userId: string;
@@ -30,15 +31,28 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
     setCurrentRoom(room);
   };
 
+  const chatList = chats.map((room) => {
+    const lastMessage = room.messages[room.messages.length - 1]?.text;
+    const lastSender = room.messages[room.messages.length - 1]?.sentByMe
+      ? "Received"
+      : "You";
+
+    return (
+      <Box
+        gap="10px"
+        flexDirection="row"
+        key={room._id}
+        onClick={() => handleSwitchChat(room)}
+      >
+        <p>{room._id}</p>
+        <h4>{lastMessage && `${lastSender} ${lastMessage}`}</h4>
+      </Box>
+    );
+  });
+
   return (
     <>
-      {chats.map((room) => {
-        return (
-          <div key={room._id} onClick={() => handleSwitchChat(room)}>
-            ROOMS: {room._id}
-          </div>
-        );
-      })}
+      {chatList}
       {currentRoom && (
         <ChatRoom
           key={currentRoom._id}
