@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./routes/signUp/signUp.component";
 import Home from "./routes/home/home.component";
-import Post from "./routes/post/post/post.component";
 import Profile from "./routes/profile/profile.component";
 import Layout from "./routes/layout/Layout";
 import { lazy, Suspense, useEffect } from "react";
@@ -14,10 +13,10 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "./api/requests";
 import { IMessage } from "./types";
-import axios from "axios";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
 const Chat = lazy(() => import("./routes/chat/chat.component"));
+const Post = lazy(() => import("./routes/post/post/post.component"));
 const AccountSettings = lazy(
   () => import("./routes/settings/AccountSettings.component")
 );
