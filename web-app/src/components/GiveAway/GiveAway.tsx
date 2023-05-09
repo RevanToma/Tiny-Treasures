@@ -1,101 +1,172 @@
-import { useState } from "react";
-import { CreatePostData, createPost } from "../../api/requests";
+import { useState, useRef, FormEvent } from "react";
+import { useCreateNewPost } from "../../api/requests";
 import Box from "../common/Box/Box";
 import { ButtonType } from "../common/Button/button.types";
 import SelectInput from "../common/select-input/SelectInput.component";
 import Button from "../common/Button/Button.component";
-
+import { ages, clothes, mainCategories, other, sizes, toys } from "../../types";
 const GiveAway = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    category: "",
-    image: null,
-  });
+  const mutation = useCreateNewPost();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [numItems, setNumItems] = useState("");
+  const [category, setCategory] = useState("");
+  const [size, setSize] = useState("");
+  const [condition, setCondition] = useState("");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileUpload = (event: any) => {
-    setFormData({
-      ...formData,
-      image: event.target.files[0],
+  const createPost = (e: FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    if (!fileInputRef.current?.files) return;
+
+    const form = new FormData();
+    Array.from(fileInputRef.current.files).forEach((file) => {
+      form.append("photos", file);
     });
-  };
+    form.append("title", title);
+    form.append("description", description);
+    form.append("itemCount", numItems);
+    form.append("categories", category);
+    form.append("size", size);
+    form.append("condition", condition);
 
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    const data = new FormData();
-
-    data.append("title", formData.title);
-    data.append("description", formData.description);
-    data.append("category", formData.category);
-    if (formData.image !== null) {
-      data.append("image", formData.image);
-    }
-
-    const post: CreatePostData = {
-      title: formData.title,
-      description: formData.description,
-      category: formData.category,
-      itemCount: 0,
-      size: "",
-      mainCategory: "",
-      subCategory: "",
-      image: formData.image as File | null,
-    };
-
-    try {
-      const { data } = await createPost(post);
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleCategorySelect = (option: string): void => {
-    setFormData({ ...formData, category: option });
+    mutation.mutate(form);
   };
 
   return (
-    <>
-      <h2>Give Away</h2>
-      <Box alignItems="center" gap="2rem">
-        <label>
-          Image:
-          <input type="file" onChange={handleFileUpload} />
-        </label>
-        <Box>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Title:
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(event) =>
-                  setFormData({ ...formData, title: event.target.value })
-                }
-              />
-            </label>
-            <label>
-              Description:
-              <textarea
-                value={formData.description}
-                onChange={(event) =>
-                  setFormData({ ...formData, description: event.target.value })
-                }
-              />
-            </label>
-            <SelectInput
-              optionsArray={["Clothing", "Toys", "Books"]}
-              initialValue={formData.category}
-              label="Category"
-              handleSelect={handleCategorySelect}
-            />
-            <Button buttonType={ButtonType.Pending} onClick={handleSubmit}>
-              Submit
-            </Button>
-          </form>
-        </Box>
-      </Box>
-    </>
+    <div>
+      <form onSubmit={createPost}>
+        <label htmlFor="tile">Title:</label>
+        <input
+          onChange={(e) => setTitle(e.target.value)}
+          name="tile"
+          type="text"
+          required
+        />
+        <label htmlFor="description">Description:</label>
+        <input
+          onChange={(e) => setDescription(e.target.value)}
+          name="description"
+          type="text"
+        />
+        <label htmlFor="item-count">Number of articles:</label>
+        <input
+          onChange={(e) => setNumItems(e.target.value)}
+          name="item-count"
+          type="number"
+          required
+          min={0}
+          max={10}
+        />
+        <label htmlFor="categories">Category:</label>
+        <select onChange={(e) => setCategory(e.target.value)} name="categories">
+          <option value="">Choose an option...</option>
+          {mainCategories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+        {category === "Clothes" && (
+          <>
+            <label htmlFor="clothes">type:</label>
+            <select
+              onChange={(e) => setSize(e.target.value)}
+              name="clothes"
+              required
+            >
+              <option value="">Choose an option...</option>
+              {clothes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        {category === "Toys" && (
+          <>
+            <label htmlFor="toys">type:</label>
+            <select
+              onChange={(e) => setSize(e.target.value)}
+              name="toys"
+              required
+            >
+              <option value="">Choose an option...</option>
+              {toys.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        {category === "Other" && (
+          <>
+            <label htmlFor="other">type:</label>
+            <select
+              onChange={(e) => setSize(e.target.value)}
+              name="other"
+              required
+            >
+              <option value="">Choose an option...</option>
+              {other.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+
+        {category === "Clothes" && (
+          <>
+            <label htmlFor="size">Size:</label>
+            <select
+              onChange={(e) => setSize(e.target.value)}
+              name="size"
+              required
+            >
+              <option value="">Choose an option...</option>
+              {sizes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        {category !== "Clothes" && (
+          <>
+            <label htmlFor="age">Age:</label>
+            <select
+              onChange={(e) => setSize(e.target.value)}
+              name="age"
+              required
+            >
+              <option value="">Choose an option...</option>
+
+              {ages.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        <label htmlFor="condition">Condition:</label>
+        <select onChange={(e) => setCondition(e.target.value)} name="condition">
+          <option value="">Choose an option...</option>
+
+          <option value="used">Used</option>
+          <option value="good">Good</option>
+          <option value="new">New</option>
+        </select>
+
+        <input ref={fileInputRef} type="file" multiple />
+        <button>Create</button>
+      </form>
+    </div>
   );
 };
 

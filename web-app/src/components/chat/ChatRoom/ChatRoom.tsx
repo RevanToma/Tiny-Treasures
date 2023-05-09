@@ -24,11 +24,6 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
     roomId: room._id,
   });
 
-  // useEffect(() => {
-  //   console.log("room updated", room);
-  //   setMessages(room.messages);
-  // }, [room]);
-
   useEffect(() => {
     const typingInfo = {
       senderId: userId,
@@ -98,7 +93,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
   };
 
   return (
-    <S.ChatRoomContainer>
+    <>
       <S.ChatContainer>
         {messages.map((message, i, arr) => (
           <>
@@ -107,7 +102,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
         ))}
         {typing && <TypingAnimation />}
       </S.ChatContainer>
-      <Box flexDirection="row" gap="10px" justifyContent="space-between">
+      <Box sticky flexDirection="row" gap="10px" justifyContent="space-between">
         <S.MessageInputForm>
           <S.MessageInput
             placeholder="Message"
@@ -117,7 +112,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
         </S.MessageInputForm>
         <SendButton onClick={onSubmit} />
       </Box>
-    </S.ChatRoomContainer>
+    </>
   );
 };
 

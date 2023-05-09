@@ -30,7 +30,7 @@ const SignIn: React.FC = () => {
       {
         onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
-          console.log(data);
+          document.cookie = `jwt=${data.token}`;
         },
         onError: (error) => {
           if (error instanceof AxiosError) alert(error.message);
@@ -44,37 +44,41 @@ const SignIn: React.FC = () => {
         <Spinner />
       ) : (
         <Box width="80%" margin="auto">
-        <img
-          src={Logo}
-          alt="Tiny Treasures Logo"
-        />
-        <S.TextContainer>
-          <Box>      
-            <p>Log in or create an account to exchange items for free.</p>
-            <p>Log In</p>
-        </Box>
-        </S.TextContainer>
-        <form onSubmit={signIn}>
-          <Box gap="20px">
-          <Input type={InputType.email} placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
-          
-          <Input type={InputType.password} placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
-          </Box>
-          
+          <img src={Logo} alt="Tiny Treasures Logo" />
           <S.TextContainer>
-            <p>Forgot your password?</p>
+            <Box>
+              <p>Log in or create an account to exchange items for free.</p>
+              <p>Log In</p>
+            </Box>
           </S.TextContainer>
-          <Box>
+          <form onSubmit={signIn}>
+            <Box gap="20px">
+              <Input
+                type={InputType.email}
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
 
-          <button>Sign In</button>
+              <Input
+                type={InputType.password}
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Box>
 
-          <S.TextContainer>
-          <p>or</p>
-          </S.TextContainer>
+            <S.TextContainer>
+              <p>Forgot your password?</p>
+            </S.TextContainer>
+            <Box>
+              <button>Sign In</button>
 
-          <button disabled>Continue with Google</button>
-          </Box>
-        </form>
+              <S.TextContainer>
+                <p>or</p>
+              </S.TextContainer>
+
+              <button disabled>Continue with Google</button>
+            </Box>
+          </form>
         </Box>
       )}
     </div>

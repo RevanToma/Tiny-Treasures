@@ -1,16 +1,24 @@
-import axios from 'axios';
-const accessTokenCookie = localStorage.getItem('authToken');
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/v1',
+  baseURL: "http://127.0.0.1:8000/api/v1",
 });
 
-// api.interceptors.request.use(async (config) => {
-//   config.headers["Content-Type"] = "application/json";
+function getCookie(n: string) {
+  const a = `; ${document.cookie}`.match(`;\\s*${n}=([^;]+)`);
+  return a ? a[1] : "";
+}
 
-//   config.headers["Authorization"] = `Bearer ${accessTokenCookie}`;
+api.interceptors.request.use(async (config) => {
+  config.headers["Content-Type"] = "application/json";
 
-//   return config;
-// });
+  const cookie = getCookie("jwt");
+
+  if (cookie) {
+    config.headers["Authorization"] = `Bearer ${cookie}`;
+  }
+
+  return config;
+});
 
 export default api;

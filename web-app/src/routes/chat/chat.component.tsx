@@ -1,10 +1,8 @@
 import ChatRoomList from "../../components/chat/ChatRoomList/ChatRoomList";
-import react from "react";
 import { selectUser } from "../../store/user/userSelectors";
 import { useSelector } from "react-redux";
-import { socket } from "../../Sockets/Message.socket";
 
-function Chat() {
+const Chat: React.FC = () => {
   const user = useSelector(selectUser);
 
   // 644798e9c829c53744a8ae49
@@ -13,6 +11,6 @@ function Chat() {
   // 64493c98d9bc5bcf3b01a8d9
 
   return <>{user._id && <ChatRoomList userId={user._id} />}</>;
-}
+};
 
 export default Chat;

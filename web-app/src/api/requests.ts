@@ -7,6 +7,7 @@ import {
   SignUpInfo,
 } from "../types";
 import api from "./index";
+import { useMutation } from "@tanstack/react-query";
 
 interface ResponseWithData<T> {
   status: string;
@@ -70,12 +71,18 @@ export const fetchPosts = async ({
   pageParam = 1,
   query = "",
 }: getPostParams): Promise<PostQueryResult> => {
-  console.log(query);
   const limit = 10;
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
     await api.get(`posts/?page=${pageParam}&limit=${limit}&${query}`);
   checkForError(data.data);
   return data.data.data.data[0];
+};
+
+export const fetchPostById = async (id: string) => {
+  const { data } = await api.get(`/posts/${id}`);
+  checkForError(data);
+  const post: Post = data.data.post[0];
+  return post;
 };
 
 export interface CreatePostData {
@@ -87,6 +94,7 @@ export interface CreatePostData {
   size: string;
   mainCategory: string;
   subCategory: string;
+  condition: string;
 }
 
 export const createPost = async (postData: CreatePostData) => {
@@ -97,6 +105,7 @@ export const createPost = async (postData: CreatePostData) => {
   formData.append("size", postData.size);
   formData.append("mainCategory", postData.mainCategory);
   formData.append("subCategory", postData.subCategory);
+  formData.append("condition", postData.condition);
 
   if (postData.image !== undefined && postData.image !== null) {
     formData.append("image", postData.image);
@@ -109,4 +118,12 @@ export const createPost = async (postData: CreatePostData) => {
   });
 
   return data;
+};
+
+export const useCreateNewPost = () => {
+  return useMutation({
+    mutationFn: async (data: FormData) => {
+      await api.post("/posts", data);
+    },
+  });
 };

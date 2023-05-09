@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./routes/signUp/signUp.component";
 import Home from "./routes/home/home.component";
-import Post from "./routes/post/post.component";
 import Profile from "./routes/profile/profile.component";
 import Layout from "./routes/layout/Layout";
 import { lazy, Suspense, useEffect } from "react";
@@ -17,6 +16,7 @@ import { IMessage } from "./types";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
 const Chat = lazy(() => import("./routes/chat/chat.component"));
+const Post = lazy(() => import("./routes/post/post/post.component"));
 const AccountSettings = lazy(
   () => import("./routes/settings/AccountSettings.component")
 );
@@ -27,13 +27,18 @@ function App() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    const refetchChats = () => {
+      queryClient.invalidateQueries([fetchChats.name]);
+    };
+
     if (userId._id) {
       Socket.init(userId._id);
       socket().on("chat-message", (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
-          queryClient.invalidateQueries([fetchChats.name]);
+          refetchChats();
         }
       });
+      socket().on("create-chat", refetchChats);
     }
   }, [userId._id, currentChatRoom, queryClient]);
 

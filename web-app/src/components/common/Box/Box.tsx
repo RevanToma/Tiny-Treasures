@@ -45,6 +45,7 @@ type BoxProps = {
   backgroundColor?: string;
   borderRadius?: string;
   boxShadow?: string;
+  sticky?: boolean;
   ref?: React.RefObject<HTMLDivElement>;
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
