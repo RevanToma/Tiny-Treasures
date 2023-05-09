@@ -21,7 +21,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images }) => {
 
   const imageList = images.map((image, i) => {
     const current = i === index;
-    return <S.Image current={current} src={image} />;
+    return <S.Image key={image} current={current} src={image} />;
   });
 
   return (

@@ -115,7 +115,7 @@ export const getPost = catchAsync(
     next: NextFunction
   ): Promise<void> => {
     const { postId } = req.params;
-    //////const location: LocationData | null = req.user.location;
+    const location: LocationData | null = req.user.location;
     console.log("POSTID", postId);
 
     const pipeline: PipelineStage[] = [
@@ -124,7 +124,7 @@ export const getPost = catchAsync(
       },
     ];
 
-    // if (location) pipeline.unshift(distanceFrom(location));
+    //if (location) pipeline.unshift(distanceFrom(location));
 
     const post = await Post.aggregate(pipeline);
 

@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-import { theme } from './themes';
+import { createGlobalStyle } from "styled-components";
+import { theme } from "./themes";
 
 export const GlobalStyles = createGlobalStyle`
 
@@ -25,6 +25,8 @@ html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
   Arial, sans-serif;
   font-size: 1.4rem;
+
+  overflow: hidden;
 }
 
 li {

@@ -8,7 +8,7 @@ import Button from "../../../components/common/Button/Button.component";
 import { ButtonType } from "../../../components/common/Button/button.types";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../store/user/userSelectors";
-import { socket } from "../../../Sockets/Message.socket";
+import { Socket, socket } from "../../../Sockets/Message.socket";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "../../../api/requests";
@@ -26,9 +26,12 @@ const Post = () => {
     const refetchChatsAndGoToChat = (data: IChatRoom) => {
       queryClient.invalidateQueries([fetchChats.name]);
       console.log(data);
+      ////////////////////////////////////////////////
+      //fortsätt här gå till chat/:id router ?
     };
 
     if (userId) {
+      Socket.init(userId);
       socket().on("create-chat", refetchChatsAndGoToChat);
     }
   }, [userId, queryClient]);

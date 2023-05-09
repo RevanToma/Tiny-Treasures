@@ -52,7 +52,10 @@ io.on("connection", (socket) => {
       });
     }
 
-    socket.emit("create-chat", chatRoom);
+    io.to([connectedUsers[userId], connectedUsers[receiverId]]).emit(
+      "create-chat",
+      chatRoom
+    );
   });
 
   socket.on("typing", (typingInfo) => {

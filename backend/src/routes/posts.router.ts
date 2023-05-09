@@ -18,6 +18,6 @@ postsRouter
 postsRouter.get(
   "/:postId",
 
-  /* userController.attatchUserToReq, */
+  userController.attatchUserToReq,
   postController.getPost
 );
