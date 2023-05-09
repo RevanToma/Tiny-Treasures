@@ -1,34 +1,41 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignUp from "./routes/signUp/signUp.component";
-import Home from "./routes/home/home.component";
-import Post from "./routes/post/post.component";
-import Profile from "./routes/profile/profile.component";
-import Layout from "./routes/layout/Layout";
-import { lazy, Suspense, useEffect } from "react";
-import Spinner from "./components/common/spinner/spinner.component";
-import { useSelector } from "react-redux";
-import { selectCurrentChatRoom, selectUser } from "./store/user/userSelectors";
-import { Socket, socket } from "./Sockets/Message.socket";
-import Posts from "./routes/posts/posts.component";
-import { GlobalStyles } from "./styles/GlobalStyles";
-import { useQueryClient } from "@tanstack/react-query";
-import { fetchChats } from "./api/requests";
-import { IMessage } from "./types";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import SignUp from './routes/signUp/signUp.component';
+import Home from './routes/home/home.component';
+import Post from './routes/post/post.component';
+import Profile from './routes/profile/profile.component';
+import Layout from './routes/layout/Layout';
+import { lazy, Suspense, useEffect } from 'react';
+import Spinner from './components/common/spinner/spinner.component';
+import { useSelector } from 'react-redux';
+import { selectCurrentChatRoom, selectUser } from './store/user/userSelectors';
+import { Socket, socket } from './Sockets/Message.socket';
+import Posts from './routes/posts/posts.component';
+import { GlobalStyles } from './styles/GlobalStyles';
+import { useQueryClient } from '@tanstack/react-query';
+import { fetchChats } from './api/requests';
+import { IMessage } from './types';
+import axios from 'axios';
+import api from './api';
 
-const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
-const Chat = lazy(() => import("./routes/chat/chat.component"));
+const SignIn = lazy(() => import('./routes/signUp/signUp.component'));
+const Chat = lazy(() => import('./routes/chat/chat.component'));
 const AccountSettings = lazy(
-  () => import("./routes/settings/AccountSettings.component")
+  () => import('./routes/settings/AccountSettings.component')
 );
 function App() {
   const userId = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
   const queryClient = useQueryClient();
 
+  const fetchPost = async id => {
+    const post = await api(`http://localhost:8000/api/v1/posts/${id}`);
+  };
+
   useEffect(() => {
     if (userId._id) {
+      fetchPost('6455835e25fe517c021545bb');
       Socket.init(userId._id);
-      socket().on("chat-message", (data: IMessage) => {
+      socket().on('chat-message', (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           queryClient.invalidateQueries([fetchChats.name]);
         }
