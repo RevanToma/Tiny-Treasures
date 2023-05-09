@@ -12,6 +12,9 @@ export const MessageSchema = new mongoose.Schema(
     text: {
       type: String,
     },
+    postId: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -8,6 +8,7 @@ export type IMessage = {
   createdAt?: Date;
   _id?: string;
   roomId?: string;
+  postId?: string;
 };
 
 export type IChatRoom = {

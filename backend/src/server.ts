@@ -65,19 +65,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat-message", (msg) => {
-    const { text, senderId, receiverId } = msg;
-
+    const { text, senderId, receiverId, postId, roomId } = msg;
+    console.log("postid", postId);
+    console.log("THIS", msg);
     io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
       "chat-message",
       msg
     );
 
-    ChatModel.findOne({
-      members: {
-        $all: [receiverId, senderId],
-      },
-    }).then((chat) => {
-      chat?.messages.push({ senderId, text });
+    ChatModel.findById(roomId).then((chat) => {
+      chat?.messages.push({ senderId, text, postId: postId });
       chat?.save();
     });
   });
