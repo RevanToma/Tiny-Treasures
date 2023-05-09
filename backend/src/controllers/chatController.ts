@@ -23,20 +23,7 @@ export const userChats = catchAsync(
     const chats = await ChatModel.find({
       members: { $in: [id] },
     });
-    const sortedChats = chats.map((chat) => {
-      const messages = chat.messages.map((message) => {
-        const sentByMe = message.senderId?.toString() === id;
-        return {
-          senderId: message.senderId,
-          text: message.text,
-          _id: message._id,
-          sentByMe,
-        };
-      });
-
-      return { members: chat.members, _id: chat._id, messages };
-    });
-    res.status(200).json(sortedChats);
+    res.status(200).json(chats);
   }
 );
 

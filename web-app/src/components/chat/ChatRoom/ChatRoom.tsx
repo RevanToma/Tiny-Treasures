@@ -10,7 +10,7 @@ import Box from "../../common/Box/Box";
 type Props = {
   room: IChatRoom;
   userId: string;
-  receiverId?: string;
+  receiverId: string;
 };
 
 const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
@@ -73,8 +73,7 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
         (member) => member === receiverId
       );
       if (senderIsMember && receiverIsMember) {
-        const isSentByMe = data.senderId === userId;
-        const updateMsg = [...messages, { ...data, sentByMe: isSentByMe }];
+        const updateMsg = [...messages, data];
         setMessages(updateMsg);
       }
     });

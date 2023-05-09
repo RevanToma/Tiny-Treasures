@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../../hooks/useDispatch";
 import { setCurrentChatRoom } from "../../../store/user/userSlice";
 import Spinner from "../../common/spinner/spinner.component";
 import Box from "../../common/Box/Box";
+import { useNavigate } from "react-router-dom";
 
 type ChatRoomListProps = {
   userId: string;
@@ -16,6 +17,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   const [currentRoom, setCurrentRoom] = useState<IChatRoom>();
   const [receiverId, setReceiverId] = useState<undefined | string>();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { data: chats, isLoading, error } = useChats(userId);
 
@@ -23,12 +25,9 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!chats) return null;
 
-  console.log(chats);
   const handleSwitchChat = (room: IChatRoom) => {
-    const switchedReceiverId = room.members.find((member) => member !== userId);
-    setReceiverId(switchedReceiverId);
     dispatch(setCurrentChatRoom(room));
-    setCurrentRoom(room);
+    navigate(`/chat/${room._id}`);
   };
 
   const chatList = chats.map((room) => {
@@ -50,19 +49,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
     );
   });
 
-  return (
-    <>
-      {chatList}
-      {currentRoom && (
-        <ChatRoom
-          key={currentRoom._id}
-          receiverId={receiverId}
-          userId={userId}
-          room={currentRoom}
-        ></ChatRoom>
-      )}
-    </>
-  );
+  return <>{chatList}</>;
 };
 
 export default ChatRoomList;

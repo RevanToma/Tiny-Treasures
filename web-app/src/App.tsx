@@ -15,6 +15,9 @@ import { fetchChats } from "./api/requests";
 import { IMessage } from "./types";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
+const DisplayedChat = lazy(
+  () => import("./components/chat/DisplayedChat/DisplayedChat")
+);
 const Chat = lazy(() => import("./routes/chat/chat.component"));
 const Post = lazy(() => import("./routes/post/post/post.component"));
 const AccountSettings = lazy(
@@ -56,6 +59,7 @@ function App() {
               <Route path="post/:id" element={<Post />} />
               <Route path="posts/:startQuery" element={<Posts />} />
               <Route path="chat" element={<Chat />} />
+              <Route path="chat/:id" element={<DisplayedChat />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Route>
           </Routes>

@@ -38,6 +38,11 @@ export const fetchChats = async (id: any) => {
   return data;
 };
 
+export const fetchChatById = async (id: any) => {
+  const { data } = await api.get<IChatRoom>(`/chat/room/${id}`);
+  return data;
+};
+
 export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
   const { data } = await api.post("/users/signin", {
     email,
