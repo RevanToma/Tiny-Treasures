@@ -35,14 +35,12 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
 
   const chatList = chats.map((room) => {
     const lastMessage = room.messages[room.messages.length - 1]?.text;
-    const postOwnerId = room.messages[room.messages.length - 1]?.postOwner;
     const receiverId = room.members.find((member) => member !== userId);
 
     if (!receiverId) return null;
 
     return (
       <ChatListCard
-        receiverId={receiverId}
         handleSwitchChat={handleSwitchChat}
         lastMessage={lastMessage}
         room={room}

@@ -9,7 +9,6 @@ export type IMessage = {
   _id?: string;
   roomId?: string;
   postId?: string;
-  postOwner?: string;
 };
 
 export type IChatRoom = {

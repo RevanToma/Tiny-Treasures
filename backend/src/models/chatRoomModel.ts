@@ -12,9 +12,6 @@ export const MessageSchema = new mongoose.Schema(
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
     },
-    postOwner: {
-      type: mongoose.Schema.Types.ObjectId,
-    },
     text: {
       type: String,
     },

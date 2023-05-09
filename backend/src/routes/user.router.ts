@@ -23,5 +23,3 @@ userRouter.patch(
   authController.verifyPassword,
   authController.updateEmail
 );
-
-userRouter.get("/:id", authController.getUserNameById);

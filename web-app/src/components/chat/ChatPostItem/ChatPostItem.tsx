@@ -17,6 +17,7 @@ const ChatPostItem: React.FC<ChatPostItemProps> = ({
       <h1>MESSAGES</h1>
       <S.Image src={post.images[0]} alt="" />
       {post.title}
+      <p>{`Conversation with other`}</p>
     </Box>
   );
 };
