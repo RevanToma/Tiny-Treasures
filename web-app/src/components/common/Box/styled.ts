@@ -42,7 +42,10 @@ type DivProps = {
   backgroundColor?: string;
   borderRadius?: string;
   boxShadow?: string;
-  sticky?: boolean;
+  top?: string;
+  bottom?: string;
+  right?: string;
+  left?: string;
 };
 
 export const Div = styled.div<DivProps>`
@@ -74,5 +77,8 @@ export const Div = styled.div<DivProps>`
   background-color: ${({ backgroundColor }) => backgroundColor || ""};
   border-radius: ${({ borderRadius }) => borderRadius || "none"};
   box-shadow: ${({ boxShadow }) => boxShadow || "none"};
-  position: ${({ sticky }) => (sticky ? "sticky" : "static")};
+  top: ${({ top }) => top || ""};
+  bottom: ${({ bottom }) => bottom || ""};
+  right: ${({ right }) => right || ""};
+  left: ${({ left }) => left || ""};
 `;

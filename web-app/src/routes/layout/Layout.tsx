@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Box from "../../components/common/Box/Box";
 import { Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -13,12 +13,15 @@ const LayoutStyle = styled.div`
 const PageStyle = styled.div`
   overflow-y: auto;
   width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 type LayoutProps = Record<string, never>;
 
 const Layout: React.FC<LayoutProps> = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
+  const navBarRef = useRef<HTMLDivElement>(null);
 
   return (
     <LayoutStyle>
@@ -38,7 +41,7 @@ const Layout: React.FC<LayoutProps> = () => {
         <Box width="100%" padding="10px 15px">
           <div id="chat-input-portal"></div>
         </Box>
-        {userSignedIn && <Navbar />}
+        {userSignedIn && <Navbar ref={navBarRef} />}
       </Box>
     </LayoutStyle>
   );
