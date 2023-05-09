@@ -105,7 +105,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   };
 
   return (
-    <Box>
+    <Box width="100%">
       {chatPostItemPlace !== null &&
         createPortal(
           <ChatPostItem navigateToPost={navigateToPost} post={post} />,

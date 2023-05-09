@@ -13,6 +13,7 @@ const LayoutStyle = styled.div`
 const PageStyle = styled.div`
   overflow-y: auto;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
 `;
@@ -34,7 +35,7 @@ const Layout: React.FC<LayoutProps> = () => {
       >
         <div id="chat-post-item-portal"></div>
         <PageStyle>
-          <Box>
+          <Box width="100%">
             <Outlet />
           </Box>
         </PageStyle>
