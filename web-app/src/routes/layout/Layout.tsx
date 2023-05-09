@@ -12,6 +12,7 @@ const LayoutStyle = styled.div`
 
 const PageStyle = styled.div`
   overflow-y: auto;
+  width: 100%;
 `;
 
 type LayoutProps = Record<string, never>;
@@ -33,7 +34,7 @@ const Layout: React.FC<LayoutProps> = () => {
             <Outlet />
           </Box>
         </PageStyle>
-
+        <div id="chat-input-portal"></div>
         {userSignedIn && <Navbar />}
       </Box>
     </LayoutStyle>
