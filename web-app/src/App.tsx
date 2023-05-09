@@ -59,7 +59,7 @@ function App() {
               <Route path="post/:id" element={<Post />} />
               <Route path="posts/:startQuery" element={<Posts />} />
               <Route path="chat" element={<Chat />} />
-              <Route path="chat/:id" element={<DisplayedChat />} />
+              <Route path="chat/:roomId/:postId" element={<DisplayedChat />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Route>
           </Routes>

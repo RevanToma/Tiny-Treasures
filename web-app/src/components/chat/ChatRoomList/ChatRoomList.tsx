@@ -14,8 +14,6 @@ type ChatRoomListProps = {
 };
 
 const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
-  const [currentRoom, setCurrentRoom] = useState<IChatRoom>();
-  const [receiverId, setReceiverId] = useState<undefined | string>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 

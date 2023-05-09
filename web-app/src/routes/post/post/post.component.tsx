@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { usePost } from "../../../hooks/usePost";
 import Spinner from "../../../components/common/spinner/spinner.component";
 import Box from "../../../components/common/Box/Box";
@@ -15,26 +15,29 @@ import { fetchChats } from "../../../api/requests";
 import { IChatRoom } from "../../../types";
 
 const Post = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useSelector(selectUser);
   const userId = user._id;
   const { id } = useParams();
   const postId = id ?? "";
   const { data: post, isLoading, error } = usePost(postId);
+  console.log(post);
 
   useEffect(() => {
     const refetchChatsAndGoToChat = (data: IChatRoom) => {
       queryClient.invalidateQueries([fetchChats.name]);
-      console.log(data);
-      ////////////////////////////////////////////////
-      //fortsätt här gå till chat/:id router ?
+      if (post?._id) {
+        navigate(`/chat/${data._id}/${post?._id}`);
+        console.log("fired");
+      }
     };
 
     if (userId) {
       Socket.init(userId);
       socket().on("create-chat", refetchChatsAndGoToChat);
     }
-  }, [userId, queryClient]);
+  }, [userId, queryClient, navigate, post?._id]);
 
   if (isLoading && postId) return <Spinner />;
   if (error instanceof Error) return <h1>{error.message}</h1>;

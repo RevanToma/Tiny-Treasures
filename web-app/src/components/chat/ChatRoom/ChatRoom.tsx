@@ -1,19 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
 import { socket } from "../../../Sockets/Message.socket";
 import Message from "../Message/Message";
-import { IChatRoom, IMessage } from "../../../types";
+import { IChatRoom, IMessage, Post } from "../../../types";
 import * as S from "./styled";
 import TypingAnimation from "../TypingAnimation/TypingAnimation";
 import SendButton from "../../../assets/svg.icons/SendButton";
 import Box from "../../common/Box/Box";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   room: IChatRoom;
   userId: string;
   receiverId: string;
+  post: Post;
 };
 
-const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
+const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
@@ -91,10 +94,15 @@ const ChatRoom: React.FC<Props> = ({ room, userId, receiverId = "" }) => {
     setMessage({ ...message, text: e.target.value });
   };
 
+  const navigateToPost = () => {
+    navigate(`/post/${post._id}`);
+  };
+
   return (
     <>
+      <Box onClick={navigateToPost}>{post.title}</Box>
       <S.ChatContainer>
-        {messages.map((message, i, arr) => (
+        {messages.map((message) => (
           <>
             <Message key={message._id} message={message} />
           </>
