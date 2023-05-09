@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
     );
 
     ChatModel.findById(roomId).then((chat) => {
-      chat?.messages.push({ senderId, text, postId: postId });
+      chat?.messages.push(msg);
       chat?.save();
     });
   });
