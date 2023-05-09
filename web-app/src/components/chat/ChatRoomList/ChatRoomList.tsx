@@ -24,18 +24,20 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
   if (!chats) return null;
 
   const handleSwitchChat = (room: IChatRoom) => {
-    console.log(room.messages);
+    const postId = room.messages[room.messages.length - 1].postId;
+
     dispatch(setCurrentChatRoom(room));
-    navigate(
-      `/chat/${room._id}/${room.messages[room.messages.length - 1].postId}`
-    );
+    if (postId) {
+      navigate(`/chat/${room._id}/${postId}`);
+    }
   };
 
   const chatList = chats.map((room) => {
     const lastMessage = room.messages[room.messages.length - 1]?.text;
-    const lastSender = room.messages[room.messages.length - 1]?.sentByMe
-      ? "Received"
-      : "You";
+    const lastSenderIsMe =
+      room.messages[room.messages.length - 1]?.senderId === userId;
+
+    const lastSender = lastSenderIsMe ? "You" : "Received";
 
     return (
       <Box
