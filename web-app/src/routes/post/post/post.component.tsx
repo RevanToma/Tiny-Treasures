@@ -48,7 +48,7 @@ const Post = () => {
     description,
     condition,
     createdAt,
-    _id: postUser,
+    user: postUser,
   } = post;
   console.log(post);
 
