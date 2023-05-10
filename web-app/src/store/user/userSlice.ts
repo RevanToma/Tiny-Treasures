@@ -27,8 +27,15 @@ const userSlice = createSlice({
     setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
       state.currentChatRoom = payload;
     },
+    signOut: (state) =>{
+      state.data.user = initialState.data.user;
+      state.isSignedIn = false;
+      state.token = ""
+      state.currentChatRoom = initialState.currentChatRoom 
+
+    }
   },
 });
 
-export const { signSuccess, setCurrentChatRoom } = userSlice.actions;
+export const { signSuccess, setCurrentChatRoom ,signOut} = userSlice.actions;
 export default userSlice.reducer;

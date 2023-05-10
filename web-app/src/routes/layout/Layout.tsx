@@ -42,7 +42,7 @@ const Layout: React.FC<LayoutProps> = () => {
         <Box width="100%" padding="10px 15px">
           <div id="chat-input-portal"></div>
         </Box>
-        {userSignedIn && <Navbar ref={navBarRef} />}
+        {userSignedIn && <Navbar />}
       </Box>
     </LayoutStyle>
   );

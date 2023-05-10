@@ -88,3 +88,12 @@ export const fetchPostById = async (id: string) => {
   const post: Post = data.data.post[0];
   return post;
 };
+
+
+
+export const signOutUser =  async () => {
+
+    await api.post("users/logout");
+    return;
+ 
+};
