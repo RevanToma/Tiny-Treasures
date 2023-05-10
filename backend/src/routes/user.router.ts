@@ -9,7 +9,7 @@ userRouter.post(
   authController.verifyPassword,
   authController.signIn
 );
-userRouter.post("/logout");
+userRouter.post("/logout", authController.logout);
 
 userRouter.use(authController.protect);
 
