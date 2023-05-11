@@ -4,15 +4,11 @@ import Box from "../../components/common/Box/Box";
 
 import { FaSearch, FaGift, FaComment, FaUser, FaHome } from "react-icons/fa";
 
-type NavbarProps = {
-  ref: React.RefObject<HTMLDivElement>;
-};
-
 const ICON_SIZE = 21;
 
-const Navbar: React.FC<NavbarProps> = ({ ref }) => {
+const Navbar: React.FC = () => {
   return (
-    <S.NavbarStyle ref={ref}>
+    <S.NavbarStyle>
       <Box
         flexDirection="row"
         alignItems="center"
