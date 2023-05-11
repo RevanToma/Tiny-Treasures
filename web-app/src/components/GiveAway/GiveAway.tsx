@@ -1,10 +1,15 @@
 import { useState, useRef, FormEvent } from "react";
 import { useCreateNewPost } from "../../api/requests";
-import Box from "../common/Box/Box";
-import { ButtonType } from "../common/Button/button.types";
 import SelectInput from "../common/select-input/SelectInput.component";
-import Button from "../common/Button/Button.component";
 import { ages, clothes, mainCategories, other, sizes, toys } from "../../types";
+import Input from "../common/Input/input.component";
+import { InputType } from "../common/Input/input.types";
+import Box from "../common/Box/Box";
+import LeftOrRightCarett from "../common/leftCarett/LeftOrRightCarett";
+import { useNavigate } from "react-router-dom";
+import * as S from "./GiveAway.styles";
+import Button from "../common/Button/Button.component";
+import { ButtonType } from "../common/Button/button.types";
 const GiveAway = () => {
   const mutation = useCreateNewPost();
   const [title, setTitle] = useState("");
@@ -13,6 +18,8 @@ const GiveAway = () => {
   const [category, setCategory] = useState("");
   const [size, setSize] = useState("");
   const [condition, setCondition] = useState("");
+  const navigate = useNavigate();
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const createPost = (e: FormEvent<HTMLFormElement>): void => {
@@ -34,139 +41,112 @@ const GiveAway = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={createPost}>
-        <label htmlFor="tile">Title:</label>
-        <input
+    <S.GiveAwayContainer>
+      <h2>Uppload Item</h2>
+
+      <S.GiveAwayForm onSubmit={createPost}>
+        <input ref={fileInputRef} type="file" multiple />
+
+        <Input
           onChange={(e) => setTitle(e.target.value)}
-          name="tile"
-          type="text"
+          name="title"
           required
+          placeholder="Title"
+          type={InputType.text}
         />
-        <label htmlFor="description">Description:</label>
-        <input
+        <S.GiveAwayDescription
+          placeholder="Item description"
           onChange={(e) => setDescription(e.target.value)}
-          name="description"
-          type="text"
-        />
-        <label htmlFor="item-count">Number of articles:</label>
-        <input
+        ></S.GiveAwayDescription>
+
+        <Input
           onChange={(e) => setNumItems(e.target.value)}
           name="item-count"
-          type="number"
+          type={InputType.text}
           required
           min={0}
           max={10}
+          placeholder="Number of articles"
         />
-        <label htmlFor="categories">Category:</label>
-        <select onChange={(e) => setCategory(e.target.value)} name="categories">
-          <option value="">Choose an option...</option>
-          {mainCategories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
+
+        <SelectInput
+          handleSelect={(value) => setCategory(value)}
+          optionsArray={mainCategories}
+          initialValue=""
+          label="Categories"
+        />
         {category === "Clothes" && (
           <>
-            <label htmlFor="clothes">type:</label>
-            <select
-              onChange={(e) => setSize(e.target.value)}
-              name="clothes"
+            <SelectInput
+              handleSelect={(value) => setSize(value)}
+              optionsArray={clothes}
+              initialValue=""
+              label="clothes"
               required
-            >
-              <option value="">Choose an option...</option>
-              {clothes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+            />
           </>
         )}
         {category === "Toys" && (
           <>
-            <label htmlFor="toys">type:</label>
-            <select
-              onChange={(e) => setSize(e.target.value)}
-              name="toys"
+            <SelectInput
+              handleSelect={(value) => setSize(value)}
+              optionsArray={toys}
+              initialValue=""
+              label="Toys"
               required
-            >
-              <option value="">Choose an option...</option>
-              {toys.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+            />
           </>
         )}
         {category === "Other" && (
           <>
-            <label htmlFor="other">type:</label>
-            <select
-              onChange={(e) => setSize(e.target.value)}
-              name="other"
+            <SelectInput
+              handleSelect={(value) => setSize(value)}
+              optionsArray={other}
+              initialValue=""
+              label="Other"
               required
-            >
-              <option value="">Choose an option...</option>
-              {other.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+            />
           </>
         )}
-
         {category === "Clothes" && (
           <>
-            <label htmlFor="size">Size:</label>
-            <select
-              onChange={(e) => setSize(e.target.value)}
-              name="size"
+            <SelectInput
+              handleSelect={(value) => setSize(value)}
+              optionsArray={sizes}
+              initialValue=""
+              label="Size"
               required
-            >
-              <option value="">Choose an option...</option>
-              {sizes.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+            />
           </>
         )}
         {category !== "Clothes" && (
           <>
-            <label htmlFor="age">Age:</label>
-            <select
-              onChange={(e) => setSize(e.target.value)}
-              name="age"
+            <SelectInput
+              handleSelect={(value) => setSize(value)}
+              optionsArray={ages}
+              initialValue=""
+              label="Age"
               required
-            >
-              <option value="">Choose an option...</option>
-
-              {ages.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
+            />
           </>
         )}
-        <label htmlFor="condition">Condition:</label>
-        <select onChange={(e) => setCondition(e.target.value)} name="condition">
-          <option value="">Choose an option...</option>
 
-          <option value="used">Used</option>
-          <option value="good">Good</option>
-          <option value="new">New</option>
-        </select>
+        <SelectInput
+          handleSelect={(value) => setCondition(value)}
+          optionsArray={["Used", "Good", "New"]}
+          initialValue=""
+          label="Condition"
+          required
+        />
 
-        <input ref={fileInputRef} type="file" multiple />
-        <button>Create</button>
-      </form>
-    </div>
+        <Button
+          buttonType={ButtonType.Review}
+          // onClick={() => navigate("/review")}
+        >
+          Review
+        </Button>
+      </S.GiveAwayForm>
+    </S.GiveAwayContainer>
   );
 };
 

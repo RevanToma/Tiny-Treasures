@@ -31,10 +31,8 @@ export const BoxExtended = styled(Box)<InputProps>`
   }
 
   ul {
-    position: absolute;
-    top: 8rem;
+    position: relative;
     z-index: 10;
-
     display: flex;
     flex-direction: column;
 

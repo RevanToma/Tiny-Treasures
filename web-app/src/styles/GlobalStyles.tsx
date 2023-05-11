@@ -45,7 +45,7 @@ button {
   transition: ${theme.button.transition};
   width: fit-content;
   height: ${theme.button.height1};
-  color: #fff;
+  color: #000;
   padding: ${theme.button.padding};
 }
 `;

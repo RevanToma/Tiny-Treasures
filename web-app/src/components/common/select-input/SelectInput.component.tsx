@@ -1,11 +1,12 @@
-import { useEffect, useState, FC, useRef } from 'react';
-import * as S from './selectInput.styles';
+import { useEffect, useState, FC, useRef } from "react";
+import * as S from "./selectInput.styles";
 
 interface SelectInputProps {
   optionsArray: string[];
   initialValue: string;
-  label: string;
+  label?: string;
   handleSelect: (option: string) => void;
+  required?: boolean;
 }
 
 const SelectInput: FC<SelectInputProps> = ({
@@ -50,7 +51,7 @@ const SelectInput: FC<SelectInputProps> = ({
         />
         {isMenuOpen && (
           <ul>
-            {optionsArray.map(option => (
+            {optionsArray.map((option) => (
               <li key={option} onClick={() => handleOptionSelect(option)}>
                 {option}
               </li>

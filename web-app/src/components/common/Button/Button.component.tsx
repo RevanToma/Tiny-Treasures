@@ -5,6 +5,7 @@ import { ButtonType } from "./button.types";
 export interface ButtonProps {
   buttonType: ButtonType;
   children: ReactNode;
+
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
