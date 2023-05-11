@@ -164,6 +164,7 @@ export const createPost = catchAsync(
       condition: req.body.condition,
       images,
       user: req.user.id,
+      userName: req.body.name,
     };
     const x = await new Post(postData).populate("enums");
 

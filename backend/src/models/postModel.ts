@@ -1,32 +1,32 @@
-import mongoose from 'mongoose';
-import User from './userModel';
-import AppError from '../utils/appError';
-import { EnumDocument } from './enumsModel';
+import mongoose from "mongoose";
+import User from "./userModel";
+import AppError from "../utils/appError";
+import { EnumDocument } from "./enumsModel";
 
 export enum Condition {
-  Used = 'used',
-  Fair = 'fair',
-  Good = 'good',
-  New = 'new',
+  Used = "used",
+  Fair = "fair",
+  Good = "good",
+  New = "new",
 }
 
 export enum Sizes {
-  A = '44',
-  B = '50/56',
-  C = '62/68',
-  D = '74/80',
-  E = '86/92',
-  F = '98/104',
-  G = '110/116',
-  H = '122/128',
-  I = '134/140',
-  J = '146/152',
+  A = "44",
+  B = "50/56",
+  C = "62/68",
+  D = "74/80",
+  E = "86/92",
+  F = "98/104",
+  G = "110/116",
+  H = "122/128",
+  I = "134/140",
+  J = "146/152",
 }
 
 enum Ages {
-  A = '0-3',
-  B = '4-7',
-  C = '8-11',
+  A = "0-3",
+  B = "4-7",
+  C = "8-11",
 }
 
 export interface PostDocumentWithoutEnum extends mongoose.Document {
@@ -41,6 +41,7 @@ export interface PostDocumentWithoutEnum extends mongoose.Document {
   createdAt: Date;
   images: string[];
   user: mongoose.Schema.Types.ObjectId;
+  userName: string;
   location: {
     type: string;
     coordinates: [number, number];
@@ -63,19 +64,19 @@ const postSchema = new mongoose.Schema<PostDocument>(
       type: String,
       maxLength: [
         1000,
-        'Descriptions can not be more than 1000 characters long',
+        "Descriptions can not be more than 1000 characters long",
       ],
     },
     itemCount: {
       type: Number,
-      min: [1, 'ItemCount must be more that 1!'],
-      max: [10, 'You can not have more than 10 articles in 1 post!'],
-      required: [true, 'Please provide the number of articles.'],
+      min: [1, "ItemCount must be more that 1!"],
+      max: [10, "You can not have more than 10 articles in 1 post!"],
+      required: [true, "Please provide the number of articles."],
     },
     enums: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Enum',
-      default: '6452654bfc9f011ef64dd9e1',
+      ref: "Enum",
+      default: "6452654bfc9f011ef64dd9e1",
     },
     mainCategory: String,
     subCategory: String,
@@ -90,7 +91,7 @@ const postSchema = new mongoose.Schema<PostDocument>(
     condition: {
       type: String,
       enum: Condition,
-      required: [true, 'Please provide a condition.'],
+      required: [true, "Please provide a condition."],
     },
     createdAt: {
       type: Date,
@@ -99,14 +100,17 @@ const postSchema = new mongoose.Schema<PostDocument>(
     images: [String],
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: [true, 'All posts must belong to a user'],
+      ref: "User",
+      required: [true, "All posts must belong to a user"],
+    },
+    userName: {
+      type: String,
     },
     location: {
       type: {
         type: String,
-        default: 'Point',
-        enum: ['Point'],
+        default: "Point",
+        enum: ["Point"],
       },
       coordinates: [Number],
     },
@@ -119,20 +123,20 @@ const postSchema = new mongoose.Schema<PostDocument>(
 
 postSchema.index({ mainCategory: 1, age: 1 });
 
-postSchema.index({ location: '2dsphere' });
+postSchema.index({ location: "2dsphere" });
 
-postSchema.pre('save', async function (next) {
+postSchema.pre("save", async function (next) {
   const user = await User.findById(this.user);
   if (!user) {
-    return next(new AppError('there was a problem saving your post.', 400));
+    return next(new AppError("there was a problem saving your post.", 400));
   }
   this.location = user.location;
 
   next();
 });
 
-postSchema.pre('save', function (next) {
-  if (!this.isModified('size') || this.mainCategory !== 'Clothes')
+postSchema.pre("save", function (next) {
+  if (!this.isModified("size") || this.mainCategory !== "Clothes")
     return next();
 
   switch (this.size) {
@@ -169,5 +173,5 @@ postSchema.methods.enumsAreValid = function (post: PostDocumentWithEnums) {
   );
 };
 
-const Post = mongoose.model<PostDocument>('Post', postSchema);
+const Post = mongoose.model<PostDocument>("Post", postSchema);
 export default Post;
