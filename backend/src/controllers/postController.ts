@@ -164,6 +164,7 @@ export const createPost = catchAsync(
       condition: req.body.condition,
       images,
       user: req.user.id,
+      userName: req.user.name,
     };
     const x = await new Post(postData).populate("enums");
 
@@ -180,6 +181,7 @@ export const createPost = catchAsync(
     }
 
     post.save();
+    console.log(req.user.name);
 
     res.status(200).json({
       status: "success",
