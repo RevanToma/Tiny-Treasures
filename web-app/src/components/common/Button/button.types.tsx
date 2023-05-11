@@ -1,13 +1,14 @@
-import { theme } from '../../../styles/themes';
+import { theme } from "../../../styles/themes";
 
 export enum ButtonType {
-  Trade = 'trade',
-  Message = 'message',
-  Primary = 'primary',
-  Secondary = 'secondary',
-  Disabled = 'disabled',
-  Pending = 'pending',
-  Completed = 'completed',
+  Trade = "trade",
+  Message = "message",
+  Primary = "primary",
+  Secondary = "secondary",
+  Disabled = "disabled",
+  Pending = "pending",
+  Completed = "completed",
+  ReviewOrSignIn = "reviewOrSignIn",
 }
 
 interface Buttons {
@@ -70,5 +71,11 @@ export const buttons: Buttons = {
     background: theme.gradient.completed,
     hoverBackground: theme.gradient.completed,
     activeBackground: theme.gradient.completed,
+  },
+  reviewOrSignIn: {
+    background: theme.gradient.tradePrimary,
+    hoverBackground: theme.gradient.tradeDark,
+    activeBackground: theme.gradient.tradeLight1,
+    width: theme.button.width,
   },
 };

@@ -41,6 +41,7 @@ interface User {
 export interface SignUpInfo {
   name: string;
   email: string;
+  confirmEmail?: string;
   password: string;
   passwordConfirm: string;
 }

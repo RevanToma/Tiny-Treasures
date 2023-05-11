@@ -13,11 +13,15 @@ import Box from "../../components/common/Box/Box";
 import Button from "../../components/common/Button/Button.component";
 import { ButtonType } from "../../components/common/Button/button.types";
 import * as S from "./signIn.styles";
+import { useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { SignUpFooter } from "../signUp/SignUp.styles";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const signInWithEmailMutation = useMutation({
     mutationFn: ApiPostSignInUser,
@@ -43,12 +47,11 @@ const SignIn: React.FC = () => {
       {signInWithEmailMutation.isLoading ? (
         <Spinner />
       ) : (
-        <Box width="80%" margin="auto">
+        <Box width="80%" margin="auto" gap="3rem">
           <img src={Logo} alt="Tiny Treasures Logo" />
           <S.TextContainer>
             <Box>
               <p>Log in or create an account to exchange items for free.</p>
-              <p>Log In</p>
             </Box>
           </S.TextContainer>
           <form onSubmit={signIn}>
@@ -69,16 +72,29 @@ const SignIn: React.FC = () => {
             <S.TextContainer>
               <p>Forgot your password?</p>
             </S.TextContainer>
-            <Box>
-              <button>Sign In</button>
-
+            <Box gap="2rem">
+              <Button buttonType={ButtonType.ReviewOrSignIn}>Sign In</Button>
+              <Button
+                buttonType={ButtonType.Primary}
+                onClick={() => navigate("/signup")}
+              >
+                Sign Up
+              </Button>
               <S.TextContainer>
                 <p>or</p>
               </S.TextContainer>
 
-              <button disabled>Continue with Google</button>
+              <S.GoogleButton buttonType={ButtonType.Secondary}>
+                <FcGoogle size={32} />
+                Continue with Google
+              </S.GoogleButton>
             </Box>
           </form>
+          <SignUpFooter>
+            <span>Support</span>
+            <span>How it Works</span>
+            <span>Reviews</span>
+          </SignUpFooter>
         </Box>
       )}
     </div>

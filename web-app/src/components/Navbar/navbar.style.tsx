@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 export const NavbarStyle = styled.nav`
   width: 100%;
   padding: 12px;
+
   background-color: #ffffff;
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px 10px 0px 0px;

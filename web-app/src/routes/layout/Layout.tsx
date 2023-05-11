@@ -22,7 +22,6 @@ type LayoutProps = Record<string, never>;
 
 const Layout: React.FC<LayoutProps> = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
-  const navBarRef = useRef<HTMLDivElement>(null);
 
   return (
     <LayoutStyle>

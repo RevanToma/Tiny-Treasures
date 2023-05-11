@@ -58,7 +58,7 @@ export const Div = styled.div<DivProps>`
   flex-shrink: ${({ flexShrink }) => flexShrink || 1};
   flex-wrap: ${({ flexWrap }) => flexWrap || "nowrap"};
   flex: ${({ flex }) => flex || "0 1 auto"};
-  align-items: ${({ alignItems }) => alignItems || "stretch"};
+  align-items: ${({ alignItems }) => alignItems || "center"};
   grid-template-columns: ${({ gridTemplateColumns }) =>
     gridTemplateColumns || "auto"};
   margin: ${({ margin }) => margin || "0"};
