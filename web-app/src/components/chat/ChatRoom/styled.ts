@@ -5,10 +5,10 @@ export const ChatContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 15px;
-  color: white;
   gap: 5px;
   align-items: center;
   overflow-y: scroll;
+  width: 100%;
 `;
 
 export const MessageInputForm = styled.div`

@@ -17,7 +17,6 @@ const DisplayedChat: React.FC<Props> = () => {
   const roomId = id ?? "";
 
   const { data: post, isLoading: postIsLoading } = usePost(postId);
-  console.log(post);
 
   const {
     data: room,

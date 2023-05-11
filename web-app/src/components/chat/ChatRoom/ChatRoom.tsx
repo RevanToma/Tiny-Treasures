@@ -10,6 +10,37 @@ import { createPortal } from "react-dom";
 import ChatInput from "../ChatInput/ChatInput";
 import ChatPostItem from "../ChatPostItem/ChatPostItem";
 
+function createJaggedArray(messagesArray: IMessage[]): IMessage[][] {
+  const jaggedArray: IMessage[][] = [];
+
+  let currentDate: Date | undefined = new Date();
+  let currentGroup: IMessage[] = [];
+
+  for (const obj of messagesArray) {
+    if (obj.createdAt) {
+      const objUnix = Date.parse(obj.createdAt.toString());
+      const objDate = new Date(objUnix);
+      if (currentDate === undefined || !isSameDay(currentDate, objDate)) {
+        currentDate = objDate;
+        currentGroup = [];
+        jaggedArray.push(currentGroup);
+      }
+      currentGroup.push(obj);
+    }
+  }
+
+  return jaggedArray;
+}
+
+// Helper function to check if two dates are on the same day
+function isSameDay(date1: Date, date2: Date): boolean {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
+
 type Props = {
   room: IChatRoom;
   userId: string;
@@ -74,6 +105,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
 
   useEffect(() => {
     socket().on("chat-message", (data) => {
+      console.log("hej");
       const senderIsMember = room.members.some(
         (member) => member === data.senderId
       );
@@ -81,6 +113,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
         (member) => member === receiverId
       );
       if (senderIsMember && receiverIsMember) {
+        console.log("jaha");
         const updateMsg = [...messages, data];
         setMessages(updateMsg);
       }
@@ -88,7 +121,6 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   }, [messages, receiverId, room, userId]);
 
   function onSubmit(event: any) {
-    console.log("submitted?");
     if (!message || !chatInputRef.current?.value) return null;
     socket().emit("chat-message", message);
     if (chatInputRef.current) {
@@ -104,20 +136,30 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
     navigate(`/post/${post._id}`);
   };
 
+  const jaggedMessageListByDay = createJaggedArray(messages);
+
+  const messageListWithFirst = jaggedMessageListByDay.map((sameDayMessages) => {
+    return sameDayMessages.map((message, index) => ({
+      ...message,
+      firstOfDay: index === 0,
+    }));
+  });
+
+  const messageList = messageListWithFirst.map((messageArray) =>
+    messageArray.map((message) => (
+      <Message key={message._id} message={message} />
+    ))
+  );
+
   return (
-    <Box width="100%">
+    <Box width="100%" alignItems="center">
       {chatPostItemPlace !== null &&
         createPortal(
           <ChatPostItem navigateToPost={navigateToPost} post={post} />,
           chatPostItemPlace
         )}
-
       <S.ChatContainer>
-        {messages.map((message) => (
-          <>
-            <Message key={message._id} message={message} />
-          </>
-        ))}
+        {messageList}
         {typing && <TypingAnimation />}
       </S.ChatContainer>
       {chatInputPlace !== null &&

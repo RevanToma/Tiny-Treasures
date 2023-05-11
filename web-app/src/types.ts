@@ -1,6 +1,7 @@
 import { AxiosError } from "axios";
 
 export type IMessage = {
+  firstOfDay?: boolean;
   senderId: string;
   text: string;
   receiverId: string;
