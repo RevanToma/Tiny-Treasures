@@ -56,12 +56,14 @@ export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
 export const ApiPostSignUpUser = async ({
   name,
   email,
+  confirmEmail,
   password,
   passwordConfirm,
 }: SignUpInfo) => {
   const { data } = await api.post('users/signup', {
     name,
     email,
+    confirmEmail,
     password,
     passwordConfirm,
   });
@@ -94,6 +96,7 @@ export const fetchPostById = async (id: string | undefined) => {
 };
 
 export const signOutUser = async () => {
+<<<<<<< HEAD
   await api.post('users/logout');
   return;
 };
@@ -102,4 +105,8 @@ export const fetchEnums = async () => {
   const data: AxiosResponse<ResponseWithData<Enum[]>> = await api.get(`enums`);
   checkForError(data.data);
   return data.data.data.data[0];
+=======
+  await api.post("users/logout");
+  return;
+>>>>>>> 18a99a91d1782bb8a1b5925c518bc989f30e0e4f
 };
