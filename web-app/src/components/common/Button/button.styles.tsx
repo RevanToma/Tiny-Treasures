@@ -6,6 +6,10 @@ export const StyledButton = styled.button<{ buttonType: ButtonType }>`
   background: ${({ buttonType }) => buttons[buttonType].background};
   width: ${({ buttonType }) => buttons[buttonType].width || 'fit-content'};
   border: ${({ buttonType }) => buttons[buttonType].border || 'none'};
+  font-weight: ${({ buttonType }) => buttons[buttonType].fontWeight || 700};
+  font-size: ${({ buttonType }) => buttons[buttonType].fontSize || '2rem'};
+  font-family: ${({ buttonType }) =>
+    buttons[buttonType].fontFamily || 'Open Sans'};
 
   &:hover {
     color: ${({ buttonType }) => buttons[buttonType].hoverColor || '#fff'};

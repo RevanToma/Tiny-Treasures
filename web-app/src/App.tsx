@@ -1,32 +1,34 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SignUp from "./routes/signUp/signUp.component";
-import Home from "./routes/home/home.component";
-import Profile from "./routes/profile/profile.component";
-import Layout from "./routes/layout/Layout";
-import { lazy, Suspense, useEffect } from "react";
-import Spinner from "./components/common/spinner/spinner.component";
-import { useSelector } from "react-redux";
-import { selectCurrentChatRoom, selectUser } from "./store/user/userSelectors";
-import { Socket, socket } from "./Sockets/Message.socket";
-import Posts from "./routes/posts/posts.component";
-import { GlobalStyles } from "./styles/GlobalStyles";
-import { useQueryClient } from "@tanstack/react-query";
-import { fetchChats } from "./api/requests";
-import { IMessage } from "./types";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import SignUp from './routes/signUp/signUp.component';
+import Profile from './routes/profile/profile.component';
+import Layout from './routes/layout/Layout';
+import { lazy, Suspense, useEffect } from 'react';
+import Spinner from './components/common/spinner/spinner.component';
+import { useSelector } from 'react-redux';
+import { selectCurrentChatRoom, selectUser } from './store/user/userSelectors';
+import { Socket, socket } from './Sockets/Message.socket';
+import { GlobalStyles } from './styles/GlobalStyles';
+import { useQueryClient } from '@tanstack/react-query';
+import { fetchChats } from './api/requests';
+import { IMessage } from './types';
+import Home from './routes/Home/Home.route';
+import { useEnums } from './hooks/useEnums';
+import Category from './routes/Category/Category.route';
 
-const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
+const SignIn = lazy(() => import('./routes/signUp/signUp.component'));
 const DisplayedChat = lazy(
-  () => import("./components/chat/DisplayedChat/DisplayedChat")
+  () => import('./components/chat/DisplayedChat/DisplayedChat')
 );
-const Chat = lazy(() => import("./routes/chat/chat.component"));
-const Post = lazy(() => import("./routes/post/post/post.component"));
+const Chat = lazy(() => import('./routes/chat/chat.component'));
+const Post = lazy(() => import('./routes/post/Post.component'));
 const AccountSettings = lazy(
-  () => import("./routes/settings/AccountSettings.component")
+  () => import('./routes/settings/AccountSettings.component')
 );
 function App() {
   const userId = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
   const queryClient = useQueryClient();
+  useEnums();
 
   useEffect(() => {
     const refetchChats = () => {
@@ -35,12 +37,12 @@ function App() {
 
     if (userId._id) {
       Socket.init(userId._id);
-      socket().on("chat-message", (data: IMessage) => {
+      socket().on('chat-message', (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           refetchChats();
         }
       });
-      socket().on("create-chat", refetchChats);
+      socket().on('create-chat', refetchChats);
     }
   }, [userId._id, currentChatRoom, queryClient]);
 
@@ -57,7 +59,7 @@ function App() {
               <Route path="signup" element={<SignUp />} />
               <Route path="profile" element={<Profile />} />
               <Route path="post/:id" element={<Post />} />
-              <Route path="posts/:startQuery" element={<Posts />} />
+              <Route path="category/:category" element={<Category />} />
               <Route path="chat" element={<Chat />} />
               <Route path="chat/:roomId/:postId" element={<DisplayedChat />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />

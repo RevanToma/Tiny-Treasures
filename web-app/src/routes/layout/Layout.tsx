@@ -1,10 +1,10 @@
-import React, { useRef, useEffect } from "react";
-import Box from "../../components/common/Box/Box";
-import { Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectIsSignedIn } from "../../store/user/userSelectors";
-import Navbar from "../../components/Navbar/navbar.component";
-import styled from "styled-components";
+import React, { useRef, useEffect } from 'react';
+import Box from '../../components/common/Box/Box';
+import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsSignedIn } from '../../store/user/userSelectors';
+import Navbar from '../../components/Navbar/navbar.component';
+import styled from 'styled-components';
 
 const LayoutStyle = styled.div`
   overflow: hidden;

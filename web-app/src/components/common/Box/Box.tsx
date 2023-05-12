@@ -1,36 +1,40 @@
-import React, { ReactNode } from "react";
-import * as S from "./styled";
+import React, { ReactNode } from 'react';
+import * as S from './styled';
 
 type BoxProps = {
-  display?: "grid" | "flex" | "block" | "inline-block" | "none";
+  display?: 'grid' | 'flex' | 'block' | 'inline-block' | 'none';
   gridTemplateColumns?: string;
+  columnGap?: string;
+  rowGap?: string;
   children?: ReactNode;
   className?: string;
-  flexDirection?: "row";
+  flexDirection?: 'row';
   gap?: string;
   justifyContent?:
-    | "flex-start"
-    | "flex-end"
-    | "center"
-    | "space-between"
-    | "space-around"
-    | "initial"
-    | "inherit";
-  flexWrap?: "wrap" | "nowrap" | "wrap-reverse";
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
+    | 'initial'
+    | 'inherit';
+  flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse';
   alignItems?:
-    | "stretch"
-    | "center"
-    | "flex-start"
-    | "flex-end"
-    | "baseline"
-    | "initial"
-    | "inherit";
+    | 'stretch'
+    | 'center'
+    | 'flex-start'
+    | 'flex-end'
+    | 'baseline'
+    | 'initial'
+    | 'inherit';
   flexGrow?: number;
   flexShrink?: number;
   flexBasis?: number;
   flex?: string;
   padding?: string;
   margin?: string;
+  marginTop?: string;
+  marginBottom?: string;
   width?: string;
   height?: string;
   maxWidth?: string;
@@ -51,6 +55,8 @@ type BoxProps = {
   bottom?: string;
   right?: string;
   left?: string;
+  zIndex?: number;
+  transform?: string;
 };
 
 const Box: React.FC<BoxProps> = ({ ...props }) => {

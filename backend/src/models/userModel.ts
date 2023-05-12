@@ -1,14 +1,9 @@
-import mongoose, { Document, Schema } from "mongoose";
-import validator from "validator";
-import bcrypt from "bcryptjs";
-import AppError from "../utils/appError";
-import {
-  BasicUserData,
-  ChatData,
-  LocationData,
-  UserMsgData,
-} from "../utils/interfaces";
-import { PostDocument } from "./postModel";
+import mongoose, { Document, Schema } from 'mongoose';
+import validator from 'validator';
+import bcrypt from 'bcryptjs';
+import AppError from '../utils/appError';
+import { BasicUserData, LocationData } from '../utils/interfaces';
+import { PostDocument } from './postModel';
 
 export interface UserDocument extends Document {
   id: string;
@@ -21,6 +16,7 @@ export interface UserDocument extends Document {
   location: LocationData;
   // posts: mongoose.Schema.Types.ObjectId[];
   credits: number;
+  saved: PostDocument[];
   favorites: PostDocument[];
   newMessages: number;
 
@@ -31,31 +27,31 @@ const userSchema = new Schema<UserDocument>(
   {
     name: {
       type: String,
-      required: [true, "Please provide a name."],
+      required: [true, 'Please provide a name.'],
     },
     email: {
       type: String,
-      required: [true, "Please privide an email address."],
+      required: [true, 'Please privide an email address.'],
       unique: true,
-      validate: [validator.isEmail, "Please provide a valid email address."],
+      validate: [validator.isEmail, 'Please provide a valid email address.'],
       lowercase: true,
     },
     confirmEmail: {
       type: String,
-      required: [true, "Please confirm your email."],
-      validate: [validator.isEmail, "Please provide a valid email address."],
+      required: [true, 'Please confirm your email.'],
+      validate: [validator.isEmail, 'Please provide a valid email address.'],
       lowercase: true,
     },
     password: {
       type: String,
-      required: [true, "Please provide a password."],
-      minLength: [8, "Passwords must have at least 8 characters"],
+      required: [true, 'Please provide a password.'],
+      minLength: [8, 'Passwords must have at least 8 characters'],
       select: false,
     },
     passwordConfirm: {
       type: String,
-      required: [true, "Please confirm your password."],
-      minLength: [8, "Passwords must have at least 8 characters"],
+      required: [true, 'Please confirm your password.'],
+      minLength: [8, 'Passwords must have at least 8 characters'],
       select: false,
     },
     createdAt: {
@@ -65,22 +61,28 @@ const userSchema = new Schema<UserDocument>(
     location: {
       type: {
         type: String,
-        default: "Point",
-        enum: ["Point"],
+        default: 'Point',
+        enum: ['Point'],
       },
       coordinates: [Number],
       city: String,
     },
+    saved: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
     favorites: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
+        ref: 'Post',
       },
     ],
     credits: {
       type: Number,
-      min: [0, "A user can not have less than 0 credits!"],
-      max: [10, "A user can not have more than 10 credits at a time."],
+      min: [0, 'A user can not have less than 0 credits!'],
+      max: [10, 'A user can not have more than 10 credits at a time.'],
       default: 3,
     },
   },
@@ -90,20 +92,20 @@ const userSchema = new Schema<UserDocument>(
   }
 );
 
-userSchema.pre("save", async function (next) {
+userSchema.pre('save', async function (next) {
   if (!this.isNew) return next();
 
   if (this.password !== this.passwordConfirm) {
-    return next(new AppError("The provided passwords do not match!", 400));
+    return next(new AppError('The provided passwords do not match!', 400));
   }
   if (this.email !== this.confirmEmail) {
-    return next(new AppError("The provided emails do not match!", 400));
+    return next(new AppError('The provided emails do not match!', 400));
   }
   next();
 });
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   this.password = await bcrypt.hash(this.password!, 14);
 
@@ -128,5 +130,5 @@ export const modifyBasicUserData = (userDoc: UserDocument): BasicUserData => {
   };
 };
 
-const User = mongoose.model<UserDocument>("User", userSchema);
+const User = mongoose.model<UserDocument>('User', userSchema);
 export default User;
