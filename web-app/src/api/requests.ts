@@ -54,12 +54,14 @@ export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
 export const ApiPostSignUpUser = async ({
   name,
   email,
+  confirmEmail,
   password,
   passwordConfirm,
 }: SignUpInfo) => {
   const { data } = await api.post("users/signup", {
     name,
     email,
+    confirmEmail,
     password,
     passwordConfirm,
   });
@@ -89,11 +91,7 @@ export const fetchPostById = async (id: string) => {
   return post;
 };
 
-
-
-export const signOutUser =  async () => {
-
-    await api.post("users/logout");
-    return;
- 
+export const signOutUser = async () => {
+  await api.post("users/logout");
+  return;
 };
