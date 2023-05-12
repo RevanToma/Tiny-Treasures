@@ -1,26 +1,20 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
-import dotenv from "dotenv";
-import { routes } from "./routes";
 import { connectToMongoDB } from "./db/mongoose_connection";
-
-dotenv.config({ path: `${__dirname}/../config.env` });
-
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-app.use(morgan("dev"));
+import { app } from "./app";
+import http from "http";
+import { Server } from "socket.io";
+import ChatModel from "./models/chatRoomModel";
 const port = process.env.PORT || 3000;
 
-app.use("/api/v1", routes);
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: { origin: "*" },
+});
 
 const start = async () => {
   try {
-    await connectToMongoDB();
-    app.listen(port, () => {
-      console.log(`listening to ${port}`);
+    await connectToMongoDB().then(() => console.log("Connected to DB..."));
+    server.listen(port, () => {
+      console.log(`listening to ${port}:  http://127.0.0.1:${port}`);
     });
   } catch (error: any) {
     console.error(error.message);
@@ -28,3 +22,60 @@ const start = async () => {
 };
 
 start();
+
+const connectedUsers: { [key: string]: string } = {};
+
+io.on("connection", (socket) => {
+  const userId: string | undefined = socket.handshake.query?.userId?.toString();
+
+  if (userId) {
+    connectedUsers[userId] = socket.id;
+  }
+
+  socket.on("create-chat", async (data) => {
+    const { receiverId, userId } = data;
+
+    console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
+
+    let chatRoom;
+
+    chatRoom = await ChatModel.findOne({
+      members: {
+        $all: [receiverId, userId],
+      },
+    });
+
+    if (!chatRoom) {
+      chatRoom = await ChatModel.create({
+        members: [receiverId, userId],
+        messages: [],
+      });
+    }
+
+    io.to([connectedUsers[userId], connectedUsers[receiverId]]).emit(
+      "create-chat",
+      chatRoom
+    );
+  });
+
+  socket.on("typing", (typingInfo) => {
+    const { receiverId } = typingInfo;
+
+    io.to(connectedUsers[receiverId]).emit("typing", typingInfo);
+  });
+
+  socket.on("chat-message", (msg) => {
+    const { text, senderId, receiverId, postId, roomId } = msg;
+    console.log("postid", postId);
+    console.log("THIS", msg);
+    io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
+      "chat-message",
+      msg
+    );
+
+    ChatModel.findById(roomId).then((chat) => {
+      chat?.messages.push(msg);
+      chat?.save();
+    });
+  });
+});

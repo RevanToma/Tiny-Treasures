@@ -1,14 +1,23 @@
 import express from "express";
-import * as postsController from "../controllers/postController";
+import * as authController from "../controllers/authController";
+import * as postController from "../controllers/postController";
+import * as userController from "../controllers/userController";
 
 export const postsRouter = express.Router();
 
-postsRouter.post("/", postsController.createPost);
+postsRouter
+  .route("/")
+  .get(userController.attatchUserToReq, postController.getAllPosts)
+  .post(
+    authController.protect,
+    postController.uploadPhotos,
+    postController.resizePhoto,
+    postController.createPost
+  );
 
-postsRouter.get("/", postsController.getAllPosts);
+postsRouter.get(
+  "/:postId",
 
-postsRouter.get("/:id", postsController.getPost);
-
-postsRouter.patch("/:id", postsController.updatePost);
-
-postsRouter.delete("/:id", postsController.deletePost);
+  userController.attatchUserToReq,
+  postController.getPost
+);
