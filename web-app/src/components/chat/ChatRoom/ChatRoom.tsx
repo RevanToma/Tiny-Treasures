@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { socket } from "../../../Sockets/Message.socket";
 import Message from "../Message/Message";
 import { IChatRoom, IMessage, Post } from "../../../types";
@@ -13,14 +13,17 @@ import ChatPostItem from "../ChatPostItem/ChatPostItem";
 function createJaggedArray(messagesArray: IMessage[]): IMessage[][] {
   const jaggedArray: IMessage[][] = [];
 
-  let currentDate: Date | undefined = new Date();
+  let currentDate: Date | null = null;
+
   let currentGroup: IMessage[] = [];
+
+  console.log("äinput", messagesArray);
 
   for (const obj of messagesArray) {
     if (obj.createdAt) {
       const objUnix = Date.parse(obj.createdAt.toString());
       const objDate = new Date(objUnix);
-      if (currentDate === undefined || !isSameDay(currentDate, objDate)) {
+      if (currentDate === null || !isSameDay(currentDate, objDate)) {
         currentDate = objDate;
         currentGroup = [];
         jaggedArray.push(currentGroup);
@@ -28,11 +31,10 @@ function createJaggedArray(messagesArray: IMessage[]): IMessage[][] {
       currentGroup.push(obj);
     }
   }
-
+  console.log("output", jaggedArray);
   return jaggedArray;
 }
 
-// Helper function to check if two dates are on the same day
 function isSameDay(date1: Date, date2: Date): boolean {
   return (
     date1.getFullYear() === date2.getFullYear() &&
@@ -103,8 +105,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   }, [userId, receiverId]);
 
   useEffect(() => {
-    socket().on("chat-message", (data) => {
-      console.log("data", data);
+    const handleChatMessage = (data: IMessage) => {
       const senderIsMember = room.members.some(
         (member) => member === data.senderId
       );
@@ -112,10 +113,18 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
         (member) => member === receiverId
       );
       if (senderIsMember && receiverIsMember) {
-        setMessages((prev) => [...prev, data]);
+        console.log("data", data);
+        const updatedMessages = [...messages, data];
+        setMessages(updatedMessages);
       }
-    });
-  }, [receiverId, room, userId]);
+    };
+
+    socket().on("chat-message", handleChatMessage);
+
+    return () => {
+      socket().off("chat-message", handleChatMessage);
+    };
+  }, [messages, receiverId, room, userId]);
 
   function onSubmit(event: any) {
     if (!message || !chatInputRef.current?.value) return null;
@@ -132,6 +141,8 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   const navigateToPost = () => {
     navigate(`/post/${post._id}`);
   };
+
+  if (!messages) return null;
 
   const jaggedMessageListByDay = createJaggedArray(messages);
 

@@ -43,6 +43,9 @@ io.on("connection", (socket) => {
       members: {
         $all: [receiverId, userId],
       },
+      post: {
+        _id: post._id,
+      },
     });
 
     if (!chatRoom) {

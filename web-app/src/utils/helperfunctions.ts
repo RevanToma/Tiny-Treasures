@@ -8,8 +8,7 @@ export const getFullDate = function (unixTime: number) {
 export const getHoursAndMinutes = (unixTime: number): string => {
   const t = new Date(unixTime);
   const currentHour = t.getHours();
-  const currentMinute = t.getMinutes();
-
+  const currentMinute = (t.getMinutes() < 10 ? "0" : "") + t.getMinutes();
   const time = `${currentHour}:${currentMinute}`;
   return time;
 };
