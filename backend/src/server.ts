@@ -33,7 +33,7 @@ io.on("connection", (socket) => {
   }
 
   socket.on("create-chat", async (data) => {
-    const { receiverId, userId } = data;
+    const { receiverId, userId, post } = data;
 
     console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
 
@@ -49,6 +49,7 @@ io.on("connection", (socket) => {
       chatRoom = await ChatModel.create({
         members: [receiverId, userId],
         messages: [],
+        post: post,
       });
     }
 

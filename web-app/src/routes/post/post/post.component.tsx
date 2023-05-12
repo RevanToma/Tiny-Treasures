@@ -53,7 +53,7 @@ const Post = () => {
   console.log(post);
 
   const handleGoToChat = () => {
-    socket().emit("create-chat", { receiverId: postUser, userId });
+    socket().emit("create-chat", { receiverId: postUser, userId, post });
   };
 
   return (

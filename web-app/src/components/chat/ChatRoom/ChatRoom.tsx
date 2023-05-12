@@ -60,7 +60,6 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
     senderId: userId,
     receiverId,
     roomId: room._id,
-    postId: post._id,
   });
 
   useEffect(() => {

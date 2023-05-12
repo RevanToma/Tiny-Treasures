@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "../../../common/Box/Box";
-import { IChatRoom } from "../../../../types";
+import { IChatRoom, Post } from "../../../../types";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../store/user/userSelectors";
 import * as S from "./styled";
@@ -14,6 +14,7 @@ type ChatListCardProps = {
   handleSwitchChat: (room: IChatRoom) => void;
   lastMessage: string;
   lastSenderNotMeId?: string | undefined;
+  post: Post;
 };
 
 const ChatListCard: React.FC<ChatListCardProps> = ({
@@ -21,6 +22,7 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
   handleSwitchChat,
   lastMessage,
   lastSenderNotMeId,
+  post,
 }) => {
   const user = useSelector(selectUser);
   const userName = user.name;
@@ -34,7 +36,7 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
 
   return (
     <S.Card key={room._id} onClick={() => handleSwitchChat(room)}>
-      <img alt="" />
+      <S.Image src={post.images[0]} />
       <Box width="100%" alignItems="flex-start" justifyContent="center">
         <p>{room._id}</p>
         <h2>{lastSenderNotMeId ? "other" : userName}</h2>

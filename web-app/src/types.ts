@@ -9,13 +9,13 @@ export type IMessage = {
   createdAt?: Date;
   _id?: string;
   roomId?: string;
-  postId?: string;
 };
 
 export type IChatRoom = {
   members: string[];
   messages: IMessage[];
   _id?: string;
+  post: Post;
 };
 export interface IUser {
   data: {
