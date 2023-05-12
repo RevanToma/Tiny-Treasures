@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { IChatRoom } from "../../../types";
-import ChatRoom from "../ChatRoom/ChatRoom";
 import { useChats } from "../../../hooks/useChats";
-
+import * as S from "./styled";
 import { useAppDispatch } from "../../../hooks/useDispatch";
 import { setCurrentChatRoom } from "../../../store/user/userSlice";
 import Spinner from "../../common/spinner/spinner.component";
-import Box from "../../common/Box/Box";
-import { useNavigate } from "react-router-dom";
 import ChatListCard from "./ChatListCard/ChatListCard";
+import { useNavigate } from "react-router-dom";
 
 type ChatRoomListProps = {
   userId: string;
@@ -26,7 +24,6 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
 
   const handleSwitchChat = (room: IChatRoom) => {
     const postId = room.messages[room.messages.length - 1].postId;
-
     dispatch(setCurrentChatRoom(room));
     if (postId) {
       navigate(`/chat/${room._id}/${postId}`);
@@ -48,7 +45,7 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
     );
   });
 
-  return <>{chatList}</>;
+  return <S.ChatListContainer>{chatList}</S.ChatListContainer>;
 };
 
 export default ChatRoomList;

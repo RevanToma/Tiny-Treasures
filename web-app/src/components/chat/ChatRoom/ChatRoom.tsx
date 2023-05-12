@@ -105,7 +105,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
 
   useEffect(() => {
     socket().on("chat-message", (data) => {
-      console.log("hej");
+      console.log("data", data);
       const senderIsMember = room.members.some(
         (member) => member === data.senderId
       );
@@ -113,12 +113,10 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
         (member) => member === receiverId
       );
       if (senderIsMember && receiverIsMember) {
-        console.log("jaha");
-        const updateMsg = [...messages, data];
-        setMessages(updateMsg);
+        setMessages((prev) => [...prev, data]);
       }
     });
-  }, [messages, receiverId, room, userId]);
+  }, [receiverId, room, userId]);
 
   function onSubmit(event: any) {
     if (!message || !chatInputRef.current?.value) return null;

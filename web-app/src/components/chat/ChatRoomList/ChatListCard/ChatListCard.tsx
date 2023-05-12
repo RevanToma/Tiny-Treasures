@@ -3,6 +3,8 @@ import Box from "../../../common/Box/Box";
 import { IChatRoom } from "../../../../types";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../store/user/userSelectors";
+import * as S from "./styled";
+import { getHoursAndMinutes } from "../../../../utils/helperfunctions";
 
 type ChatListCardProps = {
   room: IChatRoom;
@@ -20,20 +22,22 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
   const user = useSelector(selectUser);
   const userName = user.name;
 
+  const lastMessageDate = room.messages[room.messages.length - 1]?.createdAt;
+  if (!lastMessageDate) return null;
+  const dateString = Date.parse(lastMessageDate.toString());
+
   return (
-    <Box
-      gap="10px"
-      flexDirection="row"
-      key={room._id}
-      onClick={() => handleSwitchChat(room)}
-    >
-      <p>{room._id}</p>
-      <h4>
-        {lastSenderNotMeId
-          ? `other ${lastMessage}`
-          : `${userName} ${lastMessage}`}
-      </h4>
-    </Box>
+    <S.Card key={room._id} onClick={() => handleSwitchChat(room)}>
+      <img alt="" />
+      <Box width="100%" alignItems="flex-start" justifyContent="center">
+        <p>{room._id}</p>
+        <h2>{lastSenderNotMeId ? "other" : userName}</h2>
+        <Box width="100%" flexDirection="row" justifyContent="space-between">
+          <h3>{lastMessage}</h3>
+          <h3>{getHoursAndMinutes(dateString)}</h3>
+        </Box>
+      </Box>
+    </S.Card>
   );
 };
 
