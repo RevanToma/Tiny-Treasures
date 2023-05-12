@@ -13,11 +13,9 @@ import { useMutation } from "@tanstack/react-query";
 import { signOutUser } from "../../api/requests";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
-  const dispatch = useAppDispatch()
-  const user = useSelector(selectUser)
+  const dispatch = useAppDispatch();
+  const user = useSelector(selectUser);
   const navigate = useNavigate();
-
-
 
   const handleAccountSettings = () => {
     navigate("/account-settings");
@@ -34,16 +32,12 @@ const AccountSettings = () => {
     navigate("/favourites");
   };
 
-   const handleLogOut =   () => {
-   
-  signOutUser()
-    dispatch(signOut())
-    navigate("/")
-  
-   }
+  const handleLogOut = () => {
+    signOutUser();
+    dispatch(signOut());
+    navigate("/");
+  };
 
-   
-   
   return (
     <>
       <Box flexDirection="row" justifyContent="center" margin="1rem">
@@ -67,10 +61,9 @@ const AccountSettings = () => {
         <NavigationItem text="My items" onClick={handleMyItems} />
         <NavigationItem text="Favourites" onClick={handleFavourites} />
         <NavigationItem text="Log out" onClick={handleLogOut} />
-
       </Box>
     </>
   );
-}
+};
 
 export default AccountSettings;

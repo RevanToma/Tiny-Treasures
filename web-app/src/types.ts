@@ -89,3 +89,13 @@ export interface GeoLocation {
   type: string;
   city?: string;
 }
+
+export interface ToastState {
+  message: string;
+  type: "success" | "error" | "warning" | "";
+  visible?: boolean;
+}
+// export interface ToastPayload {
+//   message: string;
+//   type: "success" | "error" | "warning";
+// }

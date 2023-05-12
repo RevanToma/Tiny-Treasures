@@ -13,6 +13,7 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "./api/requests";
 import { IMessage } from "./types";
+import ToastNotification from "./components/common/ToastNotification/ToastNotification";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
 const DisplayedChat = lazy(
@@ -65,6 +66,7 @@ function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
+      <ToastNotification />
     </>
   );
 }

@@ -16,6 +16,9 @@ import * as S from "./signIn.styles";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { SignUpFooter } from "../signUp/SignUp.styles";
+import { showToast } from "../../store/toast/toastSlice";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../store/user/userSelectors";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -34,10 +37,24 @@ const SignIn: React.FC = () => {
       {
         onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
+
+          dispatch(
+            showToast({
+              message: `Welcome ${data.data.user.name}`,
+              type: "success",
+            })
+          );
+
           document.cookie = `jwt=${data.token}`;
         },
         onError: (error) => {
-          if (error instanceof AxiosError) alert(error.message);
+          if (error instanceof AxiosError)
+            dispatch(
+              showToast({
+                message: error.response?.data.message,
+                type: "error",
+              })
+            );
         },
       }
     );
