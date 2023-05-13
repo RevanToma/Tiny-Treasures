@@ -19,6 +19,7 @@ import Box from '../../../components/common/Box/Box';
 import { CheckboxContainer } from '../../../components/common/CheckboxList/checkboxList.styles';
 import CheckboxList from '../../../components/common/CheckboxList/CheckboxList.component';
 import { ages, conditions } from '../../../utils/enums';
+import { capitalize } from '../../../utils/helpers';
 
 export enum CheckboxSizes {
   Small = 'small',
@@ -133,7 +134,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
         <CheckboxList
           label="Type of Item"
           name="Categories"
-          items={filterItems[categoryName]}
+          items={filterItems[capitalize(categoryName)]}
           size={CheckboxSizes.Large}
           setOptions={handleOptions}
         />
