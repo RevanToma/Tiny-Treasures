@@ -23,6 +23,7 @@ export const userChats = catchAsync(
     const chats = await ChatModel.find({
       members: { $in: [id] },
     });
+    console.log(chats);
     res.status(200).json(chats);
   }
 );

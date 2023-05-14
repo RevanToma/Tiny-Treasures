@@ -28,11 +28,23 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
   const userName = user.name;
 
   const lastMessageDate = room.messages[room.messages.length - 1]?.createdAt;
-  if (!lastMessageDate) return null;
-  const dateString = Date.parse(lastMessageDate.toString());
-  const messageDay = new Date(dateString).getDay();
-  const todaysDay = new Date().getDay();
-  const isToday = messageDay === todaysDay;
+
+  const getDateText = (lastMessage: Date) => {
+    const dateString = Date.parse(lastMessage.toString());
+    const messageDay = new Date(dateString).getDay();
+    const todaysDay = new Date().getDay();
+    const isToday = messageDay === todaysDay;
+
+    let dateText;
+
+    if (isToday) {
+      dateText = getHoursAndMinutes(dateString);
+    } else {
+      dateText = `${getFullDate(dateString)} ${getHoursAndMinutes(dateString)}`;
+    }
+
+    return dateText;
+  };
 
   return (
     <S.Card key={room._id} onClick={() => handleSwitchChat(room)}>
@@ -45,11 +57,7 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
             {lastSenderNotMeId ? "other" : userName}
             {": " + lastMessage}
           </h3>
-          <h4>
-            {isToday
-              ? getHoursAndMinutes(dateString)
-              : `${getFullDate(dateString)} ${getHoursAndMinutes(dateString)}`}
-          </h4>
+          <h4>{lastMessageDate && getDateText(lastMessageDate)}</h4>
         </Box>
       </Box>
     </S.Card>

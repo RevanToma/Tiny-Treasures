@@ -38,12 +38,21 @@ const chatRoomSchema = new mongoose.Schema(
       },
     ],
     messages: [MessageSchema],
-    post: {},
+    post: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+chatRoomSchema.pre(/^find/, function (next) {
+  this.populate("post");
+  next();
+});
 
 const ChatModel = mongoose.model("Chat-room", chatRoomSchema);
 

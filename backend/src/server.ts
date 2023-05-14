@@ -44,14 +44,16 @@ io.on("connection", (socket) => {
       members: {
         $all: [receiverId, userId],
       },
-      "post._id": post._id,
+      post: post._id,
     });
 
     if (!chatRoom) {
       chatRoom = await ChatModel.create({
         members: [receiverId, userId],
         messages: [],
-        post: post,
+        post: post._id,
+      }).then((doc) => {
+        return ChatModel.populate(doc, { path: "post" });
       });
     }
 
@@ -68,7 +70,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat-message", (msg) => {
-    const { text, senderId, receiverId, postId, roomId } = msg;
+    const { senderId, receiverId, postId, roomId } = msg;
     console.log("postid", postId);
     console.log("THIS", msg);
     io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
