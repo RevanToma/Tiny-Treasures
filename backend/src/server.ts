@@ -33,9 +33,8 @@ io.on("connection", (socket) => {
   }
 
   socket.on("create-chat", async (data) => {
-    console.log("did it");
     const { receiverId, userId, post } = data;
-    console.log(post);
+    console.log("id", post._id);
 
     console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
 
@@ -45,9 +44,7 @@ io.on("connection", (socket) => {
       members: {
         $all: [receiverId, userId],
       },
-      post: {
-        _id: post._id,
-      },
+      "post._id": post._id,
     });
 
     if (!chatRoom) {
