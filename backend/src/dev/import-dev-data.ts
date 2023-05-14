@@ -51,12 +51,11 @@ const src = path.join(__dirname, '../', '../', 'src');
 const controllers = path.join(__dirname, '../', '../', 'src', 'controllers');
 const db = path.join(__dirname, '../', '../', 'src/db');
 const dev = path.join(__dirname, '../', '../', 'src/dev');
-const middlewares = path.join(__dirname, '../', '../', 'src/middlewares');
 const models = path.join(__dirname, '../', '../', 'src/models');
 const routes = path.join(__dirname, '../', '../', 'src/routes');
 const utils = path.join(__dirname, '../', '../', 'src/utils');
 
-const dirs = [src, controllers, db, dev, middlewares, models, routes, utils];
+const dirs = [src, controllers, db, dev, models, routes, utils];
 
 const deleteJS = dirs.forEach(dir => {
   fs.readdir(dir, (err, files) => {
