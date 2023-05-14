@@ -5,7 +5,6 @@ export const MessageInputForm = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-
   gap: 10px;
 `;
 

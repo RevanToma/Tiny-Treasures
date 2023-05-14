@@ -37,6 +37,7 @@ const chatRoomSchema = new mongoose.Schema(
       },
     ],
     messages: [MessageSchema],
+    post: {},
   },
   {
     timestamps: true,
