@@ -59,6 +59,7 @@ const Category: React.FC = () => {
     staleTime: 3 * 60 * 1000,
     enabled: !!query,
   });
+  console.log(category);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -91,11 +92,11 @@ const Category: React.FC = () => {
     let newQuery = `mainCategory=${category}`;
 
     if (categoriesString.length) {
-      newQuery += `&subCategory=${categoriesString}`;
+      newQuery += `&subCategories=${categoriesString}`;
     }
 
     if (sizesString.length) {
-      newQuery += `&size=${sizesString}`;
+      newQuery += `&sizes=${sizesString}`;
     }
 
     if (ageString.length) {
