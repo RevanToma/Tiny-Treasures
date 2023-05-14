@@ -28,7 +28,6 @@ const Post: React.FC = () => {
       queryClient.invalidateQueries([fetchChats.name]);
       if (post?._id) {
         navigate(`/chat/${data._id}/${post?._id}`);
-        console.log("fired");
       }
     };
 
@@ -44,7 +43,6 @@ const Post: React.FC = () => {
   const { user: postUser } = post;
 
   const goToChat = (): void => {
-    console.log("hej");
     socket().emit("create-chat", { receiverId: postUser, userId, post });
   };
 

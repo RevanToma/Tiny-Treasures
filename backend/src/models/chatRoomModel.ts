@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Post from "./postModel";
 
 export const MessageSchema = new mongoose.Schema(
   {
@@ -43,10 +44,6 @@ const chatRoomSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-MessageSchema.virtual("sentByMe").get(function (userId: string) {
-  return this.senderId?.toString() === userId;
-});
 
 const ChatModel = mongoose.model("Chat-room", chatRoomSchema);
 
