@@ -143,8 +143,6 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
     navigate(`/post/${post._id}`);
   };
 
-  if (!messages) return null;
-
   const jaggedMessageListByDay = createJaggedArray(messages);
 
   const messageListWithFirst = jaggedMessageListByDay.map((sameDayMessages) => {
