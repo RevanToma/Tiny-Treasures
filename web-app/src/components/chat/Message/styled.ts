@@ -8,7 +8,7 @@ type MessageContainerProps = {
 export const MessageContainer = styled.div<MessageContainerProps>`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   border-radius: 10px;
   background-color: ${({ sentByMe }) =>
     sentByMe ? theme.color.primary : theme.color.grayLight2};
@@ -22,7 +22,8 @@ export const MessageContainer = styled.div<MessageContainerProps>`
   font-family: Arial, Helvetica, sans-serifs;
   font-size: 12px;
   color: white;
-  max-width: 150px;
+  max-width: 220px;
+  min-width: 220px;
 `;
 
 export const DateText = styled.p`

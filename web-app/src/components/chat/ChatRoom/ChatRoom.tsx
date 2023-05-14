@@ -52,6 +52,7 @@ type Props = {
 
 const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   const chatInputPlace = document.getElementById("chat-input-portal");
+  const messageElRef = useRef<HTMLDivElement | null>(null);
   const chatPostItemPlace = document.getElementById("chat-post-item-portal");
   const navigate = useNavigate();
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
@@ -104,6 +105,14 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
       }
     });
   }, [userId, receiverId]);
+
+  useEffect(() => {
+    const messageEl = messageElRef.current;
+    if (!messageEl) return;
+    console.log("height");
+
+    messageEl.scrollTop = messageEl.scrollHeight;
+  }, [messages, typing, messageElRef.current]);
 
   useEffect(() => {
     const handleChatMessage = (data: IMessage) => {
@@ -165,7 +174,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
           <ChatPostItem navigateToPost={navigateToPost} post={post} />,
           chatPostItemPlace
         )}
-      <S.ChatContainer>
+      <S.ChatContainer ref={messageElRef}>
         {messageList}
         {typing && <TypingAnimation />}
       </S.ChatContainer>
