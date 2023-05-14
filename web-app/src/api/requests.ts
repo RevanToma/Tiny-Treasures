@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 import {
   Enum,
   IChatRoom,
-  IUser,
   Post,
   PostQueryResult,
   SignInInfo,
@@ -83,12 +82,10 @@ export const fetchPosts = async ({
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
     await api.get(`posts/?page=${pageParam}&limit=${limit}&${query}`);
   checkForError(data.data);
-  console.log(data);
   return data.data.data.data[0];
 };
 
 export const fetchPostById = async (id: string | undefined) => {
-  console.log(1111);
   const { data } = await api.get(`/posts/${id}`);
   checkForError(data);
   const post: Post = data.data.post[0];

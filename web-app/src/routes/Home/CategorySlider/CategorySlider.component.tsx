@@ -26,10 +26,9 @@ const ages = ['0-3', '4-7', '8-11'];
 const CategorySlider: FC<CategorySliderProps> = ({ category, enums }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const capitalCategory = capitalize(category);
 
   const handleGoToCategory = () => {
-    const newQuery = `mainCategory=${capitalCategory}`;
+    const newQuery = `mainCategory=${category}`;
     dispatch(setQuery(newQuery));
     dispatch(setQueryData({ ...initialQueryData, MainCategories: [category] }));
 
@@ -37,7 +36,7 @@ const CategorySlider: FC<CategorySliderProps> = ({ category, enums }) => {
   };
 
   const handleGoToCategoryAndAge = (age: string): void => {
-    const newQuery = `mainCategory=${capitalCategory}&age=${age}`;
+    const newQuery = `mainCategory=${category}&age=${age}`;
     dispatch(setQuery(newQuery));
     dispatch(
       setQueryData({
