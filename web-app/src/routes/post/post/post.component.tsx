@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { usePost } from "../../../hooks/usePost";
 import Spinner from "../../../components/common/spinner/spinner.component";
 import Box from "../../../components/common/Box/Box";
-import ImageCarousel from "../ImageCarousel/ImageCarousel";
 import Button from "../../../components/common/Button/Button.component";
 import { ButtonType } from "../../../components/common/Button/button.types";
 import { useSelector } from "react-redux";
@@ -58,7 +57,6 @@ const Post = () => {
 
   return (
     <Box gap="20px" padding="20px">
-      <ImageCarousel images={images} />
       <h1>{title}</h1>
       <p>{description}</p>
       <Button onClick={handleGoToChat} buttonType={ButtonType.Primary}>

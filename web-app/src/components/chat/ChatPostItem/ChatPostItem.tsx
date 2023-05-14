@@ -37,7 +37,7 @@ const ChatPostItem: React.FC<ChatPostItemProps> = ({
           <h4>{post.title}</h4>
           <p>{`Conversation with other`}</p>
         </Box>
-        <Button onClick={handleTrade} buttonType={ButtonType.Trade}>
+        <Button onClick={handleTrade} buttonType={ButtonType.Primary}>
           TRADE
         </Button>
       </Box>

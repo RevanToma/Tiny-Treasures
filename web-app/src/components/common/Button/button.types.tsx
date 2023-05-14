@@ -1,18 +1,18 @@
-import { theme } from '../../../styles/themes';
+import { theme } from "../../../styles/themes";
 
 export enum ButtonType {
-  Trade = 'trade',
-  Message = 'message',
-  Primary = 'primary',
-  Secondary = 'secondary',
-  Tertiary = 'tertiary',
-  SmallGreen = 'smallGreen',
-  SmallYellow = 'smallYellow',
-  SmallTransparent = 'smallTransparent',
-  Disabled = 'disabled',
-  Pending = 'pending',
-  Completed = 'completed',
-  ReviewOrSignIn = 'reviewOrSignIn',
+  Trade = "trade",
+  Message = "message",
+  Primary = "primary",
+  Secondary = "secondary",
+  Tertiary = "tertiary",
+  SmallGreen = "smallGreen",
+  SmallYellow = "smallYellow",
+  SmallTransparent = "smallTransparent",
+  Disabled = "disabled",
+  Pending = "pending",
+  Completed = "completed",
+  ReviewOrSignIn = "reviewOrSignIn",
 }
 
 interface Buttons {
@@ -130,8 +130,8 @@ export const buttons: Buttons = {
   google: {
     color: theme.color.black,
     fontWeight: 400,
-    fontSize: '1.6rem',
-    fontFamily: 'Poppins',
+    fontSize: "1.6rem",
+    fontFamily: "Poppins",
     background: theme.color.primaryPureWhite,
     width: theme.button.widthLarge,
     hoverBackground: theme.color.grayLight1,
