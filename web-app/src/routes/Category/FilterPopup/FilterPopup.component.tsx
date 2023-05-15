@@ -1,29 +1,29 @@
-import { FC, useEffect } from 'react';
-import Button from '../../../components/common/Button/Button.component';
-import { ButtonType } from '../../../components/common/Button/button.types';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaTimes } from 'react-icons/fa';
-import { filterAges, filterItems } from '../category.helpers';
-import { Divider } from '../../Home/home.styles';
-import { theme } from '../../../styles/themes';
+import { FC, useEffect } from "react";
+import Button from "../../../components/common/Button/Button.component";
+import { ButtonType } from "../../../components/common/Button/button.types";
+import { useDispatch, useSelector } from "react-redux";
+import { FaTimes } from "react-icons/fa";
+import { filterAges, filterItems } from "../category.helpers";
+import { Divider } from "../../Home/home.styles";
+import { theme } from "../../../styles/themes";
 import {
   selectQueryData,
   selectTempQueryData,
-} from '../../../store/query/query.selectors';
+} from "../../../store/query/query.selectors";
 import {
   QueryData,
   initialQueryData,
   setTempQueryData,
-} from '../../../store/query/querySlice';
-import Box from '../../../components/common/Box/Box';
-import { CheckboxContainer } from '../../../components/common/CheckboxList/checkboxList.styles';
-import CheckboxList from '../../../components/common/CheckboxList/CheckboxList.component';
-import { ages, conditions } from '../../../utils/enums';
-import { capitalize } from '../../../utils/helpers';
+} from "../../../store/query/querySlice";
+import Box from "../../../components/common/Box/Box";
+import { CheckboxContainer } from "../../../components/common/CheckboxList/checkboxList.styles";
+import CheckboxList from "../../../components/common/CheckboxList/CheckboxList.component";
+import { ages, conditions } from "../../../utils/enums";
+import { capitalize } from "../../../utils/helpers";
 
 export enum CheckboxSizes {
-  Small = 'small',
-  Large = 'large',
+  Small = "small",
+  Large = "large",
 }
 
 interface FilterPopupProps {
@@ -64,7 +64,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
   ) => {
     const newData = getNewQueryData();
 
-    if (category === 'Sort') {
+    if (category === "Sort") {
       newData.Sort = [];
     }
 
@@ -92,9 +92,6 @@ const FilterPopup: FC<FilterPopupProps> = ({
       width="100%"
       maxWidth="40rem"
       height="fit-content"
-      position="absolute"
-      top="0"
-      left="0"
       zIndex={100}
       boxShadow={theme.shadow}
     >
@@ -139,8 +136,8 @@ const FilterPopup: FC<FilterPopupProps> = ({
           setOptions={handleOptions}
         />
         <Divider />
-        {categoryName === 'clothes' ? (
-          filterAges.map(group => (
+        {categoryName === "clothes" ? (
+          filterAges.map((group) => (
             <CheckboxList
               key={group.name}
               name={group.name}
@@ -167,7 +164,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
         <Divider />
         <CheckboxList
           name="Sort"
-          items={['Most Recent', 'Distance']}
+          items={["Most Recent", "Distance"]}
           setOptions={handleOptions}
           size={CheckboxSizes.Large}
         />
