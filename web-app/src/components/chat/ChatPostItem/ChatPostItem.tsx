@@ -19,25 +19,21 @@ const ChatPostItem: React.FC<ChatPostItemProps> = ({
     console.log("trade");
   };
   return (
-    <Box
-      width="100%"
-      borderRadius="0 0 10px 10px"
-      boxShadow={theme.shadow}
-      padding="20px"
-    >
-      <h1>MESSAGES</h1>
-      <Box gap="10px" flexDirection="row" alignItems="center">
-        <Box
-          cursor="pointer"
-          gap="10px"
+    <Box width="100%" boxShadow={theme.shadow} padding="30px" gap="20px">
+      <h4>userName</h4>
+      <Box
+        width="100%"
+        gap="20px"
+        justifyContent="space-between"
+        flexDirection="row"
+        alignItems="flex-start"
+      >
+        <S.Image
           onClick={navigateToPost}
-          alignItems="flex-start"
-        >
-          <S.Image src={post.images[0]} alt="" />
-          <h4>{post.title}</h4>
-          <p>{`Conversation with other`}</p>
-        </Box>
-        <Button onClick={handleTrade} buttonType={ButtonType.Primary}>
+          src={post.images[0]}
+          alt="post image"
+        />
+        <Button onClick={handleTrade} buttonType={ButtonType.SmallGreen}>
           TRADE
         </Button>
       </Box>
