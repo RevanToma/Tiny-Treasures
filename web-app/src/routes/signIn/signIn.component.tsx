@@ -89,14 +89,15 @@ const SignIn: React.FC = () => {
               <S.TextContainer>
                 <p>or</p>
               </S.TextContainer>
-
+            </Box>
+          </form>
+          <SignUpFooter>
+            <a href="http://localhost:8000/auth/google">
               <S.GoogleButton buttonType={ButtonType.Secondary}>
                 <FcGoogle size={32} />
                 Continue with Google
               </S.GoogleButton>
-            </Box>
-          </form>
-          <SignUpFooter>
+            </a>
             <span>Support</span>
             <span>How it Works</span>
             <span>Reviews</span>

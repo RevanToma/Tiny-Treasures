@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosResponse } from "axios";
 import {
   Enum,
   IChatRoom,
@@ -6,8 +6,8 @@ import {
   PostQueryResult,
   SignInInfo,
   SignUpInfo,
-} from '../types';
-import api from './index';
+} from "../types";
+import api from "./index";
 
 export interface ResponseWithData<T> {
   status: string;
@@ -29,8 +29,8 @@ export const checkForError = (
     | ResponseWithData<Post[] | PostQueryResult[] | Enum[]>
     | ResponseWithError
 ): void => {
-  if (data.status === 'error' || data.status === 'fail') {
-    throw new Error('Something went wrong!');
+  if (data.status === "error" || data.status === "fail") {
+    throw new Error("Something went wrong!");
   }
 };
 
@@ -45,7 +45,7 @@ export const fetchChatById = async (id: any) => {
 };
 
 export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
-  const { data } = await api.post('/users/signin', {
+  const { data } = await api.post("/users/signin", {
     email,
     password,
   });
@@ -59,7 +59,7 @@ export const ApiPostSignUpUser = async ({
   password,
   passwordConfirm,
 }: SignUpInfo) => {
-  const { data } = await api.post('users/signup', {
+  const { data } = await api.post("users/signup", {
     name,
     email,
     confirmEmail,
@@ -76,7 +76,7 @@ type getPostParams = {
 
 export const fetchPosts = async ({
   pageParam = 1,
-  query = '',
+  query = "",
 }: getPostParams): Promise<PostQueryResult> => {
   const limit = 20;
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
@@ -93,7 +93,7 @@ export const fetchPostById = async (id: string | undefined) => {
 };
 
 export const signOutUser = async () => {
-  await api.post('users/logout');
+  await api.post("users/logout");
   return;
 };
 
