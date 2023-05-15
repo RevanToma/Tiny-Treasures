@@ -1,4 +1,4 @@
-name: Mirroring and run GitLab CI
+name: Mirror and run GitLab CI
 
 on:
   push:
