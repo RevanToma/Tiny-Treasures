@@ -23,7 +23,6 @@ export const MessageContainer = styled.div<MessageContainerProps>`
   font-size: 12px;
   color: white;
   max-width: 220px;
-  min-width: 220px;
 `;
 
 export const DateText = styled.p`
