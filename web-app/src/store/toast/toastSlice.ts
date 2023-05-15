@@ -13,7 +13,6 @@ export const toastSlice = createSlice({
       state.toasts.push(payload);
     },
     removeToast: (state, { payload }: PayloadAction<string>) => {
-      // Remove the toast with the specified id.
       state.toasts = state.toasts.filter((toast) => toast.id !== payload);
     },
   },
