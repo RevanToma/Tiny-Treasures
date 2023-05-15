@@ -109,9 +109,8 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   useEffect(() => {
     const messageEl = messageElRef.current;
     if (!messageEl) return;
-    console.log("height");
 
-    messageEl.scrollTop = messageEl.scrollHeight;
+    messageEl.scrollIntoView();
   }, [messages, typing, messageElRef.current]);
 
   useEffect(() => {
@@ -177,6 +176,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
       <S.ChatContainer ref={messageElRef}>
         {messageList}
         {typing && <TypingAnimation />}
+        <div ref={messageElRef}></div>
       </S.ChatContainer>
       {chatInputPlace !== null &&
         createPortal(

@@ -19,6 +19,7 @@ export const MessageContainer = styled.div<MessageContainerProps>`
   margin: 10px;
   gap: 5px;
   word-wrap: break-word;
+  overflow-wrap: anywhere;
   font-family: Arial, Helvetica, sans-serifs;
   font-size: 12px;
   color: white;
