@@ -14,7 +14,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { fetchChats } from "./api/requests";
 import { IMessage } from "./types";
 import ToastNotification from "./components/common/ToastNotification/ToastNotification";
-import ToastManager from "./components/common/ToastNotification/ToastManager";
 
 const SignIn = lazy(() => import("./routes/signUp/signUp.component"));
 const DisplayedChat = lazy(
@@ -67,7 +66,7 @@ function App() {
           </Routes>
         </Suspense>
       </BrowserRouter>
-      <ToastManager />
+      <ToastNotification />
     </>
   );
 }

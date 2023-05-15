@@ -1,23 +1,28 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Toast, ToastState } from "../../types";
+import { ToastState } from "../../types";
 
 const initialState: ToastState = {
-  toasts: [],
+  message: "",
+  type: "",
+  visible: false,
 };
 
-export const toastSlice = createSlice({
+const toastSlice = createSlice({
   name: "toast",
   initialState,
   reducers: {
-    addToast: (state, { payload }: PayloadAction<Toast>) => {
-      state.toasts.push(payload);
+    showToast: (state, { payload }: PayloadAction<ToastState>) => {
+      state.message = payload.message;
+      state.type = payload.type;
+      state.visible = true;
     },
-    removeToast: (state, { payload }: PayloadAction<string>) => {
-      state.toasts = state.toasts.filter((toast) => toast.id !== payload);
+    hideToast: (state) => {
+      state.message = "";
+      state.type = "";
+      state.visible = false;
     },
   },
 });
 
-export const { addToast, removeToast } = toastSlice.actions;
-
+export const { showToast, hideToast } = toastSlice.actions;
 export default toastSlice.reducer;

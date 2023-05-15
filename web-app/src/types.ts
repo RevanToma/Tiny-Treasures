@@ -90,18 +90,14 @@ export interface GeoLocation {
   city?: string;
 }
 
-// export interface ToastState {
-//   message: string;
-//   type: "success" | "error" | "warning" | "";
-//   visible?: boolean;
-// }
+export interface ToastState {
+  message: string;
+  type: "success" | "error" | "warning" | "";
+  visible?: boolean;
+}
 
 export interface Toast {
   id: string;
   type: string;
   message: string;
-}
-
-export interface ToastState {
-  toasts: Toast[];
 }

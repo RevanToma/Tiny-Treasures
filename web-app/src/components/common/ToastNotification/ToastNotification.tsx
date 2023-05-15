@@ -4,29 +4,36 @@ import { toastSlice } from "../../../store/toast/toastSelectors";
 import { useEffect, useState } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdError, MdWarning } from "react-icons/md";
-interface ToastProps {
-  id: string;
-  type?: string;
-  message: string;
-  onClose: () => void;
-}
 
 import { ToastContainer } from "./ToastNotification.style";
-const ToastNotification: React.FC<ToastProps> = ({
-  id,
-  type,
-  message,
-  onClose,
-}) => {
+import { hideToast } from "../../../store/toast/toastSlice";
+const ToastNotification: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { message, type, visible } = useSelector(toastSlice);
+  const [animate, setAnimate] = useState(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onClose();
-    }, 2500);
+    let timer: ReturnType<typeof setTimeout>;
+    if (visible) {
+      setAnimate(true);
+      timer = setTimeout(() => {
+        setAnimate(false);
+        timer = setTimeout(() => {
+          dispatch(hideToast());
+        }, 500);
+      }, 2500);
+    }
 
     return () => {
-      clearTimeout(timer);
+      if (timer) {
+        clearTimeout(timer);
+      }
     };
-  }, [onClose]);
+  }, [dispatch, visible]);
+
+  if (!visible) {
+    return null;
+  }
 
   let Icon;
   let iconColor;
@@ -42,7 +49,7 @@ const ToastNotification: React.FC<ToastProps> = ({
   }
 
   return (
-    <ToastContainer type={type} visible={true}>
+    <ToastContainer type={type} visible={animate}>
       {Icon && <Icon size={22} color={iconColor} />}
       <div>
         <p>{message}</p>
