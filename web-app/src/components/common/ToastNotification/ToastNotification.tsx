@@ -2,38 +2,31 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../../hooks/useDispatch";
 import { toastSlice } from "../../../store/toast/toastSelectors";
 import { useEffect, useState } from "react";
-import { hideToast } from "../../../store/toast/toastSlice";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdError, MdWarning } from "react-icons/md";
+interface ToastProps {
+  id: string;
+  type?: string;
+  message: string;
+  onClose: () => void;
+}
 
 import { ToastContainer } from "./ToastNotification.style";
-const ToastNotification = () => {
-  const dispatch = useAppDispatch();
-  const { message, type, visible } = useSelector(toastSlice);
-  const [animate, setAnimate] = useState(false);
-
+const ToastNotification: React.FC<ToastProps> = ({
+  id,
+  type,
+  message,
+  onClose,
+}) => {
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    if (visible) {
-      setAnimate(true);
-      timer = setTimeout(() => {
-        setAnimate(false);
-        timer = setTimeout(() => {
-          dispatch(hideToast());
-        }, 500);
-      }, 2500);
-    }
+    const timer = setTimeout(() => {
+      onClose();
+    }, 2500);
 
     return () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
+      clearTimeout(timer);
     };
-  }, [dispatch, visible]);
-
-  if (!visible) {
-    return null;
-  }
+  }, [onClose]);
 
   let Icon;
   let iconColor;
@@ -49,7 +42,7 @@ const ToastNotification = () => {
   }
 
   return (
-    <ToastContainer type={type} visible={animate}>
+    <ToastContainer type={type} visible={true}>
       {Icon && <Icon size={22} color={iconColor} />}
       <div>
         <p>{message}</p>
