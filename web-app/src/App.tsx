@@ -14,6 +14,7 @@ import { IMessage } from "./types";
 import Home from "./routes/Home/Home.route";
 import { useEnums } from "./hooks/useEnums";
 import Category from "./routes/Category/Category.route";
+import SaveUserAndRedirect from "./routes/SaveUserAndRedirect/SaveUserAndRedirect.component";
 
 const SignIn = lazy(() => import("./routes/signIn/signIn.component"));
 const DisplayedChat = lazy(
@@ -62,6 +63,7 @@ function App() {
               <Route path="category/:category" element={<Category />} />
               <Route path="chat" element={<Chat />} />
               <Route path="chat/:roomId/:postId" element={<DisplayedChat />} />
+              <Route path="getUser" element={<SaveUserAndRedirect />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Route>
           </Routes>

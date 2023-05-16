@@ -47,7 +47,7 @@ const createAndSendJWT = (
 
   // redirect if logged in from google
   if (redirect) {
-    res.redirect("/profile");
+    res.redirect("http://localhost:5173/getUser");
   } else {
     res.status(statusCode).json({
       status: "success",
@@ -86,6 +86,16 @@ export const signIn = catchAsync(
 
 // FIXME: Don't really need catchAsync but getting errors without
 export const googleAuthCallback = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    createAndSendJWT(req.user, 200, req, res, next, true);
+  }
+);
+
+export const sendUser = catchAsync(
   async (
     req: CustomRequest,
     res: Response,
