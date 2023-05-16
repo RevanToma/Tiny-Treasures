@@ -28,8 +28,11 @@ const DisplayedChat: React.FC<Props> = () => {
   if (error instanceof Error) return <h1>{error.message}</h1>;
   if (!room || !user._id || !receiverId || !post) return null;
 
+  console.log("displayedchat", post);
+
   return (
     <ChatRoom
+      key={room._id}
       post={post}
       userId={user._id}
       room={room}

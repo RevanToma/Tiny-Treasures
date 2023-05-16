@@ -1,5 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import {
+  Enum,
   IChatRoom,
   Post,
   PostQueryResult,
@@ -8,7 +9,7 @@ import {
 } from "../types";
 import api from "./index";
 
-interface ResponseWithData<T> {
+export interface ResponseWithData<T> {
   status: string;
   results?: number;
   data: {
@@ -16,17 +17,17 @@ interface ResponseWithData<T> {
   };
 }
 
-interface ResponseWithError {
+export interface ResponseWithError {
   status: string;
   error?: Error;
   message: string;
   stack?: string;
 }
 
-const baseUrl = "http://localhost:8000/api/v1";
-
 export const checkForError = (
-  data: ResponseWithData<Post[] | PostQueryResult[]> | ResponseWithError
+  data:
+    | ResponseWithData<Post[] | PostQueryResult[] | Enum[]>
+    | ResponseWithError
 ): void => {
   if (data.status === "error" || data.status === "fail") {
     throw new Error("Something went wrong!");
@@ -54,12 +55,14 @@ export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
 export const ApiPostSignUpUser = async ({
   name,
   email,
+  confirmEmail,
   password,
   passwordConfirm,
 }: SignUpInfo) => {
   const { data } = await api.post("users/signup", {
     name,
     email,
+    confirmEmail,
     password,
     passwordConfirm,
   });
@@ -75,25 +78,27 @@ export const fetchPosts = async ({
   pageParam = 1,
   query = "",
 }: getPostParams): Promise<PostQueryResult> => {
-  const limit = 10;
+  const limit = 20;
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
     await api.get(`posts/?page=${pageParam}&limit=${limit}&${query}`);
   checkForError(data.data);
   return data.data.data.data[0];
 };
 
-export const fetchPostById = async (id: string) => {
+export const fetchPostById = async (id: string | undefined) => {
   const { data } = await api.get(`/posts/${id}`);
   checkForError(data);
   const post: Post = data.data.post[0];
   return post;
 };
 
+export const signOutUser = async () => {
+  await api.post("users/logout");
+  return;
+};
 
-
-export const signOutUser =  async () => {
-
-    await api.post("users/logout");
-    return;
- 
+export const fetchEnums = async () => {
+  const data: AxiosResponse<ResponseWithData<Enum[]>> = await api.get(`enums`);
+  checkForError(data.data);
+  return data.data.data.data[0];
 };

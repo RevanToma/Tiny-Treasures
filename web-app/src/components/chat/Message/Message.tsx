@@ -4,6 +4,10 @@ import * as S from "./styled";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../store/user/userSelectors";
 import Box from "../../common/Box/Box";
+import {
+  getFullDate,
+  getHoursAndMinutes,
+} from "../../../utils/helperfunctions";
 
 type MessageProps = {
   message: IMessage;
@@ -16,22 +20,6 @@ const Message: React.FC<MessageProps> = ({
   if (!createdAt) return null;
 
   const dateString: number = Date.parse(createdAt.toString());
-
-  const getFullDate = function (unixTime: number) {
-    const t = new Date(unixTime);
-    return `${t.getFullYear()}-${(t.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${t.getDate().toString().padStart(2, "0")}`;
-  };
-
-  const getHoursAndMinutes = (unixTime: number): string => {
-    const t = new Date(unixTime);
-    const currentHour = t.getHours();
-    const currentMinute = t.getMinutes();
-
-    const time = `${currentHour}:${currentMinute}`;
-    return time;
-  };
 
   const messageDay = new Date(dateString).getDay();
   const todaysDay = new Date().getDay();

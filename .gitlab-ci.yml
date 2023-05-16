@@ -1,0 +1,36 @@
+# Define stages
+stages:
+  - build
+  - test
+  - deploy
+
+# Define job templates
+.template:
+  image: node:lts
+
+# Define jobs
+build:
+  stage: build
+  extends: .template
+  script:
+    - npm ci
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+test:
+  stage: test
+  extends: .template
+  script:
+    - npm ci
+    - npm run test
+
+deploy:
+  stage: deploy
+  image: php:latest
+  script:
+    - cd backend/
+    - composer install
+    # Add your deployment steps here
+

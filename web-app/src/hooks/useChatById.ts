@@ -12,6 +12,7 @@ export const useChatById = (
     queryKey: [fetchChatById.name, roomId],
     enabled: !!roomId,
     onSuccess: (data: IChatRoom) => {
+      console.log(data.members);
       const switchedReceiverId = data.members.find(
         (member) => member !== userId
       );

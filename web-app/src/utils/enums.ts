@@ -5,6 +5,7 @@ export enum MainCategories {
 }
 
 export const mainCategories = ['Clothes', 'Toys', 'Other'];
+export const conditions = ['New', 'Good', 'Fair', 'Used'];
 
 export enum Clothes {
   A = 'One Piece',

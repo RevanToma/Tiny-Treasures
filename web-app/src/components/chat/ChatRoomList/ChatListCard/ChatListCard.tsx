@@ -1,14 +1,20 @@
 import React from "react";
 import Box from "../../../common/Box/Box";
-import { IChatRoom } from "../../../../types";
+import { IChatRoom, Post } from "../../../../types";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../store/user/userSelectors";
+import * as S from "./styled";
+import {
+  getFullDate,
+  getHoursAndMinutes,
+} from "../../../../utils/helperfunctions";
 
 type ChatListCardProps = {
   room: IChatRoom;
   handleSwitchChat: (room: IChatRoom) => void;
   lastMessage: string;
   lastSenderNotMeId?: string | undefined;
+  post: Post;
 };
 
 const ChatListCard: React.FC<ChatListCardProps> = ({
@@ -16,24 +22,45 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
   handleSwitchChat,
   lastMessage,
   lastSenderNotMeId,
+  post,
 }) => {
   const user = useSelector(selectUser);
   const userName = user.name;
 
+  const lastMessageDate = room.messages[room.messages.length - 1]?.createdAt;
+
+  const getDateText = (lastMessage: Date) => {
+    const dateString = Date.parse(lastMessage.toString());
+    const messageDay = new Date(dateString).getDay();
+    const todaysDay = new Date().getDay();
+    const isToday = messageDay === todaysDay;
+
+    let dateText;
+
+    if (isToday) {
+      dateText = getHoursAndMinutes(dateString);
+    } else {
+      dateText = `${getFullDate(dateString)} ${getHoursAndMinutes(dateString)}`;
+    }
+
+    return dateText;
+  };
+
   return (
-    <Box
-      gap="10px"
-      flexDirection="row"
-      key={room._id}
-      onClick={() => handleSwitchChat(room)}
-    >
-      <p>{room._id}</p>
-      <h4>
-        {lastSenderNotMeId
-          ? `other ${lastMessage}`
-          : `${userName} ${lastMessage}`}
-      </h4>
-    </Box>
+    <S.Card key={room._id} onClick={() => handleSwitchChat(room)}>
+      <S.Image src={post.images[0]} />
+      <Box width="100%" alignItems="flex-start" justifyContent="center">
+        <p>{room._id}</p>
+        <h2>{post.title}</h2>
+        <Box width="100%" flexDirection="row" justifyContent="space-between">
+          <h3>
+            {lastSenderNotMeId ? "other" : userName}
+            {": " + lastMessage}
+          </h3>
+          <h4>{lastMessageDate && getDateText(lastMessageDate)}</h4>
+        </Box>
+      </Box>
+    </S.Card>
   );
 };
 
