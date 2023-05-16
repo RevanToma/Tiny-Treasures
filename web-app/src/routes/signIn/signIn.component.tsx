@@ -36,6 +36,7 @@ const SignIn: React.FC = () => {
         onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
           document.cookie = `jwt=${data.token}`;
+          navigate("/");
         },
         onError: (error) => {
           if (error instanceof AxiosError) alert(error.message);
@@ -74,12 +75,7 @@ const SignIn: React.FC = () => {
               <p>Forgot your password?</p>
             </S.TextContainer>
             <Box gap="2rem">
-              <Button
-                onClick={() => navigate("/")}
-                buttonType={ButtonType.SignIn}
-              >
-                Sign In
-              </Button>
+              <Button buttonType={ButtonType.SignIn}>Sign In</Button>
               <Button
                 buttonType={ButtonType.Primary}
                 onClick={() => navigate("/signup")}
