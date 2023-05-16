@@ -12,7 +12,7 @@ export enum ButtonType {
   Disabled = "disabled",
   Pending = "pending",
   Completed = "completed",
-  ReviewOrSignIn = "reviewOrSignIn",
+  SignIn = "signIn",
 }
 
 interface Buttons {
@@ -136,5 +136,11 @@ export const buttons: Buttons = {
     width: theme.button.widthLarge,
     hoverBackground: theme.color.grayLight1,
     activeBackground: theme.color.grayLight2,
+  },
+  signIn: {
+    background: theme.gradient.tradeDefault,
+    width: theme.button.widthLarge,
+    hoverBackground: theme.color.darkBlueHover,
+    activeBackground: theme.color.lighterBlueActive,
   },
 };

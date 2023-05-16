@@ -19,11 +19,11 @@ export const MessageContainer = styled.div<MessageContainerProps>`
   margin: 10px;
   gap: 5px;
   word-wrap: break-word;
+  overflow-wrap: anywhere;
   font-family: Arial, Helvetica, sans-serifs;
   font-size: 12px;
   color: white;
   max-width: 220px;
-  min-width: 220px;
 `;
 
 export const DateText = styled.p`
