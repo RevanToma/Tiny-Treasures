@@ -57,7 +57,7 @@ backend-linting:
     - cd backend
   script:
     - npm run build:lint
-  needs: ["back-install"]
+  needs: ["backend-install"]
   allow_failure:
     exit_codes:
       - 1
