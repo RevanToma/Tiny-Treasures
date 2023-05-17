@@ -15,9 +15,9 @@ build:
     - cd web-app 
     - npm ci
 #     - npm run build
-  artifacts:
-    paths:
-      - dist/
+#   artifacts:
+#     paths:
+#       - dist/
 
 
 deploy:
