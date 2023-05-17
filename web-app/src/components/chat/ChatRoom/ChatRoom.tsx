@@ -135,7 +135,7 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
     };
   }, [messages, receiverId, room, userId]);
 
-  function onSubmit(event: any) {
+  function onSubmit() {
     if (!message || !chatInputRef.current?.value) return null;
     socket().emit("chat-message", message);
     if (chatInputRef.current) {
