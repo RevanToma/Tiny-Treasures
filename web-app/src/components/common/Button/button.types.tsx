@@ -13,6 +13,7 @@ export enum ButtonType {
   Pending = "pending",
   Completed = "completed",
   SignIn = "signIn",
+  Google = "google"
 }
 
 interface Buttons {

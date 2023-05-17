@@ -53,7 +53,7 @@ export const SignUp: React.FC = () => {
     });
   };
 
-  const toggleShowPassword = () => {
+ const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
   const toggleShowConfirmPassword = () => {

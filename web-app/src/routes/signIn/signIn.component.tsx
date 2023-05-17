@@ -21,6 +21,7 @@ import { ButtonType } from "../../components/common/Button/button.types";
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -52,11 +53,16 @@ const SignIn: React.FC = () => {
         <Box width="80%" margin="auto" gap="3rem">
           <img src={Logo} alt="Tiny Treasures Logo" />
           <S.TextContainer>
-            <Box>
               <p>Log in or create an account to exchange items for free.</p>
-            </Box>
+              
+            
           </S.TextContainer>
+          <S.TextContainer>
+            <h5>Log in</h5>
+
+            </S.TextContainer>
           <form onSubmit={signIn}>
+         
             <Box gap="20px">
               <Input
                 type={InputType.email}
@@ -82,18 +88,19 @@ const SignIn: React.FC = () => {
               >
                 Sign Up
               </Button>
-              <S.TextContainer>
-                <p>or</p>
-              </S.TextContainer>
+              <p>or</p>
+
             </Box>
+            
           </form>
-          <SignUpFooter>
             <a href="http://localhost:8000/auth/google">
-              <S.GoogleButton buttonType={ButtonType.Secondary}>
+              <S.GoogleButton buttonType={ButtonType.Google}>
                 <FcGoogle size={32} />
                 Continue with Google
               </S.GoogleButton>
             </a>
+            <SignUpFooter>
+
             <span>Support</span>
             <span>How it Works</span>
             <span>Reviews</span>
