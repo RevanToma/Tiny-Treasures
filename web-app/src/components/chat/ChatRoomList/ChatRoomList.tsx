@@ -1,4 +1,3 @@
-
 import { IChatRoom } from "../../../types";
 import { useChats } from "../../../hooks/useChats";
 import * as S from "./styled";

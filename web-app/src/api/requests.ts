@@ -34,9 +34,24 @@ export const checkForError = (
   }
 };
 
-export const fetchChats = async (id: any) => {
+export const fetchChats = async (id: string) => {
   const { data } = await api.get<IChatRoom[]>(`/chat/${id}`);
-  return data;
+  const sortedDataByMostRecent = data.sort((a, b) => {
+    const mostRecentMessageA = a.messages[a.messages.length - 1];
+    const mostRecentMessageB = b.messages[b.messages.length - 1];
+
+    if (mostRecentMessageA.createdAt && mostRecentMessageB.createdAt) {
+      if (mostRecentMessageA.createdAt < mostRecentMessageB.createdAt) {
+        // Compare the 'createdAt' property of the most recent messages
+        return 1;
+      } else if (mostRecentMessageA.createdAt > mostRecentMessageB.createdAt) {
+        return -1;
+      }
+    }
+
+    return 0; // Default return statement when comparison cannot be performed
+  });
+  return sortedDataByMostRecent;
 };
 
 export const fetchChatById = async (id: any) => {
