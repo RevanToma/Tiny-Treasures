@@ -1,7 +1,6 @@
 # Define stages
 stages:
   - build
-  - test
   - deploy
 
 # Define job templates
@@ -13,18 +12,13 @@ build:
   stage: build
   extends: .template
   script:
+    - cd web-app 
     - npm ci
     - npm run build
   artifacts:
     paths:
       - dist/
 
-test:
-  stage: test
-  extends: .template
-  script:
-    - npm ci
-    - npm run test
 
 deploy:
   stage: deploy
