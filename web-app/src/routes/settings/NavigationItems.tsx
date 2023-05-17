@@ -1,6 +1,5 @@
 import Button from "../../components/common/Button/Button.component";
 import Box from "../../components/common/Box/Box";
-import LeftOrRightCarett from "../../components/common/leftCarett/LeftOrRightCarett";
 import { ButtonType } from "../../components/common/Button/button.types";
 import { IoMdArrowDropright } from "react-icons/io";
 
