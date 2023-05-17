@@ -1,7 +1,12 @@
+services:
+  - name: mongo:6.0
+    alias: mongodb
+
+
 # Define stages
 stages:
   - build
-  - deploy
+  - release
 
 # Define job templates
 .template:
@@ -34,13 +39,67 @@ app-build:
     paths:
       - web-app/dist
 
-deploy:
-  stage: deploy
-  image: php:latest
+
+backend-install:
+  stage: build
+  extends: .template
   script:
-    - apt-get update && apt-get install -y unzip git
-    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer 
-    - cd backend/
-    - composer install
-    # Add your deployment steps here
+   - cd backend
+   - npm install
+  artifacts:
+    paths:
+      - backend/node_modules
+    expire_in: 1 day
+
+backend-linting:
+  stage: build
+  extends: .template
+  before_script:
+    - cd backend
+  script:
+    - npm run build:lint
+  needs: ["back-install"]
+  allow_failure:
+    exit_codes:
+      - 1
+
+backend-compile:
+  stage: build
+  extends: .template
+  before_script:
+    - cd backend
+  script:
+    - npm run build:tsc
+  needs: ["backend-install", "backend-linting"]
+  artifacts:
+    paths:
+      - backend
+
+    
+    
+ release:
+  stage: release 
+  image: docker:23.0.6
+  services:
+    - docker:23.0.6-dind-alpine3.17
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    # use previous image as a cache to speedup build process
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    # use the commit sha to tag the image
+    - >-
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        export VERSION="$CI_COMMIT_SHA"
+      else
+        export VERSION="$CI_COMMIT_TAG"
+      fi
+
+      docker build --cache-from $CI_REGISTRY_IMAGE:latest
+      -t $CI_REGISTRY_IMAGE:$VERSION .
+      
+    - docker tag $CI_REGISTRY_IMAGE:$VERSION $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:$VERSION
+
 
