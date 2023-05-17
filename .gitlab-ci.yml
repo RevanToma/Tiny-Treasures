@@ -58,7 +58,7 @@ backend-compile:
   before_script:
     - cd backend
   script:
-    - npm run build:tsc
+    - npm run build
   needs: ["backend-install"]
   artifacts:
     paths:
