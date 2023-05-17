@@ -51,13 +51,14 @@ const ChatListCard: React.FC<ChatListCardProps> = ({
       <S.Image src={post.images[0]} />
       <Box width="100%" alignItems="flex-start" justifyContent="center">
         <p>{room._id}</p>
-        <h2>{post.title}</h2>
-        <Box width="100%" flexDirection="row" justifyContent="space-between">
-          <h3>
-            {lastSenderNotMeId ? "other" : userName}
-            {": " + lastMessage}
-          </h3>
-          <h4>{lastMessageDate && getDateText(lastMessageDate)}</h4>
+        <Box width="100%" gap="10px">
+          <Box width="100%" flexDirection="row" justifyContent="space-between">
+            <h3>{lastSenderNotMeId ? "other" : userName}</h3>
+            <p>{lastMessageDate && getDateText(lastMessageDate)}</p>
+          </Box>
+          <Box width="100%" flexDirection="row" justifyContent="flex-start">
+            {lastMessage}
+          </Box>
         </Box>
       </Box>
     </S.Card>
