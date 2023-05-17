@@ -7,23 +7,39 @@ stages:
 .template:
   image: node:lts
 
-# Define jobs
-build:
+# install package for web app
+app-install:
+  stage: build
+  extends: .template
+  script:
+   - cd web-app
+   - npm install
+  artifacts:
+    paths:
+      - web-app/node_modules 
+
+
+# build web app
+app-build:
   stage: build
   extends: .template
   script:
     - cd web-app 
-    - npm ci
-#     - npm run build
-#   artifacts:
-#     paths:
-#       - dist/
-
+    - npm run build
+  needs: ["app-install"]
+  allow_failure:
+    exit_codes:
+      - 1
+  artifacts:
+    paths:
+      - web-app/dist
 
 deploy:
   stage: deploy
   image: php:latest
   script:
+    - apt-get update && apt-get install -y unzip git
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer 
     - cd backend/
     - composer install
     # Add your deployment steps here
