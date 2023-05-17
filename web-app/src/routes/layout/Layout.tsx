@@ -1,8 +1,6 @@
 
 import Box from '../../components/common/Box/Box';
 import { Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectIsSignedIn } from '../../store/user/userSelectors';
 import Navbar from '../../components/Navbar/navbar.component';
 import styled from 'styled-components';
 
@@ -21,7 +19,6 @@ const PageStyle = styled.div`
 type LayoutProps = Record<string, never>;
 
 const Layout: React.FC<LayoutProps> = () => {
-  const userSignedIn = useSelector(selectIsSignedIn);
 
   return (
     <LayoutStyle>
@@ -41,7 +38,7 @@ const Layout: React.FC<LayoutProps> = () => {
         <Box width="100%" padding="10px 15px">
           <div style={{ width: "100%" }} id="chat-input-portal"></div>
         </Box>
-        {userSignedIn && <Navbar />}
+        <Navbar />
       </Box>
     </LayoutStyle>
   );

@@ -1,20 +1,22 @@
 import Box from "../../components/common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {  selectUserCredits } from "../../store/user/userSelectors";
+import {  selectIsSignedIn, selectUserCredits } from "../../store/user/userSelectors";
 
 
 import NavigationItem from "./NavigationItems";
 import { useAppDispatch } from "../../hooks/useDispatch";
 import { signOut } from "../../store/user/userSlice";
 import { signOutUser } from "../../api/requests";
-import { FaBox, FaCoins, FaEnvelope, FaHeart, FaLock, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+import { FaBox, FaCoins, FaEnvelope, FaHeart, FaLock, FaSignInAlt, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
 import { IoMdNotifications } from "react-icons/io";
 import {MdLocationPin} from "react-icons/md"
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
+  const userSignedIn = useSelector(selectIsSignedIn);
+
 
 
 
@@ -49,7 +51,10 @@ const AccountSettings = () => {
    
    
   return (
-    <Box backgroundColor="#F5F5F5" height="100vh" width="100%">
+    <>
+    
+    
+    {userSignedIn ? ( <Box backgroundColor="#F5F5F5" height="100vh" width="100%">
       <Box  justifyContent="center" padding="2.5rem" marginBottom="2.5rem">
         <h1>Account</h1>
       </Box>
@@ -105,7 +110,14 @@ const AccountSettings = () => {
        
 
       </Box>
-    </Box>
+    </Box>) : (
+      <Box justifyContent="center" marginTop="5rem">
+        <NavigationItem onClick={() => navigate("/signin")} text="Sign In" icon={<FaSignInAlt size={20}/>} />
+      </Box>
+           
+
+    )}
+    </>
   );
 }
 
