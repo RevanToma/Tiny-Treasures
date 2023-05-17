@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { theme } from "../../styles/themes";
 import { Link } from "react-router-dom";
 
 export const NavbarStyle = styled.nav`

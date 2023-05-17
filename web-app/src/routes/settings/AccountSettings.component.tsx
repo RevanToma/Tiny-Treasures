@@ -1,26 +1,25 @@
 import Box from "../../components/common/Box/Box";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser, selectUserCredits } from "../../store/user/userSelectors";
-import LeftOrRightCarett from "../../components/common/leftCarett/LeftOrRightCarett";
-import { BiCoinStack } from "react-icons/bi";
+import {  selectUserCredits } from "../../store/user/userSelectors";
+
 
 import NavigationItem from "./NavigationItems";
 import { useAppDispatch } from "../../hooks/useDispatch";
 import { signOut } from "../../store/user/userSlice";
-import { AxiosError } from "axios";
-import { useMutation } from "@tanstack/react-query";
 import { signOutUser } from "../../api/requests";
+import { FaBox, FaCoins, FaEnvelope, FaHeart, FaLock, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+import { IoMdNotifications } from "react-icons/io";
+import {MdLocationPin} from "react-icons/md"
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const dispatch = useAppDispatch()
-  const user = useSelector(selectUser)
   const navigate = useNavigate();
 
 
 
-  const handleAccountSettings = () => {
-    navigate("/account-settings");
+  const handleChangeName= () => {
+    navigate("/change-name");
   };
   const handleCredits = () => {
     navigate("/credits");
@@ -33,7 +32,12 @@ const AccountSettings = () => {
   const handleFavourites = () => {
     navigate("/favourites");
   };
-
+  const handleChangeEmail = () => {
+    navigate("/favourites");
+  };
+  const handleChangePassword = () =>{
+    navigate("/password")
+   }
    const handleLogOut =   () => {
    
   signOutUser()
@@ -45,31 +49,63 @@ const AccountSettings = () => {
    
    
   return (
-    <>
-      <Box flexDirection="row" justifyContent="center" margin="1rem">
+    <Box backgroundColor="#F5F5F5" height="100vh" width="100%">
+      <Box  justifyContent="center" padding="2.5rem" marginBottom="2.5rem">
         <h1>Account</h1>
       </Box>
-      <Box>
-        <LeftOrRightCarett left={true} onClick={() => navigate("/")} />
-      </Box>
-      <Box gap="2rem" margin="2rem">
+      
+      <Box gap="5rem" margin="2rem">
+        <Box gap="2.4rem">
+
+        <h3>Account Settings</h3>
         <NavigationItem
-          text="Account Settings"
-          onClick={handleAccountSettings}
+          text="Change Name"
+          onClick={handleChangeName}
+          icon={<FaUserEdit size={20}  color="black" />}
         />
         <NavigationItem
+          text="Change Email"
+          onClick={handleChangeEmail}
+          icon={<FaEnvelope size={20}  color="black" />}
+        />
+        <NavigationItem
+          text="Change Password"
+          onClick={handleChangePassword}
+          icon={<FaLock size={20}  color="black" />}
+        />
+                </Box>
+                <Box gap="2.4rem">
+                <h3>General Settings</h3>
+                <NavigationItem
+          text="Notification"
+          onClick={handleChangePassword}
+          icon={<IoMdNotifications size={25}  color="black" />}
+        />
+        <NavigationItem
+          text="Location"
+          onClick={handleChangePassword}
+          icon={<MdLocationPin size={25} color="black" />}
+        />
+                </Box>
+<Box gap="2.4rem">
+  <h3>Your Space</h3>
+<NavigationItem
           onClick={handleCredits}
           showArrow={false}
           text="Credits"
+          icon={<FaCoins size={20}/>}
         >
-          {userCredits}x<BiCoinStack size={20} />
+        x{userCredits}
         </NavigationItem>
-        <NavigationItem text="My items" onClick={handleMyItems} />
-        <NavigationItem text="Favourites" onClick={handleFavourites} />
-        <NavigationItem text="Log out" onClick={handleLogOut} />
+        <NavigationItem text="My items" icon={<FaBox size={20}/>} onClick={handleMyItems} />
+        <NavigationItem text="Favourites" icon={<FaHeart size={20}/>} onClick={handleFavourites} />
+        <NavigationItem text="Log out" icon={<FaSignOutAlt size={20}/>} onClick={handleLogOut} />
+
+</Box>
+       
 
       </Box>
-    </>
+    </Box>
   );
 }
 

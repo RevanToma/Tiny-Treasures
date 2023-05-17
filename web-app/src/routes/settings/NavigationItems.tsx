@@ -2,6 +2,7 @@ import Button from "../../components/common/Button/Button.component";
 import Box from "../../components/common/Box/Box";
 import LeftOrRightCarett from "../../components/common/leftCarett/LeftOrRightCarett";
 import { ButtonType } from "../../components/common/Button/button.types";
+import { IoMdArrowDropright } from "react-icons/io";
 
 interface NavigationItemProps {
   children?: React.ReactNode;
@@ -20,22 +21,24 @@ const NavigationItem = ({
   showArrow = true,
 }: NavigationItemProps) => {
   return (
-    <Button buttonType={ButtonType.Secondary} onClick={onClick}>
+    <Button buttonType={ButtonType.Google} onClick={onClick}>
       <Box
-        alignItems="center"
         flexDirection="row"
         justifyContent="space-between"
+        gap="1rem"        
+        padding="1rem"
       >
-        <span>{text}</span>
         {icon && (
           <Box alignItems="center" flexDirection="row">
             {icon}
           </Box>
         )}
+              {text}
+
         <Box flexDirection="row" alignItems="center">
           {children}
         </Box>
-        {showArrow && <LeftOrRightCarett left={false} />}
+        {showArrow && <IoMdArrowDropright color="black" size={29}/>}
       </Box>
     </Button>
   );

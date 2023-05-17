@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { socket } from "../../../Sockets/Message.socket";
 import Message from "../Message/Message";
 import { IChatRoom, IMessage, Post } from "../../../types";

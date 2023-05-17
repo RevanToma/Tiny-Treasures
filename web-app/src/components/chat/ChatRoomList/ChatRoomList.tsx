@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import { IChatRoom } from "../../../types";
 import { useChats } from "../../../hooks/useChats";
 import * as S from "./styled";
@@ -7,7 +7,6 @@ import { setCurrentChatRoom } from "../../../store/user/userSlice";
 import Spinner from "../../common/spinner/spinner.component";
 import ChatListCard from "./ChatListCard/ChatListCard";
 import { useNavigate } from "react-router-dom";
-import { usePost } from "../../../hooks/usePost";
 
 type ChatRoomListProps = {
   userId: string;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Box from '../../../components/common/Box/Box.component';
 import { theme } from '../../../styles/themes';
+import Box from '../../../components/common/Box/Box';
 
 export const Wrapper = styled(Box)`
   h1 {

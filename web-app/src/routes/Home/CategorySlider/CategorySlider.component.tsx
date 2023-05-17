@@ -23,7 +23,7 @@ interface CategorySliderProps {
 
 const ages = ['0-3', '4-7', '8-11'];
 
-const CategorySlider: FC<CategorySliderProps> = ({ category, enums }) => {
+const CategorySlider: FC<CategorySliderProps> = ({ category }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

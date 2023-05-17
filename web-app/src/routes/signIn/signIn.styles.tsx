@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "../../components/common/Button/Button.component";
+
 import { StyledButton } from "../../components/common/Button/button.styles";
 
 export const TextContainer = styled.div`

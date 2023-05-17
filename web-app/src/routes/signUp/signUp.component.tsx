@@ -15,6 +15,7 @@ import Box from "../../components/common/Box/Box";
 import { InputType } from "../../components/common/Input/input.types";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Spinner from "../../components/common/spinner/spinner.component";
 export const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export const SignUp: React.FC = () => {
 
         <h3>Sign Up</h3>
         {signUpWithEmailMutation.isLoading ? (
-          "Signing up..."
+          <Spinner/>
         ) : (
           <>
             <S.SignUpForm onSubmit={handleSubmit}>

@@ -19,7 +19,7 @@ interface PostCardLargeProps {
 
 const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
   const dispatch = useAppDispatch();
-  const { title, description, itemCount, age, condition, id } = post;
+  const { title, description,  condition, id } = post;
   const user = useSelector(selectUser);
   const isSignedIn = useSelector(selectIsSignedIn);
 
