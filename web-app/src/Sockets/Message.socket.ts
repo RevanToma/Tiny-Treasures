@@ -7,7 +7,7 @@ export class Socket {
 
   private constructor(userId: string) {
     console.log("CONNECTING TO SOCKET");
-    this.socketIO = io("http://localhost:8000", {
+    this.socketIO = io("http://192.168.50.35:8000", {
       query: {
         userId,
       },
