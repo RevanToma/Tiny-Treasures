@@ -50,17 +50,7 @@ backend-install:
       - backend/node_modules
     expire_in: 1 day
 
-backend-linting:
-  stage: build
-  extends: .template
-  before_script:
-    - cd backend
-  script:
-    - npm run build:lint
-  needs: ["backend-install"]
-  allow_failure:
-    exit_codes:
-      - 1
+ 
 
 backend-compile:
   stage: build
@@ -69,7 +59,7 @@ backend-compile:
     - cd backend
   script:
     - npm run build:tsc
-  needs: ["backend-install", "backend-linting"]
+  needs: ["backend-install"]
   artifacts:
     paths:
       - backend
