@@ -38,14 +38,10 @@ export const updateUserAsync = createAsyncThunk(
 export const checkForLoggedInUser = createAsyncThunk(
   "users/checkForLoggedInUser",
   async () => {
-    try {
-      const user: IUser = await getUserFromJwt();
-      if (!user) return;
-      Socket.init(user.data.user._id);
-      return user;
-    } catch (error) {
-      console.log(error);
-    }
+    const user: IUser = await getUserFromJwt();
+    if (!user) return;
+
+    return user;
   }
 );
 
@@ -57,6 +53,7 @@ const userSlice = createSlice({
       state.data.user = payload.data.user;
       state.token = payload.token;
       state.isSignedIn = true;
+      Socket.init(state.data.user._id);
     },
 
     setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {

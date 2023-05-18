@@ -6,10 +6,10 @@ const api = axios.create({
   baseURL: `${serverURL}/api/v1`,
 });
 
-function getCookie(n: string) {
-  const a = `; ${document.cookie}`.match(`;\\s*${n}=([^;]+)`);
-  return a ? a[1] : "";
-}
+// function getCookie(n: string) {
+//   const a = `; ${document.cookie}`.match(`;\\s*${n}=([^;]+)`);
+//   return a ? a[1] : "";
+// }
 
 api.interceptors.request.use(async (config) => {
   config.withCredentials = true;

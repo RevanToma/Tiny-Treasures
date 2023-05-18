@@ -19,7 +19,7 @@ export interface IUser {
   data: {
     user: User;
   };
-  token?: string;
+  token: string;
   isSignedIn?: boolean;
   currentChatRoom?: IChatRoom;
 }
