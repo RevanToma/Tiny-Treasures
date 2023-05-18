@@ -7,8 +7,8 @@ export const TextContainer = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   margin: 1.5rem;
   line-height: 21.7px;
-  
-  h5{
+
+  h5 {
     font-size: 1.6rem;
   }
 

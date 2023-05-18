@@ -15,6 +15,8 @@ import Home from "./routes/Home/Home.route";
 import { useEnums } from "./hooks/useEnums";
 import Category from "./routes/Category/Category.route";
 import SaveUserAndRedirect from "./routes/SaveUserAndRedirect/SaveUserAndRedirect.component";
+import { useAppDispatch } from "./hooks/useDispatch";
+import { checkForLoggedInUser } from "./store/user/userSlice";
 
 const SignIn = lazy(() => import("./routes/signIn/signIn.component"));
 const DisplayedChat = lazy(
@@ -26,9 +28,11 @@ const AccountSettings = lazy(
   () => import("./routes/settings/AccountSettings.component")
 );
 function App() {
-  const userId = useSelector(selectUser);
+  const user = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
+
   const queryClient = useQueryClient();
+  const dispatch = useAppDispatch();
   useEnums();
 
   useEffect(() => {
@@ -36,8 +40,8 @@ function App() {
       queryClient.invalidateQueries([fetchChats.name]);
     };
 
-    if (userId._id) {
-      Socket.init(userId._id);
+    if (user._id) {
+      Socket.init(user._id);
       socket().on("chat-message", (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           refetchChats();
@@ -45,8 +49,11 @@ function App() {
       });
       socket().on("create-chat", refetchChats);
     }
-  }, [userId._id, currentChatRoom, queryClient]);
+  }, [user._id, currentChatRoom, queryClient]);
 
+  useEffect(() => {
+    dispatch(checkForLoggedInUser());
+  }, [dispatch]);
   return (
     <>
       <GlobalStyles />

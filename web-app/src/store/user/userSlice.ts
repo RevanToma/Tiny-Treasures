@@ -1,6 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IChatRoom, IUser, User } from '../../types';
-import api from '../../api';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IChatRoom, IUser, User } from "../../types";
+import api from "../../api";
+import { getUserFromJwt } from "../../api/requests";
+import { Socket } from "../../Sockets/Message.socket";
 
 interface UpdateData {
   [key: string]: string | number | string[];
@@ -10,22 +12,22 @@ interface UpdateData {
 const initialState: IUser = {
   data: {
     user: {
-      email: '',
-      firstName: '',
+      email: "",
+      firstName: "",
       credits: 0,
-      name: '',
+      name: "",
       saved: [],
     },
   },
   isSignedIn: false,
-  token: '',
+  token: "",
   currentChatRoom: undefined,
 };
 
 export const updateUserAsync = createAsyncThunk(
-  'user/updateUser',
+  "user/updateUser",
   async ({ newData, field }: UpdateData) => {
-    const res = await api.patch('users/updateMe', {
+    const res = await api.patch("users/updateMe", {
       [field]: newData,
     });
     const user: User = res.data.data.data;
@@ -33,8 +35,22 @@ export const updateUserAsync = createAsyncThunk(
   }
 );
 
+export const checkForLoggedInUser = createAsyncThunk(
+  "users/checkForLoggedInUser",
+  async () => {
+    try {
+      const user: IUser = await getUserFromJwt();
+      if (!user) return;
+      Socket.init(user.data.user._id);
+      return user;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     signSuccess: (state, { payload }: PayloadAction<IUser>) => {
@@ -42,19 +58,31 @@ const userSlice = createSlice({
       state.token = payload.token;
       state.isSignedIn = true;
     },
+
     setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
       state.currentChatRoom = payload;
     },
-    signOut: state => {
+    signOut: (state) => {
       state.data.user = initialState.data.user;
       state.isSignedIn = false;
-      state.token = '';
+      state.token = "";
       state.currentChatRoom = initialState.currentChatRoom;
     },
   },
-  extraReducers: builder => {
+
+  extraReducers: (builder) => {
     builder.addCase(updateUserAsync.fulfilled, (state, { payload }) => {
       state.data.user = payload;
+    });
+
+    builder.addCase(checkForLoggedInUser.fulfilled, (state, { payload }) => {
+      if (payload) {
+        state.data.user = {
+          ...payload.data.user,
+          credits: payload.data.user?.credits ?? 0,
+        };
+        state.isSignedIn = true;
+      }
     });
   },
 });

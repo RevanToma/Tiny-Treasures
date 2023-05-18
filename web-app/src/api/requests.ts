@@ -8,6 +8,7 @@ import {
   SignUpInfo,
 } from "../types";
 import api from "./index";
+import { serverRoute } from "../utils/urls/serverUrls";
 
 export interface ResponseWithData<T> {
   status: string;
@@ -116,4 +117,9 @@ export const fetchEnums = async () => {
   const data: AxiosResponse<ResponseWithData<Enum[]>> = await api.get(`enums`);
   checkForError(data.data);
   return data.data.data.data[0];
+};
+
+export const getUserFromJwt = async () => {
+  const { data } = await api.get(serverRoute.checkSignedIn);
+  return data;
 };
