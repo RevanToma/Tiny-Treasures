@@ -25,7 +25,11 @@ userRouter.patch(
   authController.verifyPassword,
   authController.updateEmail
 );
-
+userRouter.patch(
+  "/updateName",
+  authController.protect,
+  authController.updateName
+);
 userRouter.get(
   "/checkLoggedIn",
   authController.protect,

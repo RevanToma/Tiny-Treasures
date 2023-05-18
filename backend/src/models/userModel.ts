@@ -40,7 +40,6 @@ const userSchema = new Schema<UserDocument>(
     },
     confirmEmail: {
       type: String,
-      required: [true, "Please confirm your email."],
       validate: [validator.isEmail, "Please provide a valid email address."],
       lowercase: true,
     },

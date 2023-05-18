@@ -145,13 +145,45 @@ export const updateEmail = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const { newEmail } = req.body;
+    const { newEmail, password } = req.body;
 
-    if (!newEmail) {
-      return next(new AppError("Please provide a new email address.", 401));
+    if (!newEmail || !password) {
+      return next(
+        new AppError(
+          "Please provide a new email address and your current password.",
+          401
+        )
+      );
+    }
+    const query = User.findById(req.user.id).select("+password");
+    const user: UserDocument | null = await query;
+
+    if (!user) {
+      return next(new AppError("User not found!", 401));
+    }
+    if (!(await user.correctPassword(password, user.password!))) {
+      return next(new AppError("Your current password is wrong.", 401));
     }
 
     req.user.email = newEmail;
+
+    await req.user.save();
+
+    createAndSendJWT(req.user, 200, req, res, next);
+  }
+);
+export const updateName = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { newName } = req.body;
+
+    if (!newName) {
+      return next(new AppError("Please provide a new name.", 401));
+    }
+    req.user.name = newName;
 
     await req.user.save();
 
@@ -168,7 +200,7 @@ export const verifyPassword = catchAsync(
     const { password, email } = req.body;
 
     if (!password) {
-      return next(new AppError("Pleease provide your password!", 401));
+      return next(new AppError("Please provide your password!", 401));
     }
 
     // builds query for change email or change password
