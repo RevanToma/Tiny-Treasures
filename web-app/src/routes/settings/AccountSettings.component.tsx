@@ -28,26 +28,6 @@ const AccountSettings = () => {
   const navigate = useNavigate();
   const userSignedIn = useSelector(selectIsSignedIn);
 
-  const handleChangeName = () => {
-    navigate("/account/changeName");
-  };
-  const handleCredits = () => {
-    navigate("/credits");
-  };
-
-  const handleMyItems = () => {
-    navigate("/myItems");
-  };
-
-  const handleFavourites = () => {
-    navigate("/favourites");
-  };
-  const handleChangeEmail = () => {
-    navigate("/account/changeEmail");
-  };
-  const handleChangePassword = () => {
-    navigate("/account/changePassword");
-  };
   const handleLogOut = () => {
     signOutUser();
     dispatch(signOut());
@@ -67,17 +47,17 @@ const AccountSettings = () => {
               <h3>Account Settings</h3>
               <NavigationItem
                 text="Change Name"
-                onClick={handleChangeName}
+                onClick={() => navigate("/account/changeName")}
                 icon={<FaUserEdit size={20} color="black" />}
               />
               <NavigationItem
                 text="Change Email"
-                onClick={handleChangeEmail}
+                onClick={() => navigate("/account/changeEmail")}
                 icon={<FaEnvelope size={20} color="black" />}
               />
               <NavigationItem
                 text="Change Password"
-                onClick={handleChangePassword}
+                onClick={() => navigate("/account/changePassword")}
                 icon={<FaLock size={20} color="black" />}
               />
             </Box>
@@ -85,19 +65,19 @@ const AccountSettings = () => {
               <h3>General Settings</h3>
               <NavigationItem
                 text="Notification"
-                onClick={handleChangePassword}
+                onClick={() => navigate("/account/notification")}
                 icon={<IoMdNotifications size={25} color="black" />}
               />
               <NavigationItem
                 text="Location"
-                onClick={handleChangePassword}
+                onClick={() => navigate("/account/location")}
                 icon={<MdLocationPin size={25} color="black" />}
               />
             </Box>
             <Box gap="2.4rem">
               <h3>Personal</h3>
               <NavigationItem
-                onClick={handleCredits}
+                onClick={() => navigate("/account/credits")}
                 showArrow={false}
                 text="Credits"
                 icon={<FaCoins size={20} />}
@@ -107,12 +87,12 @@ const AccountSettings = () => {
               <NavigationItem
                 text="My items"
                 icon={<FaBox size={20} />}
-                onClick={handleMyItems}
+                onClick={() => navigate("/account/myItems")}
               />
               <NavigationItem
                 text="Favourites"
                 icon={<FaHeart size={20} />}
-                onClick={handleFavourites}
+                onClick={() => navigate("/account/favourites")}
               />
               <NavigationItem
                 text="Log out"
