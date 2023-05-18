@@ -39,6 +39,7 @@ const createAndSendJWT = (
   res.cookie("jwt", token, {
     expires: new Date(Date.now() + jwtExpires * 24 * 60 * 60 * 1000),
     httpOnly: true,
+    sameSite: "none",
     secure: req.secure || req.headers["x-forwarded-proto"] === "https",
   });
 

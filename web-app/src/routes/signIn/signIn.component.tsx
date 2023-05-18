@@ -36,7 +36,7 @@ const SignIn: React.FC = () => {
       {
         onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
-          document.cookie = `jwt=${data.token}`;
+          //document.cookie = `jwt=${data.token}`;
           navigate("/");
         },
         onError: (error) => {
