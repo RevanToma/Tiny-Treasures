@@ -24,20 +24,18 @@ const NavigationItem = ({
       <Box
         flexDirection="row"
         justifyContent="space-between"
-        gap="1rem"        
-        padding="1rem"
+        gap="1rem"
+        padding="0rem 1.6rem"
       >
         {icon && (
           <Box alignItems="center" flexDirection="row">
             {icon}
           </Box>
         )}
-              {text}
+        {text}
+        {children ? <Box>{children}</Box> : ""}
 
-        <Box flexDirection="row" alignItems="center">
-          {children}
-        </Box>
-        {showArrow && <IoMdArrowDropright color="black" size={29}/>}
+        {showArrow && <IoMdArrowDropright color="black" size={29} />}
       </Box>
     </Button>
   );

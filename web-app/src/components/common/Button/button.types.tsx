@@ -13,7 +13,7 @@ export enum ButtonType {
   Pending = "pending",
   Completed = "completed",
   SignIn = "signIn",
-  Google = "google"
+  Google = "google",
 }
 
 interface Buttons {
@@ -139,9 +139,9 @@ export const buttons: Buttons = {
     activeBackground: theme.color.grayLight2,
   },
   signIn: {
-    background: theme.gradient.tradeDefault,
+    background: theme.color.logo,
     width: theme.button.widthLarge,
-    hoverBackground: theme.color.darkBlueHover,
+    hoverBackground: theme.color.signIn,
     activeBackground: theme.color.lighterBlueActive,
   },
 };
