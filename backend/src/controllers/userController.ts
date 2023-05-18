@@ -1,8 +1,9 @@
-import { NextFunction, Response } from 'express';
-import { catchAsync } from '../utils/catchAsync';
-import { CustomRequest } from '../utils/expressInterfaces';
-import User from '../models/userModel';
-import { decodeToken, getToken } from './authController';
+import { NextFunction, Response } from "express";
+import { catchAsync } from "../utils/catchAsync";
+import { CustomRequest } from "../utils/expressInterfaces";
+import User, { UserDocument } from "../models/userModel";
+import { decodeToken, getToken } from "./authController";
+import AppError from "../utils/appError";
 
 // UTILITY MIDDLEWARE
 
@@ -27,5 +28,24 @@ export const attatchUserToReq = catchAsync(
     req.user = user;
 
     next();
+  }
+);
+
+export const getBasicUserData = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const basicUserData: UserDocument | null = await User.findById(
+      req.user.id
+    ).select("id name email location saved");
+
+    if (!basicUserData) {
+      return next(new AppError("No user found", 400));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        data: basicUserData,
+      },
+    });
   }
 );

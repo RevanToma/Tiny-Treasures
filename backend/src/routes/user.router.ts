@@ -1,5 +1,6 @@
 import express from "express";
 import * as authController from "../controllers/authController";
+import * as userController from "../controllers/userController";
 
 export const userRouter = express.Router();
 
@@ -23,4 +24,10 @@ userRouter.patch(
   "/updateEmail",
   authController.verifyPassword,
   authController.updateEmail
+);
+
+userRouter.get(
+  "/checkLoggedIn",
+  authController.protect,
+  userController.getBasicUserData
 );

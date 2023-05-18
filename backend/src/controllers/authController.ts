@@ -40,7 +40,7 @@ const createAndSendJWT = (
     expires: new Date(Date.now() + jwtExpires * 24 * 60 * 60 * 1000),
     httpOnly: true,
     sameSite: "none",
-    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    secure: true, // req.secure || req.headers["x-forwarded-proto"] === "https",
   });
 
   // remove password from response
@@ -48,7 +48,7 @@ const createAndSendJWT = (
 
   // redirect if logged in from google
   if (redirect) {
-    res.redirect("http://localhost:5173/getUser");
+    res.redirect("http://localhost:5173/");
   } else {
     res.status(statusCode).json({
       status: "success",
