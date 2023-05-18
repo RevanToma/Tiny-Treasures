@@ -1,10 +1,10 @@
 import {
   Strategy as GoogleStrategy,
   VerifyCallback,
-} from 'passport-google-oauth2';
-import User from '../models/userModel';
-import passport from 'passport';
-import { Request } from 'express';
+} from "passport-google-oauth2";
+import User from "../models/userModel";
+import passport from "passport";
+import { Request } from "express";
 
 export const passportConfig = (passport: passport.PassportStatic) => {
   passport.use(
@@ -13,7 +13,7 @@ export const passportConfig = (passport: passport.PassportStatic) => {
         clientID: process.env.OA_CLIENT_ID!,
         clientSecret: process.env.OA_CLIENT_SECRET!,
         // FIXME:  PROD
-        callbackURL: 'http://localhost:8000/auth/google/callback',
+        callbackURL: "http://localhost:8000/auth/google/callback",
         passReqToCallback: true,
       },
       async (
@@ -29,7 +29,7 @@ export const passportConfig = (passport: passport.PassportStatic) => {
             return done(null, existingUser);
           }
           const newUser = new User({
-            method: 'google',
+            method: "google",
             googleId: profile.id,
             name: profile.displayName,
             email: profile.emails[0].value,
