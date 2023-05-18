@@ -1,8 +1,7 @@
-
-import Box from '../../components/common/Box/Box';
-import { Outlet } from 'react-router-dom';
-import Navbar from '../../components/Navbar/navbar.component';
-import styled from 'styled-components';
+import Box from "../../components/common/Box/Box";
+import { Outlet } from "react-router-dom";
+import Navbar from "../../components/Navbar/navbar.component";
+import styled from "styled-components";
 
 const LayoutStyle = styled.div`
   overflow: hidden;
@@ -14,12 +13,12 @@ const PageStyle = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
+  background: #f5f5f5;
 `;
 
 type LayoutProps = Record<string, never>;
 
 const Layout: React.FC<LayoutProps> = () => {
-
   return (
     <LayoutStyle>
       <Box
@@ -35,7 +34,7 @@ const Layout: React.FC<LayoutProps> = () => {
             <Outlet />
           </Box>
         </PageStyle>
-        <Box width="100%" padding="10px 15px">
+        <Box width="100%" padding="10px 15px" backgroundColor="#F5F5F5">
           <div style={{ width: "100%" }} id="chat-input-portal"></div>
         </Box>
         <Navbar />
