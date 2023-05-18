@@ -36,6 +36,9 @@ const ChangeEmail = lazy(
 const ChangePassword = lazy(
   () => import("./routes/settings/ChangePassword/ChangePassword.component")
 );
+const Location = lazy(
+  () => import("./routes/settings/Location/Location.component")
+);
 function App() {
   const user = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
@@ -86,7 +89,7 @@ function App() {
               <Route path="changeName" element={<ChangeName />} />
               <Route path="changeEmail" element={<ChangeEmail />} />
               <Route path="changePassword" element={<ChangePassword />} />
-              {/* <Route path="changePassword" element={<ChangePassword />} /> */}
+              <Route path="location" element={<Location />} />
             </Route>
           </Routes>
         </Suspense>
