@@ -1,7 +1,9 @@
 import axios from "axios";
 
+export const serverURL = "http://127.0.0.1:8000";
+
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v1",
+  baseURL: `${serverURL}/api/v1`,
 });
 
 function getCookie(n: string) {
@@ -10,13 +12,14 @@ function getCookie(n: string) {
 }
 
 api.interceptors.request.use(async (config) => {
+  config.withCredentials = true;
   config.headers["Content-Type"] = "application/json";
-
+  /*
   const cookie = getCookie("jwt");
 
   if (cookie) {
     config.headers["Authorization"] = `Bearer ${cookie}`;
-  }
+  }*/
 
   return config;
 });
