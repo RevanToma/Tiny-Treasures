@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { ButtonType, buttons } from "./button.types";
+import { StyledSpinner } from "../spinner/spinner.styles";
 
 export const StyledButton = styled.button<{ buttonType: ButtonType }>`
   color: ${({ buttonType }) => buttons[buttonType]?.color || "#fff"};
@@ -10,7 +11,6 @@ export const StyledButton = styled.button<{ buttonType: ButtonType }>`
   font-size: ${({ buttonType }) => buttons[buttonType]?.fontSize || "2rem"};
   font-family: ${({ buttonType }) =>
     buttons[buttonType]?.fontFamily || "Open Sans"};
-
   &:hover {
     color: ${({ buttonType }) => buttons[buttonType]?.hoverColor || "#fff"};
     background: ${({ buttonType }) => buttons[buttonType]?.hoverBackground};
@@ -22,4 +22,15 @@ export const StyledButton = styled.button<{ buttonType: ButtonType }>`
     border: ${({ buttonType }) =>
       buttons[buttonType]?.activeBackground || "none"};
   }
+`;
+
+export const ButtonSpinner = styled(StyledSpinner)`
+  width: 30px;
+  height: 30px;
+`;
+
+export const StyledButtonSpinner = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

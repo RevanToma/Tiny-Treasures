@@ -4,7 +4,11 @@ import { FaArrowRight } from "react-icons/fa";
 interface LeftOrRightCaretProps extends SVGProps<SVGSVGElement> {
   left: boolean;
 }
-const LeftOrRightCarett = ({ left, ...props }: LeftOrRightCaretProps) => {
+const LeftOrRightCarett = ({
+  left,
+
+  ...props
+}: LeftOrRightCaretProps) => {
   return left ? (
     <FaArrowLeft size={29} {...props} />
   ) : (

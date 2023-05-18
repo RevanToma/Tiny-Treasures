@@ -123,3 +123,27 @@ export const getUserFromJwt = async () => {
   const { data } = await api.get(serverRoute.checkSignedIn);
   return data;
 };
+
+export const patchName = async (newName: string) => {
+  const { data } = await api.patch("/users/updateName", { newName });
+  checkForError(data);
+  return data;
+};
+
+export const patchEmail = async (newEmail: string, password: string) => {
+  const { data } = await api.patch("/users/updateEmail", {
+    newEmail,
+    password,
+  });
+  checkForError(data);
+  return data;
+};
+export const patchPassword = async (passwordData: {
+  password: string;
+  passwordNew: string;
+  passwordConfirm: string;
+}) => {
+  const { data } = await api.patch("/users/updatePassword", passwordData);
+  checkForError(data);
+  return data;
+};

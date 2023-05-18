@@ -27,6 +27,15 @@ const Post = lazy(() => import("./routes/post/Post.component"));
 const AccountSettings = lazy(
   () => import("./routes/settings/AccountSettings.component")
 );
+const ChangeName = lazy(
+  () => import("./routes/settings/ChangeName/ChangeName.component")
+);
+const ChangeEmail = lazy(
+  () => import("./routes/settings/ChangeEmail/ChangeEmail.component")
+);
+const ChangePassword = lazy(
+  () => import("./routes/settings/ChangePassword/ChangePassword.component")
+);
 function App() {
   const user = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
@@ -63,7 +72,6 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="signin" element={<SignIn />} />
-              <Route path="account" element={<AccountSettings />} />
               <Route path="signup" element={<SignUp />} />
               <Route path="profile" element={<Profile />} />
               <Route path="post/:id" element={<Post />} />
@@ -72,6 +80,13 @@ function App() {
               <Route path="chat/:roomId/:postId" element={<DisplayedChat />} />
               <Route path="getUser" element={<SaveUserAndRedirect />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />
+            </Route>
+            <Route path="account/*" element={<Layout />}>
+              <Route index element={<AccountSettings />} />
+              <Route path="changeName" element={<ChangeName />} />
+              <Route path="changeEmail" element={<ChangeEmail />} />
+              <Route path="changePassword" element={<ChangePassword />} />
+              {/* <Route path="changePassword" element={<ChangePassword />} /> */}
             </Route>
           </Routes>
         </Suspense>

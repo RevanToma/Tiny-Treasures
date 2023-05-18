@@ -7,11 +7,20 @@ interface IInput {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   name?: string;
+  padding?: string;
 }
 
-const Input: FC<IInput> = ({ placeholder, type, onChange, value, name }) => {
+const Input: FC<IInput> = ({
+  placeholder,
+  type,
+  onChange,
+  value,
+  name,
+  padding,
+}) => {
   return (
     <S.StyledInput
+      padding={padding}
       value={value}
       placeholder={placeholder}
       type={type}

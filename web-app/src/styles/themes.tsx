@@ -113,9 +113,9 @@ export const theme = {
       font-weight: 700;
     `,
     h6: css`
-      font-family: "Open Sans";
-      font-size: 1.6rem;
-      font-weight: 700;
+      font-family: "Poppins";
+      font-size: 2.4rem;
+      font-weight: 500;
     `,
     body: css`
       font-family: "Open Sans";

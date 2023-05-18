@@ -29,7 +29,7 @@ const AccountSettings = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
 
   const handleChangeName = () => {
-    navigate("/change-name");
+    navigate("/account/changeName");
   };
   const handleCredits = () => {
     navigate("/credits");
@@ -43,10 +43,10 @@ const AccountSettings = () => {
     navigate("/favourites");
   };
   const handleChangeEmail = () => {
-    navigate("/favourites");
+    navigate("/account/changeEmail");
   };
   const handleChangePassword = () => {
-    navigate("/password");
+    navigate("/account/changePassword");
   };
   const handleLogOut = () => {
     signOutUser();
@@ -95,7 +95,7 @@ const AccountSettings = () => {
               />
             </Box>
             <Box gap="2.4rem">
-              <h3>Your Space</h3>
+              <h3>Personal</h3>
               <NavigationItem
                 onClick={handleCredits}
                 showArrow={false}
