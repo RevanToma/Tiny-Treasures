@@ -101,3 +101,11 @@ export interface Enum {
   toys: string[];
   other: string[];
 }
+export interface LocationData {
+  type: Point;
+  coordinates: [number, number];
+  city?: string;
+}
+export enum Point {
+  Point = "Point",
+}

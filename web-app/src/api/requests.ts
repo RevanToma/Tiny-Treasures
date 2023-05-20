@@ -1,7 +1,8 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   Enum,
   IChatRoom,
+  LocationData,
   Post,
   PostQueryResult,
   SignInInfo,
@@ -146,4 +147,35 @@ export const patchPassword = async (passwordData: {
   const { data } = await api.patch("/users/updatePassword", passwordData);
   checkForError(data);
   return data;
+};
+export const patchLocation = async (locationData: LocationData) => {
+  const { data } = await api.patch("/users/updateLocation", locationData);
+  checkForError(data);
+  return data;
+};
+export const fetchLocation = async () => {
+  const { data } = await api.get("/users/getLocation");
+  checkForError(data);
+  return data;
+};
+
+export const getCityFromCoordinates = async (
+  latitude: number,
+  longitude: number
+) => {
+  const res = await axios.get(
+    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=50886d99f1c442bc9e7276e71131cf35`
+  );
+
+  const components = res.data.results[0].components;
+
+  return components;
+};
+export const getCoordinatesFromCity = async (cityName: string) => {
+  const res = await axios.get(
+    `https://api.opencagedata.com/geocode/v1/json?q=${cityName}&key=50886d99f1c442bc9e7276e71131cf35`
+  );
+  const geometry = res.data.results[0].geometry;
+  console.log("GEO", geometry);
+  return geometry;
 };

@@ -8,6 +8,7 @@ interface IInput {
   value?: string;
   name?: string;
   padding?: string;
+  readOnly?: boolean;
 }
 
 const Input: FC<IInput> = ({
@@ -17,6 +18,7 @@ const Input: FC<IInput> = ({
   value,
   name,
   padding,
+  readOnly,
 }) => {
   return (
     <S.StyledInput
@@ -26,6 +28,7 @@ const Input: FC<IInput> = ({
       type={type}
       onChange={onChange}
       name={name}
+      readOnly={readOnly}
     />
   );
 };

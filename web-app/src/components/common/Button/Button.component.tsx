@@ -7,6 +7,7 @@ export interface ButtonProps {
   children: ReactNode;
   isLoading?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  disabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -14,9 +15,14 @@ const Button: FC<ButtonProps> = ({
   onClick,
   children,
   isLoading,
+  disabled,
 }) => {
   return (
-    <S.StyledButton onClick={onClick} buttonType={buttonType}>
+    <S.StyledButton
+      onClick={onClick}
+      buttonType={buttonType}
+      disabled={disabled}
+    >
       {isLoading ? (
         <S.StyledButtonSpinner>
           <S.ButtonSpinner />
