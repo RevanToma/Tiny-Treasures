@@ -10,6 +10,17 @@ userRouter.post(
   authController.verifyPassword,
   authController.signIn
 );
+userRouter.patch(
+  "/updateLocation",
+  authController.protect,
+  userController.updateLocation
+);
+userRouter.get(
+  "/getLocation",
+  authController.protect,
+
+  userController.getLocation
+);
 
 userRouter.post("/logout", authController.logout);
 

@@ -49,3 +49,44 @@ export const getBasicUserData = catchAsync(
     });
   }
 );
+
+export const updateLocation = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const newLocation = req.body;
+    console.log(newLocation);
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+
+      { location: newLocation },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedUser) {
+      return next(new AppError("Error updating user location", 400));
+    }
+    console.log(req.user.id);
+    res.status(200).json({
+      status: "success",
+      data: {
+        user: updatedUser,
+      },
+    });
+  }
+);
+export const getLocation = catchAsync(
+  async (req: CustomRequest, res: Response, next: NextFunction) => {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return next(new AppError("No user found", 400));
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        location: user.location,
+      },
+    });
+  }
+);
