@@ -11,6 +11,7 @@ import { LocationData, Point } from "../../../types";
 import { getCoordinatesFromCity, patchLocation } from "../../../api/requests";
 import { useNavigate } from "react-router-dom";
 import { getCurrentLocation } from "../../../utils/helperfunctions";
+import CheckBox from "../../../components/common/CheckBox/CheckBox.component";
 
 const Location: React.FC = () => {
   const [location, setLocation] = useState<LocationData | null>(null);
@@ -93,13 +94,13 @@ const Location: React.FC = () => {
         gap="2.4rem"
       >
         <Title color="#646464"> Set your location</Title>
-        <p>This helps for pick ups and finding items near you</p>
-        <label htmlFor="locationCheckbox">Get current Location</label>
-        <input
-          type="checkbox"
-          checked={isChecked}
-          onChange={handleCheckboxChange}
-        />
+        <S.InfoPara>
+          This helps for pick ups and finding items near you
+        </S.InfoPara>
+        <Box flexDirection="row" gap="2rem" marginBottom="1rem">
+          <CheckBox checked={isChecked} onChange={handleCheckboxChange} />
+          <S.Label htmlFor="locationCheckbox">Get current Location</S.Label>
+        </Box>
       </Box>
       <h4>Or</h4>
 

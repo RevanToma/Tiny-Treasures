@@ -19,7 +19,7 @@ export interface IUser {
   data: {
     user: User;
   };
-  token: string;
+  // token: string;
   isSignedIn?: boolean;
   currentChatRoom?: IChatRoom;
 }
@@ -108,4 +108,10 @@ export interface LocationData {
 }
 export enum Point {
   Point = "Point",
+}
+
+export interface checkBox {
+  checked?: boolean;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
 }

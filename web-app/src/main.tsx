@@ -21,12 +21,12 @@ const persistor = persistStore(store);
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={<Spinner />} persistor={persistor}>
-        <QueryClientProvider client={queryClient}>
-          <App />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </PersistGate>
+      {/* <PersistGate loading={<Spinner />} persistor={persistor}> */}
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+      {/* </PersistGate> */}
     </Provider>
   </React.StrictMode>
 );

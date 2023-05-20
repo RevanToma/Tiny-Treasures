@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../../styles/themes";
 
 export const LocationDiv = styled.div`
   display: flex;
@@ -12,4 +13,15 @@ export const LocationDiv = styled.div`
     color: #646464;
     font-size: 1.6rem;
   }
+`;
+
+export const InfoPara = styled.p`
+  font-size: 1rem;
+  color: #646464;
+  ${theme.type.microcopy}
+`;
+
+export const Label = styled.label`
+  ${theme.type.body}
+  color:#646464
 `;
