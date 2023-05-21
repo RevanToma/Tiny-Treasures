@@ -21,5 +21,3 @@ jobs:
           GITLAB_PROJECT_ID: "45999197"
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }} 
           
-
-
