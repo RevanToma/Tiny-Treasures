@@ -2,32 +2,28 @@ services:
   - name: mongo:6.0
     alias: mongodb
 
-# Define stages
 stages:
-  - build
+  - build 
   - deploy
 
-# Define job templates
 .template:
   image: node:lts
 
-# Install packages for web app
 app-install:
   stage: build
   extends: .template
   script:
-    - cd web-app
-    - npm install
+   - cd web-app
+   - npm install
   artifacts:
     paths:
-      - web-app/node_modules
+      - web-app/node_modules 
 
-# Build web app
 app-build:
   stage: build
   extends: .template
   script:
-    - cd web-app
+    - cd web-app 
     - npm run build
   needs: ["app-install"]
   allow_failure:
@@ -37,19 +33,17 @@ app-build:
     paths:
       - web-app/dist
 
-# Install packages for backend
 backend-install:
   stage: build
   extends: .template
   script:
-    - cd backend
-    - npm install
+   - cd backend
+   - npm install
   artifacts:
     paths:
       - backend/node_modules
     expire_in: 1 day
 
-# Build backend
 backend-compile:
   stage: build
   extends: .template
@@ -62,7 +56,6 @@ backend-compile:
     paths:
       - backend
 
-# Build and deploy image
 build-image:
   stage: deploy
   image: docker:23.0.6
@@ -71,9 +64,7 @@ build-image:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    # Use previous image as a cache to speed up build process
     - docker pull $CI_REGISTRY_IMAGE:latest || true
-    # Use the commit sha to tag the image
     - >
       if [[ -z "$CI_COMMIT_TAG" ]]; then
         export VERSION="$CI_COMMIT_SHA"
