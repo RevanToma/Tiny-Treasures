@@ -147,9 +147,23 @@ const Category: React.FC = () => {
         >
           <Box
             width="100%"
+            alignItems="center"
+            flexDirection="row"
+            padding="20px"
+          >
+            <S.SearchInput
+              type="search"
+              placeholder="Search"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Button onClick={handleSearch} buttonType={ButtonType.SmallGreen}>
+              Search
+            </Button>
+          </Box>
+          <Box
+            width="100%"
             objectFit="contain"
             maxHeight="30rem"
-            overflow="hidden"
             justifyContent="center"
           >
             <S.MainImg src={imgUrls.clothesMain} alt="Clothes" />
@@ -161,15 +175,7 @@ const Category: React.FC = () => {
             alignItems="center"
             padding="0 2rem"
           >
-            <Box width="100%" alignItems="center" gap="10px">
-              <S.SearchInput
-                type="search"
-                placeholder="Search"
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Button onClick={handleSearch} buttonType={ButtonType.Primary}>
-                Search
-              </Button>
+            <Box width="100%" alignItems="center">
               <Button
                 onClick={() => setIsFilterPopupOpen(true)}
                 buttonType={ButtonType.SmallGreen}

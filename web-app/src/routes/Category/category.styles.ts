@@ -13,7 +13,7 @@ export const MainImg = styled.img`
 `;
 
 export const SearchInput = styled.input`
-  padding: 0.5rem 1rem;
+  padding: 2rem 3rem;
   width: 100%;
   max-width: 45rem;
   margin: 0 10px;
@@ -23,4 +23,5 @@ export const SearchInput = styled.input`
     outline-offset: 2px;
   }
   border-radius: 15px;
+  height: 20px;
 `;
