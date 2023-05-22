@@ -102,6 +102,7 @@ export const getAllUsersPosts = catchAsync(
     console.log(userId);
 
     const userPosts = await Post.find({ user: userId });
+
     res.status(200).json({
       status: "success",
       TotalPosts: userPosts.length,
