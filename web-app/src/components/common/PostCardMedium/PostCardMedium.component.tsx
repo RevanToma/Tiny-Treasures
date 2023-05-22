@@ -1,10 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import * as S from './postCardMedium.styles';
+import { useNavigate } from "react-router-dom";
+import * as S from "./postCardMedium.styles";
 
-import Box from '../Box/Box';
-import { theme } from '../../../styles/themes';
-import { Post } from '../../../types';
-import { getDate } from '../../../utils/helpers';
+import Box from "../Box/Box";
+import { theme } from "../../../styles/themes";
+import { Post } from "../../../types";
+import { getDate } from "../../../utils/helpers";
 
 interface PostCardMediumProps {
   post: Post;
@@ -13,9 +13,7 @@ interface PostCardMediumProps {
 const PostCardMedium: React.FC<PostCardMediumProps> = ({ post }) => {
   const navigate = useNavigate();
 
-  const gridTempCol = post.images.length === 1 ? '1fr' : '1fr 1fr';
-
-  console.log(post.categories, post.sizes);
+  const gridTempCol = post.images.length === 1 ? "1fr" : "1fr 1fr";
 
   return (
     <S.BoxWithChildren
