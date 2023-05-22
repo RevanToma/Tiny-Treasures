@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IChatRoom, IUser, User } from "../../types";
+import { IChatRoom, IUser, SignInInfo, SignUpInfo, User } from "../../types";
 import api from "../../api";
-import { getUserFromJwt } from "../../api/requests";
+import {
+  ApiPostSignInUser,
+  ApiPostSignUpUser,
+  getUserFromJwt,
+  signOutUserAsync,
+} from "../../api/requests";
 import { Socket } from "../../Sockets/Message.socket";
 
 interface UpdateData {
@@ -40,8 +45,37 @@ export const checkForLoggedInUser = createAsyncThunk(
   async () => {
     const user: IUser = await getUserFromJwt();
     if (!user) return;
+    // Socket.init(user.data.user._id);
 
     return user;
+  }
+);
+export const signInUser = createAsyncThunk(
+  "user/signInUser",
+  async ({ email, password }: SignInInfo) => {
+    const user: User = await ApiPostSignInUser(email, password);
+    if (!user) return;
+
+    Socket.init(user._id);
+    return user;
+  }
+);
+
+export const signUpUser = createAsyncThunk(
+  "user/signUpUser",
+  async (userData: SignUpInfo) => {
+    const user: User = await ApiPostSignUpUser(userData);
+    if (!user) return;
+    Socket.init(user._id);
+    return user;
+  }
+);
+export const signOutUser = createAsyncThunk(
+  "user/signOutUserAsync",
+  async () => {
+    await signOutUserAsync();
+
+    return;
   }
 );
 
@@ -81,8 +115,24 @@ const userSlice = createSlice({
         state.isSignedIn = true;
       }
     });
+    builder.addCase(signInUser.fulfilled, (state, { payload }) => {
+      if (payload) {
+        state.data.user = payload;
+        state.isSignedIn = true;
+      }
+    });
+    builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
+      if (payload) {
+        state.data.user = payload;
+        state.isSignedIn = true;
+      }
+    });
+    builder.addCase(signOutUser.fulfilled, (state) => {
+      state.data.user = initialState.data.user;
+      state.isSignedIn = false;
+    });
   },
 });
 
-export const { signSuccess, setCurrentChatRoom, signOut } = userSlice.actions;
+export const { setCurrentChatRoom, signOut } = userSlice.actions;
 export default userSlice.reducer;

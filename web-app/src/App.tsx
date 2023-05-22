@@ -42,6 +42,12 @@ const Location = lazy(
 const Notification = lazy(
   () => import("./routes/settings/Notification/Notification.component")
 );
+const MyItems = lazy(
+  () => import("./routes/settings/MyItems/MyItems.component")
+);
+const MyFavourites = lazy(
+  () => import("./routes/settings/MyFavourites/MyFavourites.component")
+);
 function App() {
   const user = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
@@ -94,6 +100,8 @@ function App() {
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="location" element={<Location />} />
               <Route path="notification" element={<Notification />} />
+              <Route path="myItems" element={<MyItems />} />
+              <Route path="myFavourites" element={<MyFavourites />} />
             </Route>
           </Routes>
         </Suspense>

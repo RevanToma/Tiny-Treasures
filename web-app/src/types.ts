@@ -48,6 +48,7 @@ export interface SignUpInfo {
 
 export interface Post {
   categories: string[];
+  mainCategory: string;
   condition: string;
   createdAt: string;
   description: string;

@@ -9,7 +9,7 @@ import {
 import NavigationItem from "./NavigationItems";
 import { useAppDispatch } from "../../hooks/useDispatch";
 import { signOut } from "../../store/user/userSlice";
-import { signOutUser } from "../../api/requests";
+
 import {
   FaBox,
   FaCoins,
@@ -29,7 +29,6 @@ const AccountSettings = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
 
   const handleLogOut = () => {
-    signOutUser();
     dispatch(signOut());
     navigate("/");
   };
@@ -96,7 +95,7 @@ const AccountSettings = () => {
               <NavigationItem
                 text="Favourites"
                 icon={<FaHeart size={20} color="#646464" />}
-                onClick={() => navigate("/account/favourites")}
+                onClick={() => navigate("/account/myFavourites")}
               />
               <NavigationItem
                 text="Log out"

@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 
-import { signSuccess } from "../../store/user/userSlice";
 import { SignUpInfo } from "../../types";
 import { useAppDispatch } from "../../hooks/useDispatch";
 import { useMutation } from "@tanstack/react-query";
 import { ApiPostSignUpUser } from "../../api/requests";
-import { AxiosError } from "axios";
 import Input from "../../components/common/Input/input.component";
 import Button from "../../components/common/Button/Button.component";
 import { ButtonType } from "../../components/common/Button/button.types";
@@ -16,6 +14,8 @@ import { InputType } from "../../components/common/Input/input.types";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Spinner from "../../components/common/spinner/spinner.component";
+import { signUpUser } from "../../store/user/userSlice";
+
 export const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -34,29 +34,24 @@ export const SignUp: React.FC = () => {
     mutationFn: ApiPostSignUpUser,
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formFields.password !== formFields.passwordConfirm) {
       alert("Password does not match");
+      return;
     }
     if (formFields.email !== formFields.confirmEmail) {
       alert("Emails does not match");
+      return;
     }
-
-    signUpWithEmailMutation.mutate(formFields, {
-      onSuccess: (data) => {
-        dispatch(signSuccess(data));
-        navigate("/");
-      },
-      onError: (error) => {
-        if (error instanceof AxiosError) alert(error.message);
-      },
-    });
+    await dispatch(signUpUser(formFields));
+    navigate("/");
   };
 
- const toggleShowPassword = () => {
+  const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+
   const toggleShowConfirmPassword = () => {
     setShowConfirmPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -73,7 +68,7 @@ export const SignUp: React.FC = () => {
 
         <h3>Sign Up</h3>
         {signUpWithEmailMutation.isLoading ? (
-          <Spinner/>
+          <Spinner />
         ) : (
           <>
             <S.SignUpForm onSubmit={handleSubmit}>
@@ -153,4 +148,5 @@ export const SignUp: React.FC = () => {
     </Box>
   );
 };
+
 export default SignUp;
