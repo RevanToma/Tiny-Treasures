@@ -39,6 +39,9 @@ const ChangePassword = lazy(
 const Location = lazy(
   () => import("./routes/settings/Location/Location.component")
 );
+const Notification = lazy(
+  () => import("./routes/settings/Notification/Notification.component")
+);
 function App() {
   const user = useSelector(selectUser);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
@@ -90,6 +93,7 @@ function App() {
               <Route path="changeEmail" element={<ChangeEmail />} />
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="location" element={<Location />} />
+              <Route path="notification" element={<Notification />} />
             </Route>
           </Routes>
         </Suspense>
