@@ -1,5 +1,5 @@
-import { PipelineStage } from 'mongoose';
-import { LocationData, StringObject } from './interfaces';
+import { PipelineStage } from "mongoose";
+import { LocationData, StringObject } from "./interfaces";
 
 interface ProjectStage {
   $project: {
@@ -19,7 +19,7 @@ export class PostFeatures {
     const geoNearStage: PipelineStage.GeoNear = {
       $geoNear: {
         near: this.userLocation,
-        distanceField: 'distance',
+        distanceField: "distance",
         spherical: true,
         distanceMultiplier: 0.001,
       },
@@ -30,12 +30,12 @@ export class PostFeatures {
 
   filter(): this {
     const queryObj = { ...this.queryString };
-    const excludedFields = ['search', 'page', 'sort', 'limit', 'fields'];
-    excludedFields.forEach(field => delete queryObj[field]);
+    const excludedFields = ["search", "page", "sort", "limit", "fields"];
+    excludedFields.forEach((field) => delete queryObj[field]);
 
     let matchStage: PipelineStage.Match = { $match: {} };
     Object.entries(queryObj).forEach(([key, value]) => {
-      matchStage.$match[key] = key === 'itemCount' ? Number(value) : value;
+      matchStage.$match[key] = key === "itemCount" ? Number(value) : value;
     });
     this.stages.push(matchStage);
     return this;
@@ -52,7 +52,7 @@ export class PostFeatures {
       return this;
     }
 
-    const fields = this.queryString.fields.split(',');
+    const fields = this.queryString.fields.split(",");
     fields.forEach((field: string) => {
       selectStage.$project[field] = 1;
     });
@@ -65,12 +65,12 @@ export class PostFeatures {
     if (!this.queryString.search) return this;
 
     const term = this.queryString.search;
-
+    console.log("term", term);
     const matchStage = {
       $match: {
         $or: [
-          { title: { $regex: `.*${term}.*`, $options: 'i' } },
-          { description: { $regex: `.*${term}.*`, $options: 'i' } },
+          { title: { $regex: `.*${term}.*`, $options: "i" } },
+          { description: { $regex: `.*${term}.*`, $options: "i" } },
         ],
       },
     };
@@ -81,11 +81,11 @@ export class PostFeatures {
   sort = (): this => {
     if (!this.queryString.sort) return this;
 
-    const sortBy = this.queryString.sort.split(',');
+    const sortBy = this.queryString.sort.split(",");
     const sortObj: Record<string, 1 | -1> = {};
     sortBy.forEach((field: string) => {
-      const sortOrder = field.startsWith('-') ? -1 : 1;
-      const fieldName = field.replace(/^-/, '');
+      const sortOrder = field.startsWith("-") ? -1 : 1;
+      const fieldName = field.replace(/^-/, "");
       sortObj[fieldName] = sortOrder;
     });
     const sortStage = { $sort: sortObj };
@@ -110,7 +110,7 @@ export class PostFeatures {
             },
             {
               $addFields: {
-                totalPages: { $ceil: { $divide: ['$totalResults', limit] } },
+                totalPages: { $ceil: { $divide: ["$totalResults", limit] } },
                 nextPage: page + 1,
               },
             },
@@ -126,7 +126,7 @@ export class PostFeatures {
         },
       },
       {
-        $unwind: '$metadata',
+        $unwind: "$metadata",
       },
     ];
 
