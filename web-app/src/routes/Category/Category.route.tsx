@@ -119,7 +119,6 @@ const Category: React.FC = () => {
   };
 
   const handleSearch = () => {
-    console.log(searchQuery);
     refetchPosts();
   };
 
@@ -162,8 +161,12 @@ const Category: React.FC = () => {
             alignItems="center"
             padding="0 2rem"
           >
-            <Box width="100%" alignItems="center">
-              <S.SearchInput onChange={(e) => setSearchQuery(e.target.value)} />
+            <Box width="100%" alignItems="center" gap="10px">
+              <S.SearchInput
+                type="search"
+                placeholder="Search"
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
               <Button onClick={handleSearch} buttonType={ButtonType.Primary}>
                 Search
               </Button>

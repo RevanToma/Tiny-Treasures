@@ -22,4 +22,5 @@ export const SearchInput = styled.input`
     outline: 3px solid ${theme.color.grayDark};
     outline-offset: 2px;
   }
+  border-radius: 15px;
 `;
