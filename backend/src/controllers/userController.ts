@@ -4,6 +4,7 @@ import { CustomRequest } from "../utils/expressInterfaces";
 import User, { UserDocument } from "../models/userModel";
 import { decodeToken, getToken } from "./authController";
 import AppError from "../utils/appError";
+import Post from "../models/postModel";
 
 // UTILITY MIDDLEWARE
 
@@ -86,6 +87,51 @@ export const getLocation = catchAsync(
       status: "success",
       data: {
         location: user.location,
+      },
+    });
+  }
+);
+export const getAllUsersPosts = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const userId = req.user.id;
+
+    console.log(userId);
+
+    const userPosts = await Post.find({ user: userId });
+    res.status(200).json({
+      status: "success",
+      TotalPosts: userPosts.length,
+      data: {
+        userPosts,
+      },
+    });
+  }
+);
+
+export const getFavoritePosts = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).populate("favorites");
+
+    if (!user) {
+      return next(new AppError("User not found", 404));
+    }
+
+    const favorites = user.favorites;
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        favorites,
       },
     });
   }

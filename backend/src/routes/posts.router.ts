@@ -1,12 +1,12 @@
-import express from 'express';
-import * as authController from '../controllers/authController';
-import * as postController from '../controllers/postController';
-import * as userController from '../controllers/userController';
+import express from "express";
+import * as authController from "../controllers/authController";
+import * as postController from "../controllers/postController";
+import * as userController from "../controllers/userController";
 
 export const postsRouter = express.Router();
 
 postsRouter
-  .route('/')
+  .route("/")
   .get(userController.attatchUserToReq, postController.getAllPosts)
   .post(
     authController.protect,
@@ -16,8 +16,14 @@ postsRouter
   );
 
 postsRouter.get(
-  '/:postId',
-
+  "/:postId",
   userController.attatchUserToReq,
   postController.getPost
 );
+
+// postsRouter.get(
+//   "/favoritePosts",
+//   userController.attatchUserToReq,
+//   authController.protect,
+//   userController.getFavoritePosts
+// );

@@ -106,7 +106,7 @@ export const sendUser = catchAsync(
   }
 );
 
-export const logout: RequestHandler = (req, res, next): void => {
+export const signOut: RequestHandler = (req, res, next): void => {
   // renames cookie to invalidate and sets to expire in 10s
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
