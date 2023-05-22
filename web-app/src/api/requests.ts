@@ -140,7 +140,7 @@ export const fetchEnums = async () => {
 
 export const getUserFromJwt = async () => {
   const { data } = await api.get(serverRoute.checkSignedIn);
-  console.log("DATA FROM CALL", data);
+  // console.log("DATA FROM CALL", data);
   return data;
 };
 
@@ -202,7 +202,7 @@ export const getCoordinatesFromCity = async (cityName: string) => {
 export const fetchUsersPosts = async () => {
   const { data } = await api.get("/users/posts");
   checkForError(data);
-
+  console.log("USER POST FROM REQUEST", data.data.userPosts);
   return data.data.userPosts;
 };
 export const fetchtFavoritePosts = async () => {

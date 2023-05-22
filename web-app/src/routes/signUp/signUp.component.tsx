@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState } from "react";
 
 import { SignUpInfo } from "../../types";
 import { useAppDispatch } from "../../hooks/useDispatch";
@@ -21,6 +21,7 @@ export const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setIsLoading] = useState(false);
 
   const [formFields, setFormFields] = useState<SignUpInfo>({
     name: "",
@@ -44,7 +45,14 @@ export const SignUp: React.FC = () => {
       alert("Emails does not match");
       return;
     }
-    await dispatch(signUpUser(formFields));
+    setIsLoading(true);
+    const action = await dispatch(signUpUser(formFields));
+    if (signUpUser.rejected.match(action)) {
+      alert("Sign-up failed. Please fil in everything correctly.");
+      setIsLoading(false);
+      return;
+    }
+
     navigate("/");
   };
 
@@ -63,88 +71,92 @@ export const SignUp: React.FC = () => {
 
   return (
     <Box alignItems="center" gap="2.4rem">
-      <S.SignUpContainer>
-        <img src={Logo} alt="Tiny Treasures Logo" />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <S.SignUpContainer>
+          <img src={Logo} alt="Tiny Treasures Logo" />
 
-        <h3>Sign Up</h3>
-        {signUpWithEmailMutation.isLoading ? (
-          <Spinner />
-        ) : (
-          <>
-            <S.SignUpForm onSubmit={handleSubmit}>
-              <Input
-                type={InputType.text}
-                onChange={handleChange}
-                placeholder="Name"
-                name={InputType.name}
-              />
+          <h3>Sign Up</h3>
+          {signUpWithEmailMutation.isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <S.SignUpForm onSubmit={handleSubmit}>
+                <Input
+                  type={InputType.text}
+                  onChange={handleChange}
+                  placeholder="Name"
+                  name={InputType.name}
+                />
 
-              <Input
-                type={InputType.email}
-                name={InputType.confirmEmail}
-                onChange={handleChange}
-                placeholder="Email"
-              />
-              <Input
-                type={InputType.email}
-                name={InputType.email}
-                onChange={handleChange}
-                placeholder="Repeat Email"
-              />
-              <S.InputPassword>
                 <Input
-                  type={showPassword ? InputType.text : InputType.password}
-                  name={InputType.password}
+                  type={InputType.email}
+                  name={InputType.confirmEmail}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder="Email"
                 />
-                {showPassword ? (
-                  <FaEyeSlash
-                    size={25}
-                    color="#AAAAAA"
-                    onClick={toggleShowPassword}
-                  />
-                ) : (
-                  <FaEye
-                    size={25}
-                    color="#AAAAAA"
-                    onClick={toggleShowPassword}
-                  />
-                )}
-              </S.InputPassword>
-              <S.InputPassword>
                 <Input
-                  type={
-                    showConfirmPassword ? InputType.text : InputType.password
-                  }
-                  name={InputType.passwordConfirm}
+                  type={InputType.email}
+                  name={InputType.email}
                   onChange={handleChange}
-                  placeholder="Repeat Password"
+                  placeholder="Repeat Email"
                 />
-                {showConfirmPassword ? (
-                  <FaEyeSlash
-                    size={25}
-                    color="#AAAAAA"
-                    onClick={toggleShowConfirmPassword}
+                <S.InputPassword>
+                  <Input
+                    type={showPassword ? InputType.text : InputType.password}
+                    name={InputType.password}
+                    onChange={handleChange}
+                    placeholder="Password"
                   />
-                ) : (
-                  <FaEye
-                    size={25}
-                    color="#AAAAAA"
-                    onClick={toggleShowConfirmPassword}
+                  {showPassword ? (
+                    <FaEyeSlash
+                      size={25}
+                      color="#AAAAAA"
+                      onClick={toggleShowPassword}
+                    />
+                  ) : (
+                    <FaEye
+                      size={25}
+                      color="#AAAAAA"
+                      onClick={toggleShowPassword}
+                    />
+                  )}
+                </S.InputPassword>
+                <S.InputPassword>
+                  <Input
+                    type={
+                      showConfirmPassword ? InputType.text : InputType.password
+                    }
+                    name={InputType.passwordConfirm}
+                    onChange={handleChange}
+                    placeholder="Repeat Password"
                   />
-                )}
-              </S.InputPassword>
-              <Button buttonType={ButtonType.Primary}>Sign Up</Button>
-            </S.SignUpForm>
-          </>
-        )}
-        <S.SignUpFooter>
-          <span>Support</span>
-          <span>How it Works</span>
-          <span>Reviews</span>
-        </S.SignUpFooter>
-      </S.SignUpContainer>
+                  {showConfirmPassword ? (
+                    <FaEyeSlash
+                      size={25}
+                      color="#AAAAAA"
+                      onClick={toggleShowConfirmPassword}
+                    />
+                  ) : (
+                    <FaEye
+                      size={25}
+                      color="#AAAAAA"
+                      onClick={toggleShowConfirmPassword}
+                    />
+                  )}
+                </S.InputPassword>
+                <Button buttonType={ButtonType.Primary}>Sign Up</Button>
+              </S.SignUpForm>
+            </>
+          )}
+          <S.SignUpFooter>
+            <span>Support</span>
+            <span>How it Works</span>
+            <span>Reviews</span>
+          </S.SignUpFooter>
+        </S.SignUpContainer>
+      )}
     </Box>
   );
 };

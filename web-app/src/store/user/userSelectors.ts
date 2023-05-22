@@ -2,14 +2,15 @@ import { RootState } from "../store";
 import { createSelector } from "@reduxjs/toolkit";
 
 const userSlice = (state: RootState) => state.user;
+// const userData = (state: RootState) => state.user;
 
 export const selectUser = createSelector(
   [userSlice],
-  (userSlice) => userSlice.data.user
+  (userSlice) => userSlice.user
 );
 export const selectLocation = createSelector(
   [userSlice],
-  (userSlice) => userSlice.data.user.location
+  (userSlice) => userSlice.user?.location
 );
 export const selectIsSignedIn = createSelector(
   [userSlice],
@@ -23,5 +24,5 @@ export const selectCurrentChatRoom = createSelector(
 
 export const selectUserCredits = createSelector(
   [userSlice],
-  (userSlice) => userSlice.data.user.credits
+  (userSlice) => userSlice.user?.credits
 );

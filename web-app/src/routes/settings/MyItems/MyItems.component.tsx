@@ -13,7 +13,8 @@ const MyItems: React.FC = () => {
     const getUsersPosts = async () => {
       try {
         const posts = await fetchUsersPosts();
-        setUserPosts(posts);
+        console.log("FROM MYITEMS", posts);
+        // setUserPosts(posts);
       } catch (error) {
         console.error("Error fetching user posts:", error);
       }

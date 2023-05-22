@@ -19,9 +19,10 @@ const Post: React.FC = () => {
   const queryClient = useQueryClient();
   const postId = useParams().id;
   const user = useSelector(selectUser);
-  const userId = user._id;
-
+  const userId = user?.data.data._id;
   const { data: post, isError, error, isLoading } = usePost(postId);
+  console.log("POST FROM POST", post?.user);
+  console.log("USER FROM POST", userId);
 
   useEffect(() => {
     const refetchChatsAndGoToChat = (data: IChatRoom) => {

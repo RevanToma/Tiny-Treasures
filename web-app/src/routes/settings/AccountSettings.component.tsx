@@ -8,7 +8,6 @@ import {
 
 import NavigationItem from "./NavigationItems";
 import { useAppDispatch } from "../../hooks/useDispatch";
-import { signOut } from "../../store/user/userSlice";
 
 import {
   FaBox,
@@ -22,6 +21,7 @@ import {
 } from "react-icons/fa";
 import { IoMdNotifications } from "react-icons/io";
 import { MdLocationPin } from "react-icons/md";
+import { signOutUser } from "../../store/user/userSlice";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const dispatch = useAppDispatch();
@@ -29,7 +29,7 @@ const AccountSettings = () => {
   const userSignedIn = useSelector(selectIsSignedIn);
 
   const handleLogOut = () => {
-    dispatch(signOut());
+    dispatch(signOutUser());
     navigate("/");
   };
 

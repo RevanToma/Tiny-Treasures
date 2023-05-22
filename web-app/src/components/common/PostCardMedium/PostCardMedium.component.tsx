@@ -6,7 +6,6 @@ import { theme } from "../../../styles/themes";
 import { Post } from "../../../types";
 import { getDate } from "../../../utils/helpers";
 import { useState } from "react";
-import { fetchLocation } from "../../../api/requests";
 
 interface PostCardMediumProps {
   post: Post;
@@ -14,7 +13,7 @@ interface PostCardMediumProps {
 
 const PostCardMedium: React.FC<PostCardMediumProps> = ({ post }) => {
   const navigate = useNavigate();
-  const [location, setLocation] = useState("");
+  // const [location, setLocation] = useState("");
   // const { city } = JSON.parse(localStorage.getItem("location") || "null");
 
   const gridTempCol = post.images.length === 1 ? "1fr" : "1fr 1fr";

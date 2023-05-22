@@ -50,8 +50,9 @@ const MyFavourites = lazy(
 );
 function App() {
   const user = useSelector(selectUser);
+  const userId = user?.data.data._id;
   const currentChatRoom = useSelector(selectCurrentChatRoom);
-
+  console.log("FROM APPP", user?.data.data._id);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -60,9 +61,8 @@ function App() {
     const refetchChats = () => {
       queryClient.invalidateQueries([fetchChats.name]);
     };
-
-    if (user._id) {
-      Socket.init(user._id);
+    if (userId) {
+      Socket.init(userId);
       socket().on("chat-message", (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           refetchChats();
@@ -70,7 +70,7 @@ function App() {
       });
       socket().on("create-chat", refetchChats);
     }
-  }, [user._id, currentChatRoom, queryClient]);
+  }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
     dispatch(checkForLoggedInUser());
