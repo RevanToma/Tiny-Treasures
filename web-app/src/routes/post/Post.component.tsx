@@ -25,7 +25,7 @@ const Post: React.FC = () => {
   const { data: post, isError, error, isLoading } = usePost(postId);
 
   console.log("POST FROM POST", post?.user);
-  console.log("USER FROM POST", userId);
+  console.log("USER FROM POST", user);
   console.log("POST OBJCET FROM POST", post);
   console.log("POST OBJCET FROM POST", user);
 

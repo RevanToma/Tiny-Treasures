@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import {
   selectAccessToken,
   selectCurrentChatRoom,
+  selectIsSignedIn,
   selectUser,
 } from "./store/user/userSelectors";
 import { Socket, socket } from "./Sockets/Message.socket";
@@ -56,9 +57,10 @@ const MyFavourites = lazy(
 function App() {
   const user = useSelector(selectUser);
   const accessToken = useSelector(selectAccessToken);
+  const isSignedIn = useSelector(selectIsSignedIn);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
-  // console.log("FROM APPP", user?.data.user._id);
-  const userId = user._id;
+  const userId = user?._id;
+  console.log("FROM APPP", user?._id);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -79,6 +81,7 @@ function App() {
   }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
+    console.log("ACCECC TOKEN FROM APPTSX", accessToken);
     if (!accessToken) dispatch(refreshAccessToken());
     else {
       const interceptor: number = setAuthInterceptor(accessToken);
@@ -88,7 +91,7 @@ function App() {
     }
 
     //dispatch(checkForLoggedInUser());
-  }, [accessToken, dispatch]);
+  }, [accessToken, isSignedIn, dispatch]);
 
   return (
     <>

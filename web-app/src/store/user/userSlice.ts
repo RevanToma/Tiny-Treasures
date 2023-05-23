@@ -1,5 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IChatRoom, IUser, SignInInfo, SignUpInfo, User } from "../../types";
+import {
+  IChatRoom,
+  SignInInfo,
+  SignUpInfo,
+  User,
+  UserState,
+} from "../../types";
 import api from "../../api";
 import {
   ApiPostSignInUser,
@@ -13,19 +19,12 @@ interface UpdateData {
   [key: string]: string | number | string[];
   field: string;
 }
-const initialState: IUser = {
-  data: {
-    user: {
-      email: "",
-      firstName: "",
-      credits: 0,
-      name: "",
-      saved: [],
-    },
-  },
+
+const initialState: UserState = {
+  user: null,
   isSignedIn: false,
-  accessToken: "",
   currentChatRoom: undefined,
+  accessToken: "",
 };
 export const updateUserAsync = createAsyncThunk(
   "user/updateUser",
@@ -57,7 +56,7 @@ export const signUpUser = createAsyncThunk(
     const user: User = await ApiPostSignUpUser(userData);
 
     if (!user) return;
-    Socket.init(user._id);
+    // Socket.init(user._id);
 
     return user;
   }
@@ -91,33 +90,32 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(updateUserAsync.fulfilled, (state, { payload }) => {
-      state.data.user = payload;
+      state.user = payload;
     });
     builder.addCase(refreshAccessToken.fulfilled, (state, { payload }) => {
       if (payload) {
-        state.data.user = {
-          ...payload.user,
-          credits: payload.user?.credits ?? 0,
-        };
+        console.log("payload ", payload.user);
+        state.user = payload.user;
         state.isSignedIn = true;
         state.accessToken = payload.accessToken;
       }
     });
     builder.addCase(signInUser.fulfilled, (state, { payload }) => {
       if (payload) {
-        state.data.user = payload;
+        state.user = payload;
         state.isSignedIn = true;
       }
     });
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {
       if (payload) {
-        state.data.user = payload;
+        state.user = payload;
         state.isSignedIn = true;
       }
     });
     builder.addCase(signOutUser.fulfilled, (state) => {
-      state.data.user = initialState.data.user;
+      state.user = null;
       state.isSignedIn = false;
+      state.accessToken = "";
     });
   },
 });
