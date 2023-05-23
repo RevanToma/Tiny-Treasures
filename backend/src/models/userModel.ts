@@ -98,13 +98,14 @@ const userSchema = new Schema<UserDocument>(
 
 userSchema.pre("save", async function (next) {
   if (!this.isNew) return next();
-
+/*
   if (this.password !== this.passwordConfirm) {
     return next(new AppError("The provided passwords do not match!", 400));
   }
+  
   if (this.email !== this.confirmEmail) {
     return next(new AppError("The provided emails do not match!", 400));
-  }
+  }*/
   next();
 });
 

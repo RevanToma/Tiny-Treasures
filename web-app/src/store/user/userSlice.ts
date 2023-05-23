@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IChatRoom, IUser, User } from "../../types";
 import api from "../../api";
-import { getUserFromJwt } from "../../api/requests";
+import { getAccessToken } from "../../api/requests";
 import { Socket } from "../../Sockets/Message.socket";
 
 interface UpdateData {
@@ -20,7 +20,7 @@ const initialState: IUser = {
     },
   },
   isSignedIn: false,
-  // token: "",
+  accessToken: "",
   currentChatRoom: undefined,
 };
 
@@ -35,15 +35,18 @@ export const updateUserAsync = createAsyncThunk(
   }
 );
 
-export const checkForLoggedInUser = createAsyncThunk(
-  "users/checkForLoggedInUser",
-  async () => {
-    const user: IUser = await getUserFromJwt();
-    if (!user) return;
 
-    return user;
+export const refreshAccessToken = createAsyncThunk(
+  "users/refreshAccessToken",
+  async () => {
+    const data = await getAccessToken();
+    console.log(data);
+    if(!data) return;
+
+    return data;
   }
 );
+
 
 const userSlice = createSlice({
   name: "user",
@@ -72,13 +75,14 @@ const userSlice = createSlice({
       state.data.user = payload;
     });
 
-    builder.addCase(checkForLoggedInUser.fulfilled, (state, { payload }) => {
-      if (payload) {
+    builder.addCase(refreshAccessToken.fulfilled, (state, {payload}) => {
+      if(payload) {
         state.data.user = {
-          ...payload.data.user,
-          credits: payload.data.user?.credits ?? 0,
+          ...payload.user,
+          credits: payload.user?.credits ?? 0,
         };
         state.isSignedIn = true;
+        state.accessToken = payload.accessToken;
       }
     });
   },

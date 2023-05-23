@@ -25,3 +25,8 @@ export const selectUserCredits = createSelector(
   [userSlice],
   (userSlice) => userSlice.data.user.credits
 );
+
+export const selectAccessToken = createSelector(
+  [userSlice],
+  (userSlice) => userSlice.accessToken
+)

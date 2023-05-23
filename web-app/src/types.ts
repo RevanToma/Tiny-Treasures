@@ -21,6 +21,7 @@ export interface IUser {
   };
   // token: string;
   isSignedIn?: boolean;
+  accessToken?: string;
   currentChatRoom?: IChatRoom;
 }
 export type SignInInfo = {

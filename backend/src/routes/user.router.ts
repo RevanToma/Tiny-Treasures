@@ -4,6 +4,11 @@ import * as userController from "../controllers/userController";
 
 export const userRouter = express.Router();
 
+userRouter.get(
+  "/refreshToken",
+  authController.refreshToken
+);
+
 userRouter.post("/signup", authController.signUp);
 userRouter.post(
   "/signin",
@@ -46,3 +51,4 @@ userRouter.get(
   authController.protect,
   userController.getBasicUserData
 );
+

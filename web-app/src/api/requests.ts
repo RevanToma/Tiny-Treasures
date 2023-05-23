@@ -2,13 +2,14 @@ import axios, { AxiosResponse } from "axios";
 import {
   Enum,
   IChatRoom,
+  IUser,
   LocationData,
   Post,
   PostQueryResult,
   SignInInfo,
   SignUpInfo,
 } from "../types";
-import api from "./index";
+import api, { serverURL } from "./index";
 import { serverRoute } from "../utils/urls/serverUrls";
 
 export interface ResponseWithData<T> {
@@ -120,11 +121,6 @@ export const fetchEnums = async () => {
   return data.data.data.data[0];
 };
 
-export const getUserFromJwt = async () => {
-  const { data } = await api.get(serverRoute.checkSignedIn);
-  return data;
-};
-
 export const patchName = async (newName: string) => {
   const { data } = await api.patch("/users/updateName", { newName });
   checkForError(data);
@@ -179,3 +175,13 @@ export const getCoordinatesFromCity = async (cityName: string) => {
   console.log("GEO", geometry);
   return geometry;
 };
+
+export const getAccessToken = async () => {
+  const { data } = await axios.get(serverRoute.refreshToken, {
+    headers: {"Content-Type": "application/json"},
+    withCredentials: true
+  });//await api.get("/users/refresh-token");
+  checkForError(data);
+  
+  return data.data;
+}

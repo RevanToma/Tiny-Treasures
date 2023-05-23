@@ -5,7 +5,7 @@ import Layout from "./routes/layout/Layout";
 import { lazy, Suspense, useEffect } from "react";
 import Spinner from "./components/common/spinner/spinner.component";
 import { useSelector } from "react-redux";
-import { selectCurrentChatRoom, selectUser } from "./store/user/userSelectors";
+import { selectAccessToken, selectCurrentChatRoom, selectUser } from "./store/user/userSelectors";
 import { Socket, socket } from "./Sockets/Message.socket";
 import { GlobalStyles } from "./styles/GlobalStyles";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +16,8 @@ import { useEnums } from "./hooks/useEnums";
 import Category from "./routes/Category/Category.route";
 import SaveUserAndRedirect from "./routes/SaveUserAndRedirect/SaveUserAndRedirect.component";
 import { useAppDispatch } from "./hooks/useDispatch";
-import { checkForLoggedInUser } from "./store/user/userSlice";
+import { refreshAccessToken } from "./store/user/userSlice";
+import api, { setAuthInterceptor } from "./api";
 
 const SignIn = lazy(() => import("./routes/signIn/signIn.component"));
 const DisplayedChat = lazy(
@@ -41,6 +42,7 @@ const Location = lazy(
 );
 function App() {
   const user = useSelector(selectUser);
+  const accessToken = useSelector(selectAccessToken);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
 
   const queryClient = useQueryClient();
@@ -64,8 +66,18 @@ function App() {
   }, [user._id, currentChatRoom, queryClient]);
 
   useEffect(() => {
-    dispatch(checkForLoggedInUser());
-  }, [dispatch]);
+    if(!accessToken)
+      dispatch(refreshAccessToken());
+    else {
+      const interceptor : number = setAuthInterceptor(accessToken);
+      return () => {
+        api.interceptors.request.eject(interceptor);
+      };
+    }
+
+    //dispatch(checkForLoggedInUser());
+  }, [accessToken, dispatch]);
+
   return (
     <>
       <GlobalStyles />
