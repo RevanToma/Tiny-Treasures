@@ -66,7 +66,6 @@ export const updateLocation = catchAsync(
     if (!updatedUser) {
       return next(new AppError("Error updating user location", 400));
     }
-    console.log(req.user.id);
     res.status(200).json({
       status: "success",
       data: {
