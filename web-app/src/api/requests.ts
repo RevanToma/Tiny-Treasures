@@ -2,17 +2,13 @@ import axios, { AxiosResponse } from "axios";
 import {
   Enum,
   IChatRoom,
-  IUser,
   LocationData,
   Post,
   PostQueryResult,
-  SignInInfo,
   SignUpInfo,
 } from "../types";
 import api from "./index";
 import { serverRoute } from "../utils/urls/serverUrls";
-import { url } from "inspector";
-import { posts } from "./../../../backend/src/dev/postData";
 
 export interface ResponseWithData<T> {
   status: string;
