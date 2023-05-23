@@ -39,8 +39,8 @@ const createAndSendJWT = (
   res.cookie("jwt", token, {
     expires: new Date(Date.now() + jwtExpires * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    sameSite: "none",
-    secure: true, // req.secure || req.headers["x-forwarded-proto"] === "https",
+    // sameSite: "none",
+    secure: false, // req.secure || req.headers["x-forwarded-proto"] === "https",
   });
 
   // remove password from response
@@ -48,13 +48,14 @@ const createAndSendJWT = (
 
   // redirect if logged in from google
   if (redirect) {
+    console.log("redirect");
     res.redirect("http://localhost:5173/");
   } else {
     res.status(statusCode).json({
       status: "success",
       token,
       data: {
-        user,
+        data: user,
       },
     });
   }
@@ -111,6 +112,7 @@ export const signOut: RequestHandler = (req, res, next): void => {
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: false,
   });
 
   res.status(200).json({ status: "success" });
@@ -264,6 +266,7 @@ export const protect = catchAsync(
     next: NextFunction
   ): Promise<void> => {
     const token = getToken(req);
+    console.log(token);
 
     if (!token) {
       return next(
