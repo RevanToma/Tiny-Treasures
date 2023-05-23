@@ -9,14 +9,21 @@ interface DecodedJwt extends JwtPayload {
   id: string;
 }
 
-const signToken = (id: string): string | void => {
+const signRefreshToken = (id: string): string | void => {
   if (!process.env.JWT_SECRET) return;
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
 
-const createAndSendJWT = (
+const signAccessToken = (id: string): string | void => {
+  if (!process.env.JWT_SECRET) return;
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
+  });
+};
+
+const createAndSendRefreshToken = (
   user: UserDocument,
   statusCode: number,
   req: Request,
@@ -25,7 +32,7 @@ const createAndSendJWT = (
   redirect: boolean = false
 ): void => {
   // create new token
-  const token = signToken(user.id);
+  const token = signRefreshToken(user.id);
   if (!token) {
     return next(
       new AppError("There was a problem signing you in. Try again later", 400)
@@ -48,8 +55,7 @@ const createAndSendJWT = (
 
   // redirect if logged in from google
   if (redirect) {
-    console.log("redirect");
-    res.redirect("http://localhost:5173/");
+    res.redirect("http://localhost:5173/"); //TODO: This shouldn't be hardcoded
   } else {
     res.status(statusCode).json({
       status: "success",
@@ -72,7 +78,7 @@ export const signUp = catchAsync(
 
     const newUser: UserDocument = await User.create(req.body);
 
-    createAndSendJWT(newUser, 200, req, res, next);
+    createAndSendRefreshToken(newUser, 200, req, res, next);
   }
 );
 
@@ -82,7 +88,9 @@ export const signIn = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    createAndSendJWT(req.user, 200, req, res, next);
+    console.log("signin");
+    console.log(req.user);
+    createAndSendRefreshToken(req.user, 200, req, res, next);
   }
 );
 
@@ -93,7 +101,7 @@ export const googleAuthCallback = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    createAndSendJWT(req.user, 200, req, res, next, true);
+    createAndSendRefreshToken(req.user, 200, req, res, next, true);
   }
 );
 
@@ -103,7 +111,7 @@ export const sendUser = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    createAndSendJWT(req.user, 200, req, res, next, true);
+    createAndSendRefreshToken(req.user, 200, req, res, next, true);
   }
 );
 
@@ -137,7 +145,7 @@ export const updatePassword = catchAsync(
 
     await req.user.save();
 
-    createAndSendJWT(req.user, 200, req, res, next);
+    createAndSendRefreshToken(req.user, 200, req, res, next);
   }
 );
 
@@ -171,7 +179,7 @@ export const updateEmail = catchAsync(
 
     await req.user.save();
 
-    createAndSendJWT(req.user, 200, req, res, next);
+    createAndSendRefreshToken(req.user, 200, req, res, next);
   }
 );
 export const updateName = catchAsync(
@@ -189,7 +197,7 @@ export const updateName = catchAsync(
 
     await req.user.save();
 
-    createAndSendJWT(req.user, 200, req, res, next);
+    createAndSendRefreshToken(req.user, 200, req, res, next);
   }
 );
 
@@ -226,17 +234,28 @@ export const verifyPassword = catchAsync(
   }
 );
 
-export const getToken = (req: CustomRequest) => {
+export const getRefreshToken = (req: CustomRequest) => {
+  let token: string = "";
+  console.log(req.cookies.jwt);
+  if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  }
+  if (token.length < 5) {
+    console.log("didnt find refresh token");
+  }
+
+  return token;
+};
+
+export const getAccessToken = (req: CustomRequest) => {
   let token: string = "";
 
   if (req.headers.authorization?.startsWith("Bearer")) {
     token = req.headers.authorization.split(" ")[1];
-  } else if (req.cookies.jwt) {
-    token = req.cookies.jwt;
   }
 
   if (token.length < 5) {
-    console.log("didnt find");
+    console.log("didnt find access token");
   }
 
   return token;
@@ -265,8 +284,7 @@ export const protect = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const token = getToken(req);
-    console.log(token);
+    const token = getAccessToken(req);
 
     if (!token) {
       return next(
@@ -298,5 +316,48 @@ export const protect = catchAsync(
 
     req.user = currentUser;
     next();
+  }
+);
+
+export const refreshToken = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const token = getRefreshToken(req);
+
+    if (!token) {
+      return next(new AppError("Refresh token invalid", 401));
+    }
+
+    const decoded = await decodeToken(token);
+
+    if (!decoded) {
+      return next(
+        new AppError(
+          "There was a problem verifying that you are logged in.",
+          403
+        )
+      );
+    }
+
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return next(
+        new AppError("The owner of the token no longer exists!", 401)
+      );
+    }
+
+    const accessToken = signAccessToken(user._id);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        accessToken,
+        user,
+      },
+    });
   }
 );

@@ -22,6 +22,7 @@ export interface IUser {
 
   // token: string;
   isSignedIn?: boolean;
+  accessToken?: string;
   currentChatRoom?: IChatRoom;
 }
 export type SignInInfo = {
@@ -30,6 +31,7 @@ export type SignInInfo = {
 };
 export interface User {
   // data?: any;
+
   _id?: string;
   email: string;
   firstName: string;

@@ -6,11 +6,11 @@ const userSlice = (state: RootState) => state.user;
 
 export const selectUser = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user
+  (userSlice) => userSlice.data.user
 );
 export const selectLocation = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user?.location
+  (userSlice) => userSlice.data.user.location
 );
 export const selectIsSignedIn = createSelector(
   [userSlice],
@@ -24,5 +24,10 @@ export const selectCurrentChatRoom = createSelector(
 
 export const selectUserCredits = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user?.credits
+  (userSlice) => userSlice.data.user.credits
+);
+
+export const selectAccessToken = createSelector(
+  [userSlice],
+  (userSlice) => userSlice.accessToken
 );

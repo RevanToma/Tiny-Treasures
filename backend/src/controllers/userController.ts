@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { CustomRequest } from "../utils/expressInterfaces";
 import User, { UserDocument } from "../models/userModel";
-import { decodeToken, getToken } from "./authController";
+import { decodeToken, getAccessToken } from "./authController";
 import AppError from "../utils/appError";
 import Post from "../models/postModel";
 
@@ -14,7 +14,7 @@ export const attatchUserToReq = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const token = getToken(req);
+    const token = getAccessToken(req);
 
     if (!token) return next();
 

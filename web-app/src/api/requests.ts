@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import {
   Enum,
   IChatRoom,
+  IUser,
   LocationData,
   Post,
   PostQueryResult,
@@ -86,6 +87,7 @@ export const ApiPostSignUpUser = async ({
     password,
     passwordConfirm,
   });
+  checkForError(data);
   return data;
 };
 
@@ -200,6 +202,15 @@ export const getCoordinatesFromCity = async (cityName: string) => {
   return geometry;
 };
 
+export const getAccessToken = async () => {
+  const { data } = await axios.get(serverRoute.refreshToken, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  }); //await api.get("/users/refresh-token");
+  checkForError(data);
+
+  return data.data;
+};
 export const fetchUsersPosts = async () => {
   const { data } = await api.get("/users/posts");
   checkForError(data);

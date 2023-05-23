@@ -5,7 +5,11 @@ import Layout from "./routes/layout/Layout";
 import { lazy, Suspense, useEffect } from "react";
 import Spinner from "./components/common/spinner/spinner.component";
 import { useSelector } from "react-redux";
-import { selectCurrentChatRoom, selectUser } from "./store/user/userSelectors";
+import {
+  selectAccessToken,
+  selectCurrentChatRoom,
+  selectUser,
+} from "./store/user/userSelectors";
 import { Socket, socket } from "./Sockets/Message.socket";
 import { GlobalStyles } from "./styles/GlobalStyles";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +20,8 @@ import { useEnums } from "./hooks/useEnums";
 import Category from "./routes/Category/Category.route";
 import SaveUserAndRedirect from "./routes/SaveUserAndRedirect/SaveUserAndRedirect.component";
 import { useAppDispatch } from "./hooks/useDispatch";
-import { checkForLoggedInUser } from "./store/user/userSlice";
+import { refreshAccessToken } from "./store/user/userSlice";
+import api, { setAuthInterceptor } from "./api";
 
 const SignIn = lazy(() => import("./routes/signIn/signIn.component"));
 const DisplayedChat = lazy(
@@ -50,10 +55,10 @@ const MyFavourites = lazy(
 );
 function App() {
   const user = useSelector(selectUser);
-  const userId = user?._id;
-  // const userId = user?._id;
+  const accessToken = useSelector(selectAccessToken);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
   // console.log("FROM APPP", user?.data.user._id);
+  const userId = user._id;
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -74,12 +79,17 @@ function App() {
   }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
-    console.log("RELOAD!!!!");
-
-    if (!user) {
-      dispatch(checkForLoggedInUser());
+    if (!accessToken) dispatch(refreshAccessToken());
+    else {
+      const interceptor: number = setAuthInterceptor(accessToken);
+      return () => {
+        api.interceptors.request.eject(interceptor);
+      };
     }
-  }, []);
+
+    //dispatch(checkForLoggedInUser());
+  }, [accessToken, dispatch]);
+
   return (
     <>
       <GlobalStyles />
