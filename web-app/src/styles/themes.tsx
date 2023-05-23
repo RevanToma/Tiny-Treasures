@@ -122,6 +122,12 @@ export const theme = {
       font-size: 1.6rem;
       font-weight: 400;
     `,
+    bodyBold: css`
+      font-family: "Open Sans";
+      font-size: 1.6rem;
+      font-weight: 700;
+      Line height: 21.79px;
+    `,
     buttons: css`
       font-family: "Open Sans";
       font-size: 20rem;

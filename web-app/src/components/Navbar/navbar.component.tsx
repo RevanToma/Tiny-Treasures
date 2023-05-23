@@ -21,10 +21,6 @@ const Navbar: React.FC = () => {
             <S.NavText>Home</S.NavText>
           </Box>
         </S.NavLink>
-        <Box alignItems="center" gap="5px">
-          <FaSearch size={ICON_SIZE} />
-          <S.NavText>Search</S.NavText>
-        </Box>
         <S.NavLink to="/giveaway">
           <Box alignItems="center" gap="5px">
             <FaGift size={ICON_SIZE} />

@@ -120,6 +120,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
           <FaTimes size={24} />
         </Box>
       </Box>
+
       <h1>Filter</h1>
 
       <Box

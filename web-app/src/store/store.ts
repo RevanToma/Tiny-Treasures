@@ -1,14 +1,7 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import userReducer from "./user/userSlice";
 import queryReducer from "./query/querySlice";
-import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-
-const persistConfig = {
-  key: "root",
-  storage,
-};
 
 // const rootReducer = combineReducers({
 //   user: userReducer,

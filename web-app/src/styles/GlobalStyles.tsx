@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
-import { theme } from './themes';
+import { createGlobalStyle } from "styled-components";
+import { theme } from "./themes";
 
 export const GlobalStyles = createGlobalStyle`
 
@@ -45,5 +45,16 @@ button {
   height: ${theme.button.height};
   color: ${theme.color.primaryOffWhite};
   ${theme.type.buttons}
+}
+h3{
+  font-family: 'Open Sans';
+  font-weight: 700;
+font-size: 1.6rem;
+line-height: 22px;
+color:#646464;
+}
+
+span{
+  ${theme.type.bodyBold}
 }
 `;

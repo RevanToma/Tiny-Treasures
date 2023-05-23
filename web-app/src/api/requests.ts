@@ -11,6 +11,7 @@ import {
 } from "../types";
 import api, { serverURL } from "./index";
 import { serverRoute } from "../utils/urls/serverUrls";
+import { url } from "inspector";
 
 export interface ResponseWithData<T> {
   status: string;
@@ -90,15 +91,31 @@ export const ApiPostSignUpUser = async ({
 type getPostParams = {
   pageParam: number;
   query: string | undefined;
+  searchQuery: string | undefined;
 };
 
 export const fetchPosts = async ({
   pageParam = 1,
   query = "",
+  searchQuery,
 }: getPostParams): Promise<PostQueryResult> => {
+  console.log("fetched", searchQuery);
   const limit = 20;
+  let urlQuery = "posts/?";
+  if (pageParam) {
+    urlQuery += `&page=${pageParam}&limit=${limit}`;
+  }
+  if (query) {
+    urlQuery += `&limit=${limit}`;
+  }
+  if (searchQuery) {
+    urlQuery += `&search=${searchQuery}`;
+  }
+
+  console.log(urlQuery);
+
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
-    await api.get(`posts/?page=${pageParam}&limit=${limit}&${query}`);
+    await api.get(urlQuery);
   checkForError(data.data);
   return data.data.data.data[0];
 };
