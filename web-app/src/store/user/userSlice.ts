@@ -85,20 +85,8 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    signSuccess: (state, { payload }: PayloadAction<IUser>) => {
-      state.data.user = payload.data.user;
-      // state.token = payload.token;
-      state.isSignedIn = true;
-      Socket.init(state.data.user._id);
-    },
     setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
       state.currentChatRoom = payload;
-    },
-    signOut: (state) => {
-      state.data.user = initialState.data.user;
-      state.isSignedIn = false;
-      // state.token = "";
-      state.currentChatRoom = initialState.currentChatRoom;
     },
   },
   extraReducers: (builder) => {
@@ -133,5 +121,5 @@ const userSlice = createSlice({
     });
   },
 });
-export const { signSuccess, setCurrentChatRoom, signOut } = userSlice.actions;
+export const { setCurrentChatRoom } = userSlice.actions;
 export default userSlice.reducer;
