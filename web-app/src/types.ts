@@ -17,7 +17,6 @@ export type IChatRoom = {
 };
 export interface IUser {
   data: {
-    data?: any;
     user: User;
   };
 
@@ -30,7 +29,7 @@ export type SignInInfo = {
   password: string;
 };
 export interface User {
-  data?: any;
+  // data?: any;
   _id?: string;
   email: string;
   firstName: string;

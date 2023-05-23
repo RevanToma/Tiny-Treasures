@@ -50,9 +50,10 @@ const MyFavourites = lazy(
 );
 function App() {
   const user = useSelector(selectUser);
-  const userId = user?.data.data._id;
+  const userId = user?._id;
+  // const userId = user?._id;
   const currentChatRoom = useSelector(selectCurrentChatRoom);
-  console.log("FROM APPP", user?.data.data._id);
+  // console.log("FROM APPP", user?.data.user._id);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -73,8 +74,12 @@ function App() {
   }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
-    dispatch(checkForLoggedInUser());
-  }, [dispatch]);
+    console.log("RELOAD!!!!");
+
+    if (!user) {
+      dispatch(checkForLoggedInUser());
+    }
+  }, []);
   return (
     <>
       <GlobalStyles />

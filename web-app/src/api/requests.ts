@@ -68,7 +68,8 @@ export const ApiPostSignInUser = async (email: string, password: string) => {
     email,
     password,
   });
-  return data;
+  console.log("LOGIN!!!!!!!!!!", data.data.data);
+  return data.data.data;
 };
 
 export const ApiPostSignUpUser = async ({
@@ -139,9 +140,9 @@ export const fetchEnums = async () => {
 };
 
 export const getUserFromJwt = async () => {
-  const { data } = await api.get(serverRoute.checkSignedIn);
-  // console.log("DATA FROM CALL", data);
-  return data;
+  const { data } = await api.get("/users/checkLoggedIn");
+  console.log("DATA FROM CALL", data.data.data);
+  return data.data.data;
 };
 
 export const patchName = async (newName: string) => {

@@ -55,10 +55,11 @@ export const checkForLoggedInUser = createAsyncThunk(
   "users/checkForLoggedInUser",
   async () => {
     const user: User = await getUserFromJwt();
+    console.log("FROM SLICE CHECK LOGGED IN", user);
+    // console.log("FROM SLICE", user.data.data._id);
+    // console.log("FROM SLICE", user.data.user._id);
     if (!user) return;
-    console.log(user._id);
     Socket.init(user._id);
-
     return user;
   }
 );
@@ -66,9 +67,9 @@ export const signInUser = createAsyncThunk(
   "user/signInUser",
   async ({ email, password }: SignInInfo) => {
     const user: User = await ApiPostSignInUser(email, password);
-
+    console.log(user);
     if (!user) return;
-    console.log(user._id);
+    // console.log("FROM SLICE SIGNIN", user);
     Socket.init(user._id);
 
     return user;
@@ -80,7 +81,7 @@ export const signUpUser = createAsyncThunk(
   async (userData: SignUpInfo) => {
     const user: User = await ApiPostSignUpUser(userData);
     if (!user) return;
-    Socket.init(user.data._id);
+    Socket.init(user._id);
 
     return user;
   }
@@ -125,7 +126,7 @@ const userSlice = createSlice({
       if (payload) {
         state.user = payload;
 
-        // Socket.init(state.user._id);
+        Socket.init(state.user._id);
 
         // state.data = {
         //   ...payload.data,
@@ -139,6 +140,7 @@ const userSlice = createSlice({
       if (payload) {
         state.user = payload;
         state.isSignedIn = true;
+        // Socket.init(state.user._id);
       }
     });
     builder.addCase(signUpUser.fulfilled, (state, { payload }) => {

@@ -22,6 +22,7 @@ import {
 import { IoMdNotifications } from "react-icons/io";
 import { MdLocationPin } from "react-icons/md";
 import { signOutUser } from "../../store/user/userSlice";
+
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const dispatch = useAppDispatch();
@@ -30,7 +31,7 @@ const AccountSettings = () => {
 
   const handleLogOut = () => {
     dispatch(signOutUser());
-    navigate("/");
+    // navigate("/");
   };
 
   return (
