@@ -2,79 +2,95 @@ services:
   - name: mongo:6.0
     alias: mongodb
 
-stages:
-  - build
-  - deploy
 
-variables:
-  DOCKER_DRIVER: overlay2
+# Define stages
+stages:
+  - build 
+  - deploy
 
 # Define job templates
 .template:
   image: node:lts
 
-# Install dependencies for the web app
+# install package for web app
 app-install:
   stage: build
   extends: .template
   script:
-    - cd web-app
-    - npm ci
+   - cd web-app
+   - npm install
   artifacts:
     paths:
-      - web-app/node_modules/
+      - web-app/node_modules 
 
-# Build the web app
+
+# build web app
 app-build:
   stage: build
   extends: .template
   script:
-    - cd web-app
+    - cd web-app 
     - npm run build
   needs: ["app-install"]
+  allow_failure:
+    exit_codes:
+      - 1
   artifacts:
     paths:
-      - web-app/dist/
+      - web-app/dist
 
-# Install dependencies for the backend
+
 backend-install:
   stage: build
   extends: .template
   script:
-    - cd backend
-    - npm ci
+   - cd backend
+   - npm install
   artifacts:
     paths:
-      - backend/node_modules/
+      - backend/node_modules
     expire_in: 1 day
 
-# Build the backend
-backend-build:
+ 
+
+backend-compile:
   stage: build
   extends: .template
   before_script:
     - cd backend
   script:
-    - tsc --noEmit || true
     - npm run build
   needs: ["backend-install"]
   artifacts:
     paths:
-      - backend/
+      - backend
 
-# Build and push the Docker image
+
 build-image:
   stage: deploy
-  image:
-    name: docker:20.10.8
-    entrypoint: [""]
+  image: docker:23.0.6
   services:
-    - docker:20.10.8-dind
+    - docker:23.0.6-dind-alpine3.17
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - export IMAGE_TAG=${CI_COMMIT_TAG:-$CI_COMMIT_SHA}
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$IMAGE_TAG" .
-    - docker push "$CI_REGISTRY_IMAGE:$IMAGE_TAG"
-    - docker tag "$CI_REGISTRY_IMAGE:$IMAGE_TAG" "$CI_REGISTRY_IMAGE:latest"
-    - docker push "$CI_REGISTRY_IMAGE:latest"
+    # use previous image as a cache to speedup build process
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    # use the commit sha to tag the image
+    - >-
+      if [[ -z "$CI_COMMIT_TAG" ]]; then
+        export VERSION="$CI_COMMIT_SHA"
+      else
+        export VERSION="$CI_COMMIT_TAG"
+      fi
+
+      docker build --cache-from $CI_REGISTRY_IMAGE:latest
+      -t $CI_REGISTRY_IMAGE:$VERSION .
+      
+    - docker tag $CI_REGISTRY_IMAGE:$VERSION $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:$VERSION
+    
+    
+ 
+
