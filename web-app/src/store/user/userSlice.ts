@@ -7,7 +7,7 @@ import {
   getAccessToken,
   signOutUserAsync,
 } from "../../api/requests";
-import { Socket } from "../../Sockets/Message.socket";
+import { socket, Socket } from "../../Sockets/Message.socket";
 
 interface UpdateData {
   [key: string]: string | number | string[];
@@ -45,7 +45,6 @@ export const signInUser = createAsyncThunk(
 
     if (!user) return;
     console.log(user._id);
-    Socket.init(user._id);
 
     return user;
   }
@@ -57,7 +56,6 @@ export const signUpUser = createAsyncThunk(
     const user: User = await ApiPostSignUpUser(userData);
 
     if (!user) return;
-    Socket.init(user._id);
 
     return user;
   }
@@ -76,8 +74,8 @@ export const refreshAccessToken = createAsyncThunk(
   "users/refreshAccessToken",
   async () => {
     const data = await getAccessToken();
-    console.log(data);
     if (!data) return;
+    Socket.init(data.accessToken);
     return data;
   }
 );

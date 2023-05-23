@@ -38,7 +38,6 @@ const Post: React.FC = () => {
     };
 
     if (userId) {
-      Socket.init(userId);
       socket().on("create-chat", refetchChatsAndGoToChat);
     }
   }, [userId, queryClient, navigate, post?._id]);
@@ -49,7 +48,7 @@ const Post: React.FC = () => {
   const { user: postUser } = post;
 
   const goToChat = (): void => {
-    socket().emit("create-chat", { receiverId: postUser, userId, post });
+    socket().emit("create-chat", { receiverId: postUser, post });
   };
 
   const handleEditPost = () => {

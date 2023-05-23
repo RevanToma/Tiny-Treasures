@@ -68,7 +68,7 @@ function App() {
       queryClient.invalidateQueries([fetchChats.name]);
     };
     if (userId) {
-      Socket.init(userId);
+      Socket.init(accessToken);
       socket().on("chat-message", (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           refetchChats();

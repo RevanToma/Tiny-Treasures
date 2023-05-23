@@ -16,8 +16,6 @@ export const setAuthInterceptor = (accessToken: string) => {
   return api.interceptors.request.use(async (config) => {
     config.withCredentials = true;
     config.headers["Content-Type"] = "application/json";
-
-    console.log("setAuthInterceptor ", accessToken);
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }

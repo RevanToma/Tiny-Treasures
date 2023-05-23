@@ -2,11 +2,11 @@ import { connectToMongoDB } from "./db/mongoose_connection";
 import { app } from "./app";
 import http from "http";
 import { Server } from "socket.io";
-import ChatModel from "./models/chatRoomModel";
+import { SocketServer } from "./utils/socketServer";
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
-const io = new Server(server, {
+export const io = new Server(server, {
   cors: { origin: "*" },
 });
 
@@ -23,64 +23,4 @@ const start = async () => {
 
 start();
 
-const connectedUsers: { [key: string]: string } = {};
-
-io.on("connection", (socket) => {
-  const userId: string | undefined = socket.handshake.query?.userId?.toString();
-
-  if (userId) {
-    connectedUsers[userId] = socket.id;
-  }
-
-  socket.on("create-chat", async (data) => {
-    const { receiverId, userId, post } = data;
-    console.log("id", post._id);
-
-    console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
-
-    let chatRoom;
-
-    chatRoom = await ChatModel.findOne({
-      members: {
-        $all: [receiverId, userId],
-      },
-      post: post._id,
-    });
-
-    if (!chatRoom) {
-      chatRoom = await ChatModel.create({
-        members: [receiverId, userId],
-        messages: [],
-        post: post._id,
-      }).then((doc) => {
-        return ChatModel.populate(doc, { path: "post" });
-      });
-    }
-
-    io.to([connectedUsers[userId], connectedUsers[receiverId]]).emit(
-      "create-chat",
-      chatRoom
-    );
-  });
-
-  socket.on("typing", (typingInfo) => {
-    const { receiverId } = typingInfo;
-
-    io.to(connectedUsers[receiverId]).emit("typing", typingInfo);
-  });
-
-  socket.on("chat-message", (msg) => {
-    const { senderId, receiverId, postId, roomId } = msg;
-    console.log("postid", postId);
-    console.log("THIS", msg);
-    io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
-      "chat-message",
-      msg
-    );
-
-    ChatModel.findById(roomId).then((chat) => {
-      chat?.messages.push(msg);
-      chat?.save();
-    });
-  });
-});
+new SocketServer(io).start();
