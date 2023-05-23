@@ -1,9 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-
-export const serverURL = "http://127.0.0.1:8000";
+import { apiUrl } from "../utils/urls/serverUrls";
 
 const api = axios.create({
-  baseURL: `${serverURL}/api/v1`,
+  baseURL: `${apiUrl}`,
 });
 
 api.interceptors.request.use(async (config) => {

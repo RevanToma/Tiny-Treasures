@@ -9,7 +9,7 @@ import {
   SignInInfo,
   SignUpInfo,
 } from "../types";
-import api, { serverURL } from "./index";
+import api from "./index";
 import { serverRoute } from "../utils/urls/serverUrls";
 import { url } from "inspector";
 

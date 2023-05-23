@@ -88,6 +88,8 @@ export const signIn = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
+    console.log("signin");
+    console.log(req.user);
     createAndSendRefreshToken(req.user, 200, req, res, next);
   }
 );
