@@ -210,7 +210,7 @@ export const getAccessToken = async () => {
 export const fetchUsersPosts = async () => {
   const { data } = await api.get("/users/posts");
   checkForError(data);
-  console.log("USER POST FROM REQUEST", data.data.userPosts);
+  console.log("USER POST FROM REQUEST", data);
   return data.data.userPosts;
 };
 export const fetchtFavoritePosts = async () => {
