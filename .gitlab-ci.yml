@@ -29,6 +29,8 @@ app-build:
   allow_failure:
     exit_codes:
       - 1
+  variables:
+    CI: "false"    
   artifacts:
     paths:
       - web-app/dist
