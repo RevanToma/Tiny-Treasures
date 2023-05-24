@@ -21,6 +21,9 @@
       "noUnusedLocals": false,
     "noUnusedParameters": false,
       "strictNullChecks": false,
+        "strict": false,
+          "noImplicitAny": false,
+    "strictPropertyInitialization": false,
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
