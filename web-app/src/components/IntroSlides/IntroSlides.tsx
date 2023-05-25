@@ -5,30 +5,35 @@ import Box from "../common/Box/Box";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 type IIntroSlidesArr = {
+  img: string;
   title: string;
   description: string;
 }[];
 
 const introSlidesArr: IIntroSlidesArr = [
   {
-    title: "Post item on Tiny Treasures",
+    img: "/FirstIntroSlide.png",
+    title: "1. Post item on Tiny Treasures",
     description:
-      "1. Create an account and post an ad with a picture and description of the item you want to donate.",
+      "Create an account and post an ad with a picture and description of the item you want to donate.",
   },
   {
-    title: "Wait for pickup",
+    img: "/SecondIntroSlide.png",
+    title: "2. Wait for pickup",
     description:
-      "2. When someone is interested in picking up your item, they can send you a message through Tiny Treasures. You will agree on a time and place to carry out the exchange.",
+      "When someone is interested in picking up your item, they can send you a message through Tiny Treasures. You will agree on a time and place to carry out the exchange.",
   },
   {
-    title: "Receive Your credit",
+    img: "/ThirdIntroSlide.png",
+    title: "3. Receive Your credit",
     description:
-      "3. When someone is interested in picking up your item, they can send you a message through Tiny Treasures. You will agree on a time and place to carry out the exchange",
+      "When someone is interested in picking up your item, they can send you a message through Tiny Treasures. You will agree on a time and place to carry out the exchange",
   },
   {
-    title: "Use your credit",
+    img: "/FourthIntroSlide.png",
+    title: "4. Use your credit",
     description:
-      "4. Now you can use your credit to select and pick up new items that you find on Tiny Treasures.",
+      "Now you can use your credit to select and pick up new items that you find on Tiny Treasures.",
   },
 ];
 
@@ -49,38 +54,41 @@ const IntroSlides: React.FC<Props> = () => {
     setIndex(index - 1);
   };
 
-  const currentSlide = introSlidesArr.map((slide, i) => {
+  const chevronSize = 20;
+
+  const currentSlide = introSlidesArr.map(({ img, title, description }, i) => {
     const current = i === index;
     return (
       <S.Slide key={i} current={current}>
-        <S.Header>{slide.title}</S.Header>
-        <p>{slide.description}</p>
+        <Box flexDirection="row" justifyContent="space-between" width="100%">
+          <S.FirstNavBtn isFirst={isFirst} onClick={goToPrevious}>
+            <FaChevronLeft
+              size={chevronSize}
+              color={isFirst ? "gray" : "black"}
+              name="previous"
+              disabled={index === 0}
+            />
+          </S.FirstNavBtn>
+          <S.Image src={img} />
+          <S.SecondNavBtn isLast={isLast} onClick={goToNext}>
+            <FaChevronRight
+              size={chevronSize}
+              color={isLast ? "gray" : "black"}
+              disabled={index === introSlidesArr.length - 1}
+              name="next"
+            />
+          </S.SecondNavBtn>
+        </Box>
+
+        <S.SubHeader>{title}</S.SubHeader>
+        <S.Description>{description}</S.Description>
       </S.Slide>
     );
   });
 
-  const chevronSize = 20;
-
   return (
     <S.SlideContainer>
-      <Box flexDirection="row">
-        <S.FirstNavBtn isFirst={isFirst} onClick={goToPrevious}>
-          <FaChevronLeft
-            size={chevronSize}
-            color={isFirst ? "gray" : "black"}
-            name="previous"
-            disabled={index === 0}
-          />
-        </S.FirstNavBtn>
-        <S.SecondNavBtn isLast={isLast} onClick={goToNext}>
-          <FaChevronRight
-            size={chevronSize}
-            color={isLast ? "gray" : "black"}
-            disabled={index === currentSlide.length - 1}
-            name="next"
-          />
-        </S.SecondNavBtn>
-      </Box>
+      <S.Header>How does it work?</S.Header>
       <Box justifyContent="center" width="100%" flexDirection="row">
         {currentSlide}
       </Box>

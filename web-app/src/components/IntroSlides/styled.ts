@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const Slide = styled(Box)<Props>`
-  gap: 20px;
+  gap: 30px;
   width: 300px;
   height: 400px;
   text-align: center;
@@ -18,7 +18,7 @@ export const SlideContainer = styled(Box)`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding: 25px;
 `;
 
 type FirstNavBtnProps = {
@@ -29,7 +29,7 @@ export const FirstNavBtn = styled.div<FirstNavBtnProps>`
   align-items: center;
   justify-content: center;
   box-shadow: ${theme.shadow};
-  padding: 20px;
+  padding: 15px;
   border-radius: 50%;
   gap: 20px;
 
@@ -70,6 +70,20 @@ export const Header = styled.h1`
   font-size: 3rem;
   font-weight: 700;
   color: #474747;
+  height: 50px;
+`;
+
+export const SubHeader = styled.p`
+  font-family: "Poppins";
+  font-size: 2.5rem;
+
+  color: #474747;
+  height: 50px;
+`;
+
+export const Description = styled.p`
+  ${theme.type.h6}
+  font-size: 14px;
 `;
 
 type DotProps = {
@@ -81,4 +95,9 @@ export const Dot = styled.div<DotProps>`
   width: 12px;
   border-radius: 50%;
   background-color: ${({ current }) => (current ? "#2b2a2a" : "#9f9f9f")};
+`;
+
+export const Image = styled.img`
+  width: auto;
+  height: 140px;
 `;
