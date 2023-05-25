@@ -8,12 +8,19 @@ import {
 } from '../../types';
 import api from '../../api';
 import {
+  addPostToUserFavourite,
   ApiPostSignInUser,
   ApiPostSignUpUser,
+  fetchtFavoritePosts,
   getAccessToken,
   signOutUserAsync,
+<<<<<<< HEAD
 } from '../../api/requests';
 import { socket, Socket } from '../../Sockets/Message.socket';
+=======
+} from "../../api/requests";
+import { Socket } from "../../Sockets/Message.socket";
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
 
 interface UpdateData {
   [key: string]: string | number | string[];
@@ -26,6 +33,24 @@ const initialState: UserState = {
   currentChatRoom: undefined,
   accessToken: '',
 };
+
+export const fetchFavoritePosts = createAsyncThunk(
+  "user/fetchFavoritePosts",
+  async () => {
+    const favorites = await fetchtFavoritePosts();
+    return favorites;
+  }
+);
+
+export const addPostToFavourite = createAsyncThunk(
+  "user/addPostToFavourite",
+  async (postId: string) => {
+    const updatedFavorites = await addPostToUserFavourite(postId);
+    console.log(updatedFavorites);
+    return updatedFavorites;
+  }
+);
+
 export const updateUserAsync = createAsyncThunk(
   'user/updateUser',
   async ({ newData, field }: UpdateData) => {
@@ -73,6 +98,7 @@ export const refreshAccessToken = createAsyncThunk(
     const data = await getAccessToken();
     if (!data) return;
     Socket.init(data.accessToken);
+
     return data;
   }
 );
@@ -90,7 +116,10 @@ const userSlice = createSlice({
     });
     builder.addCase(refreshAccessToken.fulfilled, (state, { payload }) => {
       if (payload) {
+<<<<<<< HEAD
         console.log('payload ', payload.user);
+=======
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
         state.user = payload.user;
         state.isSignedIn = true;
         state.accessToken = payload.accessToken;
@@ -112,6 +141,12 @@ const userSlice = createSlice({
       state.user = null;
       state.isSignedIn = false;
       state.accessToken = '';
+    });
+    builder.addCase(fetchFavoritePosts.fulfilled, (state, { payload }) => {
+      state.user.favorites = payload;
+    });
+    builder.addCase(addPostToFavourite.fulfilled, (state, { payload }) => {
+      state.user.favorites = payload;
     });
   },
 });

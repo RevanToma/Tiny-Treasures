@@ -15,15 +15,15 @@ postsRouter
     postController.createPost
   );
 
-postsRouter.get(
-  "/:postId",
-  userController.attatchUserToReq,
-  postController.getPost
-);
-
-// postsRouter.get(
-//   "/favoritePosts",
-//   userController.attatchUserToReq,
-//   authController.protect,
-//   userController.getFavoritePosts
-// );
+postsRouter
+  .route("/:postId")
+  .get(
+    userController.attatchUserToReq,
+    authController.protect,
+    postController.getPost
+  )
+  .post(
+    userController.attatchUserToReq,
+    authController.protect,
+    userController.updateFavouritePosts
+  );

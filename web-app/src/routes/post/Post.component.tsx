@@ -22,6 +22,14 @@ const Post: React.FC = () => {
 
   const { data: post, isError, error, isLoading } = usePost(postId);
 
+<<<<<<< HEAD
+=======
+  // console.log("POST FROM POST", post?.user);
+  // console.log("USER FROM POST", user);
+  // console.log("POST OBJCET FROM POST", post);
+  // console.log("POST OBJCET FROM POST", user);
+
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
   useEffect(() => {
     const refetchChatsAndGoToChat = (data: IChatRoom) => {
       queryClient.invalidateQueries([fetchChats.name]);

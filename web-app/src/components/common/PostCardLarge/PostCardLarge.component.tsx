@@ -5,6 +5,7 @@ import { Post } from '../../../types';
 import {
   selectIsSignedIn,
   selectUser,
+<<<<<<< HEAD
 } from '../../../store/user/userSelectors';
 import Box from '../Box/Box';
 import { getDate, getListFromArray } from '../../../utils/helpers';
@@ -12,17 +13,28 @@ import { theme } from '../../../styles/themes';
 import { useAppDispatch } from '../../../hooks/useDispatch';
 import { updateUserAsync } from '../../../store/user/userSlice';
 import LightBox from '../LightBox/LightBox.component';
+=======
+} from "../../../store/user/userSelectors";
+import Box from "../Box/Box";
+import { getDate } from "../../../utils/helpers";
+import { theme } from "../../../styles/themes";
+import { useAppDispatch } from "../../../hooks/useDispatch";
+import { updateUserAsync } from "../../../store/user/userSlice";
+import LightBox from "../LightBox/LightBox.component";
+import HeartIcon from "../../../routes/settings/MyFavourites/HeartComponent/Heart.component";
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
 
 interface PostCardLargeProps {
   post: Post;
 }
 
 const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const { title, description, condition, id } = post;
   const user = useSelector(selectUser);
-  const isSignedIn = useSelector(selectIsSignedIn);
+  // const isSignedIn = useSelector(selectIsSignedIn);
 
+<<<<<<< HEAD
   const toggleSavedPost = (): void => {
     const updatedSavedPosts = updateSavedPosts();
     if (!updatedSavedPosts) return;
@@ -34,15 +46,28 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
     // eslint-disable-next-line no-unsafe-optional-chaining
     if (!user) return null;
     const newSavedPosts = [...user.favorites];
+=======
+  // const toggleSavedPost = (): void => {
+  //   const updatedSavedPosts = updateSavedPosts();
+  //   if (!updatedSavedPosts) return;
+  //   dispatch(updateUserAsync({ newData: updatedSavedPosts, field: "saved" }));
+  // };
 
-    const index = newSavedPosts.indexOf(id);
-    if (index === -1) {
-      newSavedPosts.push(id);
-    } else {
-      newSavedPosts.splice(index, 1);
-    }
-    return newSavedPosts;
-  };
+  // const updateSavedPosts = (): string[] | null => {
+  //   if (!isSignedIn) return null;
+  //   // eslint-disable-next-line no-unsafe-optional-chaining
+  //   if (!user) return null;
+  //   const newSavedPosts = [...user.favourites];
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
+
+  //   const index = newSavedPosts.indexOf(id);
+  //   if (index === -1) {
+  //     newSavedPosts.push(id);
+  //   } else {
+  //     newSavedPosts.splice(index, 1);
+  //   }
+  //   return newSavedPosts;
+  // };
 
   console.log(post);
 
@@ -84,19 +109,11 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
         <h1>{title}</h1>
         {user?.favorites && user.favorites.includes(id) ? (
           <Box width="4rem">
-            <IoIosHeart
-              onClick={toggleSavedPost}
-              size={36}
-              color={theme.color.primaryBlue}
-            />
+            <HeartIcon postId={post._id} />
           </Box>
         ) : (
           <Box width="4rem">
-            <IoIosHeartEmpty
-              onClick={toggleSavedPost}
-              size={36}
-              color={theme.color.primaryBlue}
-            />
+            <HeartIcon postId={post._id} />
           </Box>
         )}
       </Box>

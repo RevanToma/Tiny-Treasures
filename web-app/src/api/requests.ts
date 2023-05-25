@@ -219,6 +219,13 @@ export const fetchtFavoritePosts = async () => {
 
   return data.data.favorites;
 };
+export const addPostToUserFavourite = async (postId: string) => {
+  const { data } = await api.post(`/posts/${postId}`);
+  checkForError(data);
+
+  return data.data.user.favorites;
+};
+
 // {user: ObjectId("645e7ad0b490c479f8416795")}
 
 export const postCreatePost = async (data: FormData) => {

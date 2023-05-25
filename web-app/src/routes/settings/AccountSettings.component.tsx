@@ -22,7 +22,8 @@ import {
 import { IoMdNotifications } from "react-icons/io";
 import { MdLocationPin } from "react-icons/md";
 import { signOutUser } from "../../store/user/userSlice";
-
+import * as S from "./AccountSettings.styles";
+import CreditsSVG from "../../assets/creditsSVG.svg";
 const AccountSettings = () => {
   const userCredits = useSelector(selectUserCredits);
   const dispatch = useAppDispatch();
@@ -44,6 +45,12 @@ const AccountSettings = () => {
 
           <Box gap="5rem" margin="2rem">
             <Box gap="2.4rem">
+              <img src={CreditsSVG} />
+              <S.CreditsDiv flexDirection="row" gap="2rem" marginBottom="8rem">
+                <FaCoins size={20} color="#646464" />
+                <p>Credits</p>
+                <span>x {userCredits}</span>
+              </S.CreditsDiv>
               <h3>Account Settings</h3>
               <NavigationItem
                 text="Change Name"
@@ -80,14 +87,7 @@ const AccountSettings = () => {
             </Box>
             <Box gap="2.4rem">
               <h3>Personal</h3>
-              <NavigationItem
-                onClick={() => navigate("/account/credits")}
-                showArrow={false}
-                text="Credits"
-                icon={<FaCoins size={20} color="#646464" />}
-              >
-                x {userCredits}
-              </NavigationItem>
+
               <NavigationItem
                 text="My items"
                 icon={<FaBox size={20} color="#646464" />}

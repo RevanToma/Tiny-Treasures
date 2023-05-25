@@ -61,7 +61,11 @@ function App() {
   const isSignedIn = useSelector(selectIsSignedIn);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
   const userId = user?._id;
+<<<<<<< HEAD
   // console.log('FROM APPP', user?._id);
+=======
+  // console.log("FROM APPP", user?._id);
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -82,7 +86,11 @@ function App() {
   }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
+<<<<<<< HEAD
     console.log('ACCECC TOKEN FROM APPTSX', accessToken);
+=======
+    // console.log("ACCECC TOKEN FROM APPTSX", accessToken);
+>>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
     if (!accessToken) dispatch(refreshAccessToken());
     else {
       const interceptor: number = setAuthInterceptor(accessToken);

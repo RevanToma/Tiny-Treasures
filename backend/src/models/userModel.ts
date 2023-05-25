@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import { BasicUserData, LocationData } from "../utils/interfaces";
@@ -16,7 +16,7 @@ export interface UserDocument extends Document {
   // posts: mongoose.Schema.Types.ObjectId[];
   credits: number;
   saved: PostDocument[];
-  favorites: PostDocument[];
+  favorites: (string | Types.ObjectId)[];
   newMessages: number;
   method: "password" | "google";
   googleId?: string;

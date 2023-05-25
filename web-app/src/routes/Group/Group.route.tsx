@@ -30,6 +30,7 @@ import Box from '../../components/common/Box/Box';
 const Group: React.FC = () => {
   const { group } = useParams();
   const dispatch = useDispatch();
+
   const LoadMoreButton = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState<undefined | string>(undefined);
 
