@@ -126,7 +126,7 @@ export const theme = {
       font-family: "Open Sans";
       font-size: 1.6rem;
       font-weight: 700;
-      Line height: 21.79px;
+      line-height: 21.79px;
     `,
     buttons: css`
       font-family: "Open Sans";
