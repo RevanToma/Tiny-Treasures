@@ -2,8 +2,9 @@ import { NextFunction, Response } from "express";
 import { catchAsync } from "../utils/catchAsync";
 import { CustomRequest } from "../utils/expressInterfaces";
 import User, { UserDocument } from "../models/userModel";
-import { decodeToken, getToken } from "./authController";
+import { decodeToken, getAccessToken } from "./authController";
 import AppError from "../utils/appError";
+import Post from "../models/postModel";
 
 // UTILITY MIDDLEWARE
 
@@ -13,7 +14,7 @@ export const attatchUserToReq = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const token = getToken(req);
+    const token = getAccessToken(req);
 
     if (!token) return next();
 
@@ -65,7 +66,6 @@ export const updateLocation = catchAsync(
     if (!updatedUser) {
       return next(new AppError("Error updating user location", 400));
     }
-    console.log(req.user.id);
     res.status(200).json({
       status: "success",
       data: {
@@ -86,6 +86,52 @@ export const getLocation = catchAsync(
       status: "success",
       data: {
         location: user.location,
+      },
+    });
+  }
+);
+export const getAllUsersPosts = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const userId = req.user.id;
+
+    console.log(userId);
+
+    const userPosts = await Post.find({ user: userId });
+
+    res.status(200).json({
+      status: "success",
+      TotalPosts: userPosts.length,
+      data: {
+        userPosts,
+      },
+    });
+  }
+);
+
+export const getFavoritePosts = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).populate("favorites");
+
+    if (!user) {
+      return next(new AppError("User not found", 404));
+    }
+
+    const favorites = user.favorites;
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        favorites,
       },
     });
   }

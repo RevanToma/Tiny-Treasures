@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import Box from '../Box/Box';
+import styled from "styled-components";
+import Box from "../Box/Box";
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -16,10 +16,10 @@ export const ImageBox = styled.div`
 `;
 
 export const BoxWithChildren = styled(Box)`
-  h2 {
-    text-align: center;
-    font-size: 1.4rem;
-    font-weight: 600;
+  p {
+    font-size: 1.3rem;
+    weight: 400;
+    line-height: 19.5px;
   }
   p {
     /* white-space: normal; */
@@ -28,6 +28,6 @@ export const BoxWithChildren = styled(Box)`
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 4rem;
+    height: fit-content;
   }
 `;

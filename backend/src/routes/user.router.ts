@@ -4,6 +4,8 @@ import * as userController from "../controllers/userController";
 
 export const userRouter = express.Router();
 
+userRouter.get("/refreshToken", authController.refreshToken);
+
 userRouter.post("/signup", authController.signUp);
 userRouter.post(
   "/signin",
@@ -22,7 +24,7 @@ userRouter.get(
   userController.getLocation
 );
 
-userRouter.post("/logout", authController.logout);
+userRouter.post("/signout", authController.signOut);
 
 userRouter.use(authController.protect);
 
@@ -45,4 +47,18 @@ userRouter.get(
   "/checkLoggedIn",
   authController.protect,
   userController.getBasicUserData
+);
+
+userRouter.get(
+  "/posts",
+  userController.attatchUserToReq,
+  authController.protect,
+  userController.getAllUsersPosts
+);
+
+userRouter.get(
+  "/favoritePosts",
+  userController.attatchUserToReq,
+  authController.protect,
+  userController.getFavoritePosts
 );

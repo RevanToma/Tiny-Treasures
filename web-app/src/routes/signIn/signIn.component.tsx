@@ -1,11 +1,7 @@
-import { signSuccess } from "../../store/user/userSlice";
+import { signInUser } from "../../store/user/userSlice";
 import { useState } from "react";
 import { useAppDispatch } from "../../hooks/useDispatch";
-import { useMutation } from "@tanstack/react-query";
-import { ApiPostSignInUser } from "../../api/requests";
-import { AxiosError } from "axios";
-import type { IUser } from "../../types";
-import Spinner from "../../components/common/spinner/spinner.component";
+
 import Logo from "../../assets/logo.svg";
 import Input from "../../components/common/Input/input.component";
 import { InputType } from "../../components/common/Input/input.types";
@@ -17,37 +13,41 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { SignUpFooter } from "../signUp/SignUp.styles";
 import { ButtonType } from "../../components/common/Button/button.types";
+import Spinner from "../../components/common/spinner/spinner.component";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setIsLoading] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const signInWithEmailMutation = useMutation({
-    mutationFn: ApiPostSignInUser,
-  });
-
-  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const signIn = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    signInWithEmailMutation.mutate(
-      { email, password },
-      {
-        onSuccess: (data: IUser) => {
-          dispatch(signSuccess(data));
-          //document.cookie = `jwt=${data.token}`;
-          navigate("/");
-        },
-        onError: (error) => {
-          if (error instanceof AxiosError) alert(error.message);
-        },
-      }
-    );
+
+    if (!password) {
+      alert("Please type in your Password");
+      return;
+    }
+    if (!email) {
+      alert("Please type in your Email");
+      return;
+    }
+    setIsLoading(true);
+    const action = await dispatch(signInUser({ email, password }));
+
+    if (signInUser.rejected.match(action)) {
+      setIsLoading(false);
+      alert("Sign-in failed. Please check your credentials.");
+      return;
+    }
+
+    navigate("/");
   };
   return (
     <div>
-      {signInWithEmailMutation.isLoading ? (
+      {loading ? (
         <Spinner />
       ) : (
         <Box width="80%" margin="auto" gap="3rem">

@@ -5,12 +5,10 @@ import {
   LocationData,
   Post,
   PostQueryResult,
-  SignInInfo,
   SignUpInfo,
 } from "../types";
 import api from "./index";
 import { serverRoute } from "../utils/urls/serverUrls";
-import { url } from "inspector";
 
 export interface ResponseWithData<T> {
   status: string;
@@ -62,12 +60,13 @@ export const fetchChatById = async (id: any) => {
   return data;
 };
 
-export const ApiPostSignInUser = async ({ email, password }: SignInInfo) => {
+export const ApiPostSignInUser = async (email: string, password: string) => {
   const { data } = await api.post("/users/signin", {
     email,
     password,
   });
-  return data;
+  console.log("LOGIN!!!!!!!!!!", data.data.data);
+  return data.data.data;
 };
 
 export const ApiPostSignUpUser = async ({
@@ -84,6 +83,7 @@ export const ApiPostSignUpUser = async ({
     password,
     passwordConfirm,
   });
+  checkForError(data);
   return data;
 };
 
@@ -126,8 +126,8 @@ export const fetchPostById = async (id: string | undefined) => {
   return post;
 };
 
-export const signOutUser = async () => {
-  await api.post("users/logout");
+export const signOutUserAsync = async () => {
+  await api.post("users/signout");
   return;
 };
 
@@ -138,8 +138,9 @@ export const fetchEnums = async () => {
 };
 
 export const getUserFromJwt = async () => {
-  const { data } = await api.get(serverRoute.checkSignedIn);
-  return data;
+  const { data } = await api.get("/users/checkLoggedIn");
+  console.log("DATA FROM CALL", data.data.data);
+  return data.data.data;
 };
 
 export const patchName = async (newName: string) => {
@@ -196,3 +197,26 @@ export const getCoordinatesFromCity = async (cityName: string) => {
   console.log("GEO", geometry);
   return geometry;
 };
+
+export const getAccessToken = async () => {
+  const { data } = await axios.get(serverRoute.refreshToken, {
+    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+  }); //await api.get("/users/refresh-token");
+  checkForError(data);
+
+  return data.data;
+};
+export const fetchUsersPosts = async () => {
+  const { data } = await api.get("/users/posts");
+  checkForError(data);
+  console.log("USER POST FROM REQUEST", data);
+  return data.data.userPosts;
+};
+export const fetchtFavoritePosts = async () => {
+  const { data } = await api.get("/users/favoritePosts");
+  checkForError(data);
+
+  return data.data.favorites;
+};
+// {user: ObjectId("645e7ad0b490c479f8416795")}

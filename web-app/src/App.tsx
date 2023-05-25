@@ -5,7 +5,12 @@ import Layout from "./routes/layout/Layout";
 import { lazy, Suspense, useEffect } from "react";
 import Spinner from "./components/common/spinner/spinner.component";
 import { useSelector } from "react-redux";
-import { selectCurrentChatRoom, selectUser } from "./store/user/userSelectors";
+import {
+  selectAccessToken,
+  selectCurrentChatRoom,
+  selectIsSignedIn,
+  selectUser,
+} from "./store/user/userSelectors";
 import { Socket, socket } from "./Sockets/Message.socket";
 import { GlobalStyles } from "./styles/GlobalStyles";
 import { useQueryClient } from "@tanstack/react-query";
@@ -16,7 +21,8 @@ import { useEnums } from "./hooks/useEnums";
 import Category from "./routes/Category/Category.route";
 import SaveUserAndRedirect from "./routes/SaveUserAndRedirect/SaveUserAndRedirect.component";
 import { useAppDispatch } from "./hooks/useDispatch";
-import { checkForLoggedInUser } from "./store/user/userSlice";
+import { refreshAccessToken } from "./store/user/userSlice";
+import api, { setAuthInterceptor } from "./api";
 
 const SignIn = lazy(() => import("./routes/signIn/signIn.component"));
 const DisplayedChat = lazy(
@@ -39,10 +45,22 @@ const ChangePassword = lazy(
 const Location = lazy(
   () => import("./routes/settings/Location/Location.component")
 );
+const Notification = lazy(
+  () => import("./routes/settings/Notification/Notification.component")
+);
+const MyItems = lazy(
+  () => import("./routes/settings/MyItems/MyItems.component")
+);
+const MyFavourites = lazy(
+  () => import("./routes/settings/MyFavourites/MyFavourites.component")
+);
 function App() {
   const user = useSelector(selectUser);
+  const accessToken = useSelector(selectAccessToken);
+  const isSignedIn = useSelector(selectIsSignedIn);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
-
+  const userId = user?._id;
+  console.log("FROM APPP", user?._id);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -51,9 +69,8 @@ function App() {
     const refetchChats = () => {
       queryClient.invalidateQueries([fetchChats.name]);
     };
-
-    if (user._id) {
-      Socket.init(user._id);
+    if (userId) {
+      Socket.init(accessToken);
       socket().on("chat-message", (data: IMessage) => {
         if (data.roomId !== currentChatRoom?._id || !currentChatRoom) {
           refetchChats();
@@ -61,11 +78,21 @@ function App() {
       });
       socket().on("create-chat", refetchChats);
     }
-  }, [user._id, currentChatRoom, queryClient]);
+  }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
-    dispatch(checkForLoggedInUser());
-  }, [dispatch]);
+    console.log("ACCECC TOKEN FROM APPTSX", accessToken);
+    if (!accessToken) dispatch(refreshAccessToken());
+    else {
+      const interceptor: number = setAuthInterceptor(accessToken);
+      return () => {
+        api.interceptors.request.eject(interceptor);
+      };
+    }
+
+    //dispatch(checkForLoggedInUser());
+  }, [accessToken, isSignedIn, dispatch]);
+
   return (
     <>
       <GlobalStyles />
@@ -90,6 +117,9 @@ function App() {
               <Route path="changeEmail" element={<ChangeEmail />} />
               <Route path="changePassword" element={<ChangePassword />} />
               <Route path="location" element={<Location />} />
+              <Route path="notification" element={<Notification />} />
+              <Route path="myItems" element={<MyItems />} />
+              <Route path="myFavourites" element={<MyFavourites />} />
             </Route>
           </Routes>
         </Suspense>

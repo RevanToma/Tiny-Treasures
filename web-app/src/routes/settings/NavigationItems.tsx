@@ -35,7 +35,7 @@ const NavigationItem = ({
         {text}
         {children ? <Box>{children}</Box> : ""}
 
-        {showArrow && <IoMdArrowDropright color="black" size={29} />}
+        {showArrow && <IoMdArrowDropright color="#646464" size={29} />}
       </Box>
     </Button>
   );

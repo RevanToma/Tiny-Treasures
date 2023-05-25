@@ -17,17 +17,27 @@ export type IChatRoom = {
 };
 export interface IUser {
   data: {
-    user: User;
+    user: User | null;
   };
+
   // token: string;
   isSignedIn?: boolean;
+  accessToken?: string;
   currentChatRoom?: IChatRoom;
+}
+export interface UserState {
+  user: User | null;
+  isSignedIn: boolean;
+  currentChatRoom?: IChatRoom;
+  accessToken: string;
 }
 export type SignInInfo = {
   email: string;
   password: string;
 };
 export interface User {
+  // data?: any;
+
   _id?: string;
   email: string;
   firstName: string;
@@ -36,7 +46,6 @@ export interface User {
   location?: {
     coordinates: [];
   };
-  saved: string[];
 }
 export interface SignUpInfo {
   name: string;
@@ -48,6 +57,7 @@ export interface SignUpInfo {
 
 export interface Post {
   categories: string[];
+  mainCategory: string;
   condition: string;
   createdAt: string;
   description: string;
