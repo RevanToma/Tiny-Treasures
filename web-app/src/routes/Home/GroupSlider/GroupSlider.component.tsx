@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import Button from '../../../components/common/Button/Button.component';
 import { ButtonType } from '../../../components/common/Button/button.types';
-import CategoryCard from './CategoryCard/CategoryCard.component';
-import * as S from './categorySlider.styles';
+import CategoryCard from './GroupCard/GroupCard.component';
+import * as S from './groupSlider.styles';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -16,27 +16,27 @@ import {
 } from '../../../store/query/querySlice';
 import { Enum } from '../../../types';
 
-interface CategorySliderProps {
-  category: string;
+interface GroupSliderProps {
+  group: string;
   enums: Enum;
 }
 
 const ages = ['0-3', '4-7', '8-11'];
 
-const CategorySlider: FC<CategorySliderProps> = ({ category }) => {
+const GroupSlider: FC<GroupSliderProps> = ({ group }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleGoToCategory = () => {
-    const newQuery = `mainCategory=${category}`;
+  const handleGoToGroup = () => {
+    const newQuery = `group=${group}`;
     dispatch(setQuery(newQuery));
-    dispatch(setQueryData({ ...initialQueryData, MainCategories: [category] }));
+    dispatch(setQueryData({ ...initialQueryData, Group: [group] }));
 
-    navigate(`/category/${category}`);
+    navigate(`/group/${group}`);
   };
 
-  const handleGoToCategoryAndAge = (age: string): void => {
-    const newQuery = `mainCategory=${category}&age=${age}`;
+  const handleGoToGroupAndAge = (age: string): void => {
+    const newQuery = `group=${group}&age=${age}`;
     dispatch(setQuery(newQuery));
     dispatch(
       setQueryData({
@@ -45,31 +45,31 @@ const CategorySlider: FC<CategorySliderProps> = ({ category }) => {
       })
     );
 
-    navigate(`/category/${category}`);
+    navigate(`/group/${group}`);
   };
 
   return (
     <S.Wrapper>
       <Box gap="2.4rem" alignItems="center">
-        <S.CategoryTitle>{capitalize(category)}</S.CategoryTitle>
+        <S.CategoryTitle>{capitalize(group)}</S.CategoryTitle>
         <p>Choose an age group</p>
         <Box gap="1rem" flexDirection="row">
           {ages.map((age, i) => (
             <CategoryCard
               key={age}
-              image={imgUrls.categories[category][i]}
+              image={imgUrls.categories[group][i]}
               age={age}
-              onClick={handleGoToCategoryAndAge}
+              onClick={handleGoToGroupAndAge}
             />
           ))}
         </Box>
         <p>or</p>
-        <Button onClick={handleGoToCategory} buttonType={ButtonType.Primary}>
-          Show All {capitalize(category)}
+        <Button onClick={handleGoToGroup} buttonType={ButtonType.Primary}>
+          Show All {capitalize(group)}
         </Button>
       </Box>
     </S.Wrapper>
   );
 };
 
-export default CategorySlider;
+export default GroupSlider;

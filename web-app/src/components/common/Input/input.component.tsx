@@ -1,14 +1,18 @@
-import { FC } from "react";
-import * as S from "./input.styles";
+import { FC } from 'react';
+import * as S from './input.styles';
 
 interface IInput {
   placeholder: string;
   type?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   value?: string;
   name?: string;
-  padding?: string;
   readOnly?: boolean;
+  required?: boolean;
+  min?: number;
+  max?: number;
 }
 
 const Input: FC<IInput> = ({
@@ -17,19 +21,32 @@ const Input: FC<IInput> = ({
   onChange,
   value,
   name,
-  padding,
   readOnly,
+  ...otherProps
 }) => {
   return (
-    <S.StyledInput
-      padding={padding}
-      value={value}
-      placeholder={placeholder}
-      type={type}
-      onChange={onChange}
-      name={name}
-      readOnly={readOnly}
-    />
+    <>
+      {type === 'textarea' ? (
+        <S.StyledTextarea
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+          name={name}
+          readOnly={readOnly}
+          {...otherProps}
+        />
+      ) : (
+        <S.StyledInput
+          value={value}
+          placeholder={placeholder}
+          type={type}
+          onChange={onChange}
+          name={name}
+          readOnly={readOnly}
+          {...otherProps}
+        />
+      )}
+    </>
   );
 };
 

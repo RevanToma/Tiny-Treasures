@@ -9,3 +9,15 @@ export const getDate = (dateStr: string): string => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}/${month}/${day}`;
 };
+
+export const getListFromArray = (array: string[]) => {
+  let str = '';
+  array.forEach((item, i, arr) => {
+    if (i < arr.length - 1) {
+      str = `${str}${item}, `;
+    } else {
+      str = `${str}${item}`;
+    }
+  });
+  return str;
+};

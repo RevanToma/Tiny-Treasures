@@ -1,17 +1,17 @@
-import { IoIosHeartEmpty, IoIosHeart } from "react-icons/io";
-import * as S from "./postCardLarge.styles";
-import { useSelector } from "react-redux";
-import { Post } from "../../../types";
+import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
+import * as S from './postCardLarge.styles';
+import { useSelector } from 'react-redux';
+import { Post } from '../../../types';
 import {
   selectIsSignedIn,
   selectUser,
-} from "../../../store/user/userSelectors";
-import Box from "../Box/Box";
-import { getDate } from "../../../utils/helpers";
-import { theme } from "../../../styles/themes";
-import { useAppDispatch } from "../../../hooks/useDispatch";
-import { updateUserAsync } from "../../../store/user/userSlice";
-import LightBox from "../LightBox/LightBox.component";
+} from '../../../store/user/userSelectors';
+import Box from '../Box/Box';
+import { getDate, getListFromArray } from '../../../utils/helpers';
+import { theme } from '../../../styles/themes';
+import { useAppDispatch } from '../../../hooks/useDispatch';
+import { updateUserAsync } from '../../../store/user/userSlice';
+import LightBox from '../LightBox/LightBox.component';
 
 interface PostCardLargeProps {
   post: Post;
@@ -26,14 +26,14 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
   const toggleSavedPost = (): void => {
     const updatedSavedPosts = updateSavedPosts();
     if (!updatedSavedPosts) return;
-    dispatch(updateUserAsync({ newData: updatedSavedPosts, field: "saved" }));
+    dispatch(updateUserAsync({ newData: updatedSavedPosts, field: 'saved' }));
   };
 
   const updateSavedPosts = (): string[] | null => {
     if (!isSignedIn) return null;
     // eslint-disable-next-line no-unsafe-optional-chaining
     if (!user) return null;
-    const newSavedPosts = [...user.saved];
+    const newSavedPosts = [...user.favorites];
 
     const index = newSavedPosts.indexOf(id);
     if (index === -1) {
@@ -44,33 +44,45 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
     return newSavedPosts;
   };
 
+  console.log(post);
+
   return (
-    <S.Wrapper padding="0 1rem" alignItems="center">
-      <LightBox images={post.images} />
+    <S.Wrapper width="100%" alignItems="center">
+      {post.images.length > 0 && <LightBox images={post.images} />}
+
       <Box
         display="grid"
         gridTemplateColumns="1fr 1fr"
-        marginTop="1.6rem"
+        marginTop="3.6rem"
         marginBottom="5rem"
-        columnGap="4rem"
+        columnGap="3rem"
         rowGap=".2rem"
         width="100%"
       >
-        <p>Date: {getDate(post.createdAt)}</p>
-        <p>Location: {post.location.city}</p>
-        <p>Condition: {condition}</p>
-        <p>Distance: {post.distance}km</p>
-        <p>Sizes: {post.sizes}</p>
+        <S.Details>Published: {getDate(post.createdAt)}</S.Details>
+        <S.Details>Ages: {post.age}</S.Details>
+        <S.Details>Category: {post.group}</S.Details>
+        <S.Details>Location: {post.location.city}</S.Details>
+        <S.Details>
+          Type of Items: {getListFromArray(post.typeOfItems)}
+        </S.Details>
+        <S.Details>Distance: {post.distance}km</S.Details>
+        <S.Details>Condition: {condition}</S.Details>
+        <S.Details>Number of Items: {post.itemCount}</S.Details>
+        {post.group === 'clothes' && (
+          <S.Details>Sizes: {getListFromArray(post.sizes)}</S.Details>
+        )}
       </Box>
       <Box
         flexDirection="row"
         justifyContent="space-between"
+        alignItems="flex-start"
         gap="2rem"
         marginBottom="1rem"
         width="100%"
       >
         <h1>{title}</h1>
-        {user?.saved && user.saved.includes(id) ? (
+        {user?.favorites && user.favorites.includes(id) ? (
           <Box width="4rem">
             <IoIosHeart
               onClick={toggleSavedPost}
@@ -90,13 +102,11 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
       </Box>
       <Box
         width="100%"
-        backgroundColor="#fff"
         borderRadius={theme.radius.image}
-        boxShadow={theme.shadow}
-        padding="1.2rem"
-        marginBottom="1rem"
+        marginBottom="3.6rem"
+        alignItems="flex-start"
       >
-        <p>{description}</p>
+        <S.Description>{description}</S.Description>
       </Box>
     </S.Wrapper>
   );

@@ -10,8 +10,10 @@ const iconsStyles = css`
   width: 6rem;
   background-color: #fff;
   border-radius: 50%;
-  padding: 0.6rem;
+  padding: 1.2rem;
   box-shadow: ${theme.shadow};
+  color: ${theme.color.placeholderText};
+  stroke: 10px;
 `;
 
 export const StyledArrowBack = styled(IoIosArrowBack)`
@@ -32,4 +34,15 @@ export const StyledImg = styled.img`
   object-fit: contain;
   box-shadow: ${theme.shadow};
   border-radius: ${theme.radius.image};
+`;
+
+interface IBReadcrumbsProps {
+  active: boolean;
+}
+
+export const Breadcrumbs = styled.div<IBReadcrumbsProps>`
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background-color: ${({ active }) => (active ? '#323232' : '#c9c8c8')};
 `;

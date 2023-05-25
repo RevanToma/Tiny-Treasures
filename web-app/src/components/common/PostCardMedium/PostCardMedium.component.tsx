@@ -1,11 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import * as S from "./postCardMedium.styles";
+import { useNavigate } from 'react-router-dom';
+import * as S from './postCardMedium.styles';
 
-import Box from "../Box/Box";
-import { theme } from "../../../styles/themes";
-import { Post } from "../../../types";
-import { getDate } from "../../../utils/helpers";
-import { useState } from "react";
+import Box from '../Box/Box';
+import { theme } from '../../../styles/themes';
+import { Post } from '../../../types';
+import { getDate } from '../../../utils/helpers';
 
 interface PostCardMediumProps {
   post: Post;
@@ -16,7 +15,7 @@ const PostCardMedium: React.FC<PostCardMediumProps> = ({ post }) => {
   // const [location, setLocation] = useState("");
   // const { city } = JSON.parse(localStorage.getItem("location") || "null");
 
-  const gridTempCol = post.images.length === 1 ? "1fr" : "1fr 1fr";
+  const gridTempCol = post.images.length === 1 ? '1fr' : '1fr 1fr';
 
   return (
     <S.BoxWithChildren

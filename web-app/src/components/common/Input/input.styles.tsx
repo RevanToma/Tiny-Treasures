@@ -1,14 +1,25 @@
-import styled from "styled-components";
-import { theme } from "../../../styles/themes";
-type paddingProp = {
-  padding?: string;
-};
-export const StyledInput = styled.input`
+import styled, { css } from 'styled-components';
+import { theme } from '../../../styles/themes';
+
+const commonStyles = css`
   width: 100%;
-  font-size: 1em;
   border-radius: ${theme.radius.button};
   border: 1px solid #b4b4b4;
-  padding: ${({ padding }: paddingProp) => (padding ? padding : "7.5px")};
   cursor: text;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: ${theme.shadow};
+  ${theme.type.body}
+`;
+
+export const StyledInput = styled.input`
+  ${commonStyles}
+
+  padding: 0 1rem;
+  height: 4.5rem;
+`;
+
+export const StyledTextarea = styled.textarea`
+  ${commonStyles}
+
+  padding: 1rem;
+  height: 18rem;
 `;

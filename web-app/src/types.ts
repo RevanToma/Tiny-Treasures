@@ -46,6 +46,7 @@ export interface User {
   location?: {
     coordinates: [];
   };
+  favorites: string[];
 }
 export interface SignUpInfo {
   name: string;
@@ -56,8 +57,8 @@ export interface SignUpInfo {
 }
 
 export interface Post {
-  categories: string[];
-  mainCategory: string;
+  typeOfItems: string[];
+  group: string;
   condition: string;
   createdAt: string;
   description: string;
@@ -70,7 +71,7 @@ export interface Post {
     city: string;
   };
   distance: number;
-  sizes: number[];
+  sizes: string[];
   age: string;
   title: string;
   user: string;
@@ -117,7 +118,7 @@ export interface LocationData {
   city?: string;
 }
 export enum Point {
-  Point = "Point",
+  Point = 'Point',
 }
 
 export interface checkBox {

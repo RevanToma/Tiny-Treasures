@@ -16,23 +16,33 @@ const LightBox: FC<LightBoxProps> = ({ images }) => {
   };
 
   return (
-    <Box
-      position="relative"
-      width="90%"
-      maxWidth="40rem"
-      height="30rem"
-      margin="0 .4rem"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <S.StyledArrowBack onClick={() => setCurrentImg(getImgIndex('back'))} />
-      <Box width="30rem">
-        <S.StyledImg src={images[currentImg]} alt="Items for sale" />
+    <>
+      <Box
+        maxWidth="40rem"
+        height="30rem"
+        margin="0 .4rem"
+        alignItems="center"
+        justifyContent="center"
+        marginBottom="2.4rem"
+      >
+        <Box width="30rem" position="relative">
+          <S.StyledArrowBack
+            onClick={() => setCurrentImg(getImgIndex('back'))}
+          />
+          <S.StyledImg src={images[currentImg]} alt="Items for sale" />
+          <S.StyledArrowForward
+            onClick={() => setCurrentImg(getImgIndex('forward'))}
+          />
+        </Box>
       </Box>
-      <S.StyledArrowForward
-        onClick={() => setCurrentImg(getImgIndex('forward'))}
-      />
-    </Box>
+      <Box flexDirection="row" gap=".6rem">
+        {images.map((img, i) => (
+          <S.Breadcrumbs active={currentImg === i} key={i}>
+            &nbsp;
+          </S.Breadcrumbs>
+        ))}
+      </Box>
+    </>
   );
 };
 

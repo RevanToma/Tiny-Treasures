@@ -1,19 +1,19 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IChatRoom,
   SignInInfo,
   SignUpInfo,
   User,
   UserState,
-} from "../../types";
-import api from "../../api";
+} from '../../types';
+import api from '../../api';
 import {
   ApiPostSignInUser,
   ApiPostSignUpUser,
   getAccessToken,
   signOutUserAsync,
-} from "../../api/requests";
-import { socket, Socket } from "../../Sockets/Message.socket";
+} from '../../api/requests';
+import { socket, Socket } from '../../Sockets/Message.socket';
 
 interface UpdateData {
   [key: string]: string | number | string[];
@@ -24,12 +24,12 @@ const initialState: UserState = {
   user: null,
   isSignedIn: false,
   currentChatRoom: undefined,
-  accessToken: "",
+  accessToken: '',
 };
 export const updateUserAsync = createAsyncThunk(
-  "user/updateUser",
+  'user/updateUser',
   async ({ newData, field }: UpdateData) => {
-    const res = await api.patch("users/updateMe", {
+    const res = await api.patch('users/updateMe', {
       [field]: newData,
     });
     const user: User = res.data.data.data;
@@ -38,7 +38,7 @@ export const updateUserAsync = createAsyncThunk(
 );
 
 export const signInUser = createAsyncThunk(
-  "user/signInUser",
+  'user/signInUser',
   async ({ email, password }: SignInInfo) => {
     const user: User = await ApiPostSignInUser(email, password);
 
@@ -50,7 +50,7 @@ export const signInUser = createAsyncThunk(
 );
 
 export const signUpUser = createAsyncThunk(
-  "user/signUpUser",
+  'user/signUpUser',
   async (userData: SignUpInfo) => {
     const user: User = await ApiPostSignUpUser(userData);
 
@@ -61,17 +61,14 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
-export const signOutUser = createAsyncThunk(
-  "user/signOutUserAsync",
-  async () => {
-    await signOutUserAsync();
+export const signOutUser = createAsyncThunk('user/signOutUser', async () => {
+  await signOutUserAsync();
 
-    return;
-  }
-);
+  return;
+});
 
 export const refreshAccessToken = createAsyncThunk(
-  "users/refreshAccessToken",
+  'users/refreshAccessToken',
   async () => {
     const data = await getAccessToken();
     if (!data) return;
@@ -80,20 +77,20 @@ export const refreshAccessToken = createAsyncThunk(
   }
 );
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
       state.currentChatRoom = payload;
     },
   },
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder.addCase(updateUserAsync.fulfilled, (state, { payload }) => {
       state.user = payload;
     });
     builder.addCase(refreshAccessToken.fulfilled, (state, { payload }) => {
       if (payload) {
-        console.log("payload ", payload.user);
+        console.log('payload ', payload.user);
         state.user = payload.user;
         state.isSignedIn = true;
         state.accessToken = payload.accessToken;
@@ -111,10 +108,10 @@ const userSlice = createSlice({
         state.isSignedIn = true;
       }
     });
-    builder.addCase(signOutUser.fulfilled, (state) => {
+    builder.addCase(signOutUser.fulfilled, state => {
       state.user = null;
       state.isSignedIn = false;
-      state.accessToken = "";
+      state.accessToken = '';
     });
   },
 });

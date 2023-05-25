@@ -1,15 +1,15 @@
 import { FC } from 'react';
 import { theme } from '../../../../styles/themes';
-import * as S from './categoryCard.styles';
+import * as S from './groupCard.styles';
 import Box from '../../../../components/common/Box/Box';
 
-interface CategoryCardProps {
+interface GroupCardProps {
   image: string;
   age: string;
   onClick: (age: string) => void;
 }
 
-const CategoryCard: FC<CategoryCardProps> = ({ image, age, onClick }) => {
+const GroupCard: FC<GroupCardProps> = ({ image, age, onClick }) => {
   return (
     <S.Wrapper
       width="10.6rem"
@@ -29,4 +29,4 @@ const CategoryCard: FC<CategoryCardProps> = ({ image, age, onClick }) => {
   );
 };
 
-export default CategoryCard;
+export default GroupCard;

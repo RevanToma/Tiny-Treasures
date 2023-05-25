@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CheckboxSizes } from '../../../routes/Category/FilterPopup/FilterPopup.component';
+import { CheckboxSizes } from '../../../routes/Group/FilterPopup/FilterPopup.component';
 import Box from '../Box/Box';
 import {
   filterCheckboxLarge,

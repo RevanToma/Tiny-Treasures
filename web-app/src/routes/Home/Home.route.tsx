@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import CategorySlider from './CategorySlider/CategorySlider.component';
+import GroupSlider from './GroupSlider/GroupSlider.component';
 
 import * as S from './home.styles';
 import Divider from '../../components/common/Divider/Divider.component';
@@ -23,13 +23,9 @@ const Home: FC = () => {
       </Box>
       <Box padding="0 3.2rem">
         {enums &&
-          enums.main.map((category, i, arr) => (
-            <Box key={category}>
-              <CategorySlider
-                key={category}
-                category={category}
-                enums={enums}
-              />
+          enums.main.map((group, i, arr) => (
+            <Box key={group}>
+              <GroupSlider key={group} group={group} enums={enums} />
               {i < arr.length - 1 && <Divider />}
             </Box>
           ))}

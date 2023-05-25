@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface QueryData {
   [key: string]: string[];
-  Categories: string[];
+  TypeOfItems: string[];
   Sizes: string[];
   Age: string[];
   Condition: string[];
@@ -10,8 +10,8 @@ export interface QueryData {
 }
 
 export const initialQueryData: QueryData = {
-  MainCategories: [],
-  Categories: [],
+  Group: [],
+  TypeOfItems: [],
   Sizes: [],
   Age: [],
   Condition: [],

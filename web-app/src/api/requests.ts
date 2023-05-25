@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 import {
   Enum,
   IChatRoom,
@@ -6,9 +6,9 @@ import {
   Post,
   PostQueryResult,
   SignUpInfo,
-} from "../types";
-import api from "./index";
-import { serverRoute } from "../utils/urls/serverUrls";
+} from '../types';
+import api from './index';
+import { serverRoute } from '../utils/urls/serverUrls';
 
 export interface ResponseWithData<T> {
   status: string;
@@ -30,8 +30,8 @@ export const checkForError = (
     | ResponseWithData<Post[] | PostQueryResult[] | Enum[]>
     | ResponseWithError
 ): void => {
-  if (data.status === "error" || data.status === "fail") {
-    throw new Error("Something went wrong!");
+  if (data.status === 'error' || data.status === 'fail') {
+    throw new Error('Something went wrong!');
   }
 };
 
@@ -61,11 +61,11 @@ export const fetchChatById = async (id: any) => {
 };
 
 export const ApiPostSignInUser = async (email: string, password: string) => {
-  const { data } = await api.post("/users/signin", {
+  const { data } = await api.post('/users/signin', {
     email,
     password,
   });
-  console.log("LOGIN!!!!!!!!!!", data.data.data);
+  console.log('LOGIN!!!!!!!!!!', data.data.data);
   return data.data.data;
 };
 
@@ -76,7 +76,7 @@ export const ApiPostSignUpUser = async ({
   password,
   passwordConfirm,
 }: SignUpInfo) => {
-  const { data } = await api.post("users/signup", {
+  const { data } = await api.post('users/signup', {
     name,
     email,
     confirmEmail,
@@ -95,12 +95,12 @@ type getPostParams = {
 
 export const fetchPosts = async ({
   pageParam = 1,
-  query = "",
+  query = '',
   searchQuery,
 }: getPostParams): Promise<PostQueryResult> => {
-  console.log("fetched", searchQuery);
+  console.log('fetched', searchQuery);
   const limit = 20;
-  let urlQuery = "posts/?";
+  let urlQuery = 'posts/?';
   if (pageParam) {
     urlQuery += `&page=${pageParam}&limit=${limit}`;
   }
@@ -127,7 +127,7 @@ export const fetchPostById = async (id: string | undefined) => {
 };
 
 export const signOutUserAsync = async () => {
-  await api.post("users/signout");
+  await api.post('users/signout');
   return;
 };
 
@@ -138,19 +138,19 @@ export const fetchEnums = async () => {
 };
 
 export const getUserFromJwt = async () => {
-  const { data } = await api.get("/users/checkLoggedIn");
-  console.log("DATA FROM CALL", data.data.data);
+  const { data } = await api.get('/users/checkLoggedIn');
+  console.log('DATA FROM CALL', data.data.data);
   return data.data.data;
 };
 
 export const patchName = async (newName: string) => {
-  const { data } = await api.patch("/users/updateName", { newName });
+  const { data } = await api.patch('/users/updateName', { newName });
   checkForError(data);
   return data;
 };
 
 export const patchEmail = async (newEmail: string, password: string) => {
-  const { data } = await api.patch("/users/updateEmail", {
+  const { data } = await api.patch('/users/updateEmail', {
     newEmail,
     password,
   });
@@ -162,17 +162,17 @@ export const patchPassword = async (passwordData: {
   passwordNew: string;
   passwordConfirm: string;
 }) => {
-  const { data } = await api.patch("/users/updatePassword", passwordData);
+  const { data } = await api.patch('/users/updatePassword', passwordData);
   checkForError(data);
   return data;
 };
 export const patchLocation = async (locationData: LocationData) => {
-  const { data } = await api.patch("/users/updateLocation", locationData);
+  const { data } = await api.patch('/users/updateLocation', locationData);
   checkForError(data);
   return data;
 };
 export const fetchLocation = async () => {
-  const { data } = await api.get("/users/getLocation");
+  const { data } = await api.get('/users/getLocation');
   checkForError(data);
   return data;
 };
@@ -194,13 +194,13 @@ export const getCoordinatesFromCity = async (cityName: string) => {
     `https://api.opencagedata.com/geocode/v1/json?q=${cityName}&key=50886d99f1c442bc9e7276e71131cf35`
   );
   const geometry = res.data.results[0].geometry;
-  console.log("GEO", geometry);
+  console.log('GEO', geometry);
   return geometry;
 };
 
 export const getAccessToken = async () => {
   const { data } = await axios.get(serverRoute.refreshToken, {
-    headers: { "Content-Type": "application/json" },
+    headers: { 'Content-Type': 'application/json' },
     withCredentials: true,
   }); //await api.get("/users/refresh-token");
   checkForError(data);
@@ -208,15 +208,19 @@ export const getAccessToken = async () => {
   return data.data;
 };
 export const fetchUsersPosts = async () => {
-  const { data } = await api.get("/users/posts");
+  const { data } = await api.get('/users/posts');
   checkForError(data);
-  console.log("USER POST FROM REQUEST", data);
+  console.log('USER POST FROM REQUEST', data);
   return data.data.userPosts;
 };
 export const fetchtFavoritePosts = async () => {
-  const { data } = await api.get("/users/favoritePosts");
+  const { data } = await api.get('/users/favoritePosts');
   checkForError(data);
 
   return data.data.favorites;
 };
 // {user: ObjectId("645e7ad0b490c479f8416795")}
+
+export const postCreatePost = async (data: FormData) => {
+  await api.post('/posts', data);
+};
