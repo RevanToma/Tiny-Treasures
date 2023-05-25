@@ -9,6 +9,7 @@ import mongoose, { PipelineStage } from "mongoose";
 import multer from "multer";
 import sharp from "sharp";
 import "../models/enumsModel";
+import User from "../models/userModel";
 
 // multer adds a body to the request object with the values of the form field.  If not using default FF, must create new form and all values on client side.
 // req.file will hold the file, req.body will hold the text fields
