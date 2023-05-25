@@ -5,7 +5,7 @@ import Box from "../Box/Box";
 import { theme } from "../../../styles/themes";
 import { Post } from "../../../types";
 import { getDate } from "../../../utils/helpers";
-import { useState } from "react";
+import HeartIcon from "../../../routes/settings/MyFavourites/HeartComponent/Heart.component";
 
 interface PostCardMediumProps {
   post: Post;
@@ -14,7 +14,7 @@ interface PostCardMediumProps {
 const PostCardMedium: React.FC<PostCardMediumProps> = ({ post }) => {
   const navigate = useNavigate();
   // const [location, setLocation] = useState("");
-  // const { city } = JSON.parse(localStorage.getItem("location") || "null");
+  const { city } = JSON.parse(localStorage.getItem("location") || "null");
 
   const gridTempCol = post.images.length === 1 ? "1fr" : "1fr 1fr";
 
@@ -33,19 +33,22 @@ const PostCardMedium: React.FC<PostCardMediumProps> = ({ post }) => {
         {post.images.map((img, i) => {
           if (i < 4)
             return (
-              <S.ImageBox key={img}>
-                <img src={img} alt="Picture" />
-              </S.ImageBox>
+              <>
+                <S.ImageBox key={img}>
+                  <img src={img} alt="Picture" />
+                </S.ImageBox>
+              </>
             );
         })}
       </Box>
       {/* <h2>{post.categories.join(',')}</h2> */}
       <p>{post.title}</p>
       <p>Published: {getDate(post.createdAt)}</p>
-      {/* <p>Location: {city}</p> */}
+      <p>Location: {city}</p>
       {/* <h2>{post.condition}</h2> */}
       {/* <h2>{post.sizes}</h2>
       <h2>{post.age}</h2> */}
+      <HeartIcon postId={post._id} />
     </S.BoxWithChildren>
   );
 };

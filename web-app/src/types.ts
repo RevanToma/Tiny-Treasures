@@ -37,7 +37,6 @@ export type SignInInfo = {
 };
 export interface User {
   // data?: any;
-
   _id?: string;
   email: string;
   firstName: string;
@@ -46,6 +45,7 @@ export interface User {
   location?: {
     coordinates: [];
   };
+  favorites?: string[];
 }
 export interface SignUpInfo {
   name: string;

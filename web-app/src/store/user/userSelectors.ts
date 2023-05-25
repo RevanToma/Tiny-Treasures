@@ -31,3 +31,8 @@ export const selectAccessToken = createSelector(
   [userSlice],
   (userSlice) => userSlice.accessToken
 );
+
+export const selectUserFavouritePosts = createSelector(
+  [userSlice],
+  (userSlice) => userSlice.user.favorites
+);

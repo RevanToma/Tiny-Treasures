@@ -16,6 +16,7 @@ export const ImageBox = styled.div`
 `;
 
 export const BoxWithChildren = styled(Box)`
+  position: relative;
   p {
     font-size: 1.3rem;
     weight: 400;
@@ -29,5 +30,12 @@ export const BoxWithChildren = styled(Box)`
     overflow: hidden;
     text-overflow: ellipsis;
     height: fit-content;
+  }
+
+  svg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1.5rem;
   }
 `;

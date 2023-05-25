@@ -60,7 +60,7 @@ function App() {
   const isSignedIn = useSelector(selectIsSignedIn);
   const currentChatRoom = useSelector(selectCurrentChatRoom);
   const userId = user?._id;
-  console.log("FROM APPP", user?._id);
+  // console.log("FROM APPP", user?._id);
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   useEnums();
@@ -81,7 +81,7 @@ function App() {
   }, [userId, currentChatRoom, queryClient]);
 
   useEffect(() => {
-    console.log("ACCECC TOKEN FROM APPTSX", accessToken);
+    // console.log("ACCECC TOKEN FROM APPTSX", accessToken);
     if (!accessToken) dispatch(refreshAccessToken());
     else {
       const interceptor: number = setAuthInterceptor(accessToken);

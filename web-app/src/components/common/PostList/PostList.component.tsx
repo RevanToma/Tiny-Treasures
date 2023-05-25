@@ -2,6 +2,7 @@ import { FC } from "react";
 import Box from "../Box/Box";
 import PostCardMedium from "../PostCardMedium/PostCardMedium.component";
 import { Post } from "../../../types";
+import HeartIcon from "../../../routes/settings/MyFavourites/HeartComponent/Heart.component";
 
 interface PostListProps {
   posts: Post[];
