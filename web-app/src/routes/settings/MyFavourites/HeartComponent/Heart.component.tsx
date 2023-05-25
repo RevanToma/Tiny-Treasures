@@ -25,6 +25,8 @@ const HeartIcon = ({ postId }) => {
       color={isFavourite ? "red" : "white"}
       size={29}
       style={{ cursor: "pointer" }}
+      stroke="black"
+      strokeWidth={35}
     />
   );
 };
