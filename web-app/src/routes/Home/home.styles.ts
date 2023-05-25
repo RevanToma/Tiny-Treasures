@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { theme } from '../../styles/themes';
+import styled from "styled-components";
+import { theme } from "../../styles/themes";
 
 export const HeroImg = styled.img`
   object-fit: cover;
@@ -27,7 +27,7 @@ export const HeroTextBox = styled.div`
 `;
 
 export const Divider = styled.div`
-  content: '';
+  content: "";
   font-size: 1.6rem;
   width: 100%;
   margin-top: 2.4rem;
