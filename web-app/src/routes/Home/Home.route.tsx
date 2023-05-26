@@ -1,16 +1,21 @@
-import { FC } from 'react';
+import { FC } from "react";
 
+<<<<<<< HEAD
 import GroupSlider from './GroupSlider/GroupSlider.component';
+=======
+import CategorySlider from "./CategorySlider/CategorySlider.component";
+>>>>>>> a3db53a80b71f5243214b03c8dbabb08cadb864c
 
-import * as S from './home.styles';
-import Divider from '../../components/common/Divider/Divider.component';
-import Box from '../../components/common/Box/Box';
-import { queryClient } from '../../main';
-import { Enum } from '../../types';
-import { imgUrls } from '../../utils/urls/imgUrls';
+import * as S from "./home.styles";
+import Divider from "../../components/common/Divider/Divider.component";
+import Box from "../../components/common/Box/Box";
+import { queryClient } from "../../main";
+import { Enum } from "../../types";
+import { imgUrls } from "../../utils/urls/imgUrls";
+import IntroSlides from "../../components/IntroSlides/IntroSlides";
 
 const Home: FC = () => {
-  const enums: Enum | undefined = queryClient.getQueryData(['enums']);
+  const enums: Enum | undefined = queryClient.getQueryData(["enums"]);
 
   return (
     <Box gap="2.4rem">
@@ -21,6 +26,7 @@ const Home: FC = () => {
           <p>"Swap online! Sustainable exchange for a greater future!"</p>
         </S.HeroTextBox>
       </Box>
+      <IntroSlides />
       <Box padding="0 3.2rem">
         {enums &&
           enums.main.map((group, i, arr) => (
