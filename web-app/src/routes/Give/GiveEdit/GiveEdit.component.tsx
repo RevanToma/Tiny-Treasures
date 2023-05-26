@@ -1,22 +1,23 @@
 import { FC, Dispatch, useState, useEffect } from 'react';
 
 import UploadImageBox from '../UploadImageBox/UploadImageBox.component';
-import { ButtonType } from '../../../components/common/Button/button.types';
 import Button from '../../../components/common/Button/Button.component';
+import Box from '../../../components/common/Box/Box';
+import Input from '../../../components/common/Input/input.component';
+import SelectInput from '../../../components/common/SelectInput/SelectInput.component';
+import CheckboxList from '../../../components/common/CheckboxList/CheckboxList.component';
+import { CheckboxSizes } from '../../Group/FilterPopup/FilterPopup.component';
+
 import {
   checkIsFormValid,
   getCategory,
   getSizes,
   handleInputChange,
 } from '../give.helpers';
-import Box from '../../../components/common/Box/Box';
-import Input from '../../../components/common/Input/input.component';
-import { IConvertedChangeData, IGivePreviewFormData } from '../give.types';
 
+import { ButtonType } from '../../../components/common/Button/button.types';
+import { IConvertedChangeData, IGivePreviewFormData } from '../give.types';
 import { ages, conditions, mainCategories } from '../../../utils/enums';
-import SelectInput from '../../../components/common/SelectInput/SelectInput.component';
-import CheckboxList from '../../../components/common/CheckboxList/CheckboxList.component';
-import { CheckboxSizes } from '../../Group/FilterPopup/FilterPopup.component';
 
 interface GiveEditProps {
   setFormValues: Dispatch<React.SetStateAction<IGivePreviewFormData>>;
@@ -71,6 +72,8 @@ const GiveEdit: FC<GiveEditProps> = ({
     const choices = [...formValues[name]] as string[];
     return choices.includes(item);
   };
+
+  //TODO:  ADD ERROR MESSAGE IF USER HAS NO LOCATION
 
   return (
     <>
@@ -146,14 +149,6 @@ const GiveEdit: FC<GiveEditProps> = ({
           previousValue={formValues.condition}
           optionsArray={conditions}
           initialValue="Condition"
-          required
-        />
-        <SelectInput
-          handleSelect={handleChange}
-          name="location"
-          previousValue={formValues.location}
-          optionsArray={['Home']}
-          initialValue="Location"
           required
         />
         <Button

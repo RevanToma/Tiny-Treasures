@@ -53,9 +53,9 @@ export const checkIsFormValid = (data: IGivePreviewFormData) => {
     data.age === '' ||
     data.itemCount === '' ||
     data.condition === '' ||
-    data.location === '' ||
     !data.typeOfItems.length ||
-    !data.sizes
+    (data.group === 'clothes' && !data.sizes.length) ||
+    !data.images.length
   )
     return false;
   return true;
@@ -90,4 +90,38 @@ export const getSizes = (age: string) => {
   if (age === EAges.B) return ['98/104', '110/116', '122/128'];
   if (age === EAges.C) return ['134/140', '146/152'];
   return [];
+};
+
+export const getFormData = (formData: IGivePreviewFormData) => {
+  const {
+    images,
+    title,
+    description,
+    group,
+    typeOfItems,
+    age,
+    sizes,
+    itemCount,
+    condition,
+  } = formData;
+
+  const form = new FormData();
+
+  images.forEach(file => {
+    form.append('photos', file);
+  });
+  form.append('title', title);
+  form.append('description', description);
+  form.append('group', group);
+  typeOfItems.forEach(typeOfItem => {
+    form.append('typeOfItems', typeOfItem);
+  });
+  form.append('age', age);
+  sizes.forEach(size => {
+    form.append('sizes', size);
+  });
+  form.append('itemCount', itemCount);
+  form.append('condition', condition);
+
+  return form;
 };

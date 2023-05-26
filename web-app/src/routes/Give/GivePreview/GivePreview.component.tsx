@@ -1,13 +1,20 @@
-import { FC, useState, useEffect, Dispatch, MouseEvent } from 'react';
+import { FC, useState, useEffect, Dispatch } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import Button from '../../../components/common/Button/Button.component';
-import { IGivePreviewFormData } from '../give.types';
-import { IReviewPost } from '../../../types';
 import PostCardLarge from '../../../components/common/PostCardLarge/PostCardLarge.component';
 import Box from '../../../components/common/Box/Box';
-import { ButtonType } from '../../../components/common/Button/button.types';
+import Spinner from '../../../components/common/spinner/spinner.component';
+
 import { useCreateNewPost } from '../../../hooks/useCreateNewPost';
-import * as S from './givePreview.styles';
 import { moveToFrontOfArray } from '../../../utils/helpers';
+import { getFormData } from '../give.helpers';
+
+import { IGivePreviewFormData } from '../give.types';
+import { IReviewPost } from '../../../types';
+import { ButtonType } from '../../../components/common/Button/button.types';
+
+import * as S from './givePreview.styles';
 
 interface GivePreviewProps {
   formData: IGivePreviewFormData;
@@ -15,10 +22,11 @@ interface GivePreviewProps {
 }
 
 const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
+  const navigate = useNavigate();
   const [imgSrcArray, setImgSrcArray] = useState<string[]>([]);
   const [postData, setPostData] = useState<IReviewPost | null>(null);
 
-  const mutation = useCreateNewPost();
+  const { mutate, isLoading, isSuccess, isError } = useCreateNewPost();
 
   const createPostData = (): IReviewPost => {
     const post = {
@@ -69,37 +77,9 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
   }, [formData.images]);
 
   const createPost = (): void => {
-    const {
-      images,
-      title,
-      description,
-      group,
-      typeOfItems,
-      age,
-      sizes,
-      itemCount,
-      condition,
-    } = formData;
+    const form = getFormData(formData);
 
-    const form = new FormData();
-
-    images.forEach(file => {
-      form.append('photos', file);
-    });
-    form.append('title', title);
-    form.append('description', description);
-    form.append('group', group);
-    typeOfItems.forEach(typeOfItem => {
-      form.append('typeOfItems', typeOfItem);
-    });
-    form.append('age', age);
-    sizes.forEach(size => {
-      form.append('sizes', size);
-    });
-    form.append('itemCount', itemCount);
-    form.append('condition', condition);
-
-    mutation.mutate(form);
+    mutate(form);
   };
 
   const setPrimaryImage = (index: number) => {
@@ -107,8 +87,38 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
     formData.images = newArray;
   };
 
+  const goToHome = () => {
+    navigate('/');
+  };
+
+  const resetGive = () => {
+    window.location.reload();
+  };
+
   return (
-    <S.Wrapper gap="5rem">
+    <S.Wrapper gap="5rem" position="relative">
+      {isLoading && (
+        <S.Uploading>
+          <Spinner size="large" />
+          <p>Uploading</p>
+        </S.Uploading>
+      )}
+
+      {isSuccess && (
+        <S.Success>
+          <Box>
+            <p>Success</p>
+            <p>Your item has been published</p>
+          </Box>
+          <Button onClick={resetGive} buttonType={ButtonType.Secondary}>
+            Upload another item
+          </Button>
+          <Button onClick={goToHome} buttonType={ButtonType.Google}>
+            Home
+          </Button>
+        </S.Success>
+      )}
+
       <h1>Review Item</h1>
       {postData && (
         <PostCardLarge
