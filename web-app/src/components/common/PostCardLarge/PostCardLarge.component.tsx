@@ -1,11 +1,10 @@
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import * as S from './postCardLarge.styles';
 import { useSelector } from 'react-redux';
-import { Post } from '../../../types';
+import { IReviewPost, Post } from '../../../types';
 import {
   selectIsSignedIn,
   selectUser,
-<<<<<<< HEAD
 } from '../../../store/user/userSelectors';
 import Box from '../Box/Box';
 import { getDate, getListFromArray } from '../../../utils/helpers';
@@ -13,67 +12,31 @@ import { theme } from '../../../styles/themes';
 import { useAppDispatch } from '../../../hooks/useDispatch';
 import { updateUserAsync } from '../../../store/user/userSlice';
 import LightBox from '../LightBox/LightBox.component';
-=======
-} from "../../../store/user/userSelectors";
-import Box from "../Box/Box";
-import { getDate } from "../../../utils/helpers";
-import { theme } from "../../../styles/themes";
-import { useAppDispatch } from "../../../hooks/useDispatch";
-import { updateUserAsync } from "../../../store/user/userSlice";
-import LightBox from "../LightBox/LightBox.component";
-import HeartIcon from "../../../routes/settings/MyFavourites/HeartComponent/Heart.component";
->>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
+import HeartIcon from '../../../routes/settings/MyFavourites/HeartComponent/Heart.component';
 
 interface PostCardLargeProps {
-  post: Post;
+  post: Post | IReviewPost;
+  isReview?: boolean;
+  setPrimaryImage?: (index: number) => void;
 }
 
-const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
-  // const dispatch = useAppDispatch();
+const PostCardLarge: React.FC<PostCardLargeProps> = ({
+  post,
+  isReview = false,
+  setPrimaryImage,
+}) => {
   const { title, description, condition, id } = post;
   const user = useSelector(selectUser);
-  // const isSignedIn = useSelector(selectIsSignedIn);
-
-<<<<<<< HEAD
-  const toggleSavedPost = (): void => {
-    const updatedSavedPosts = updateSavedPosts();
-    if (!updatedSavedPosts) return;
-    dispatch(updateUserAsync({ newData: updatedSavedPosts, field: 'saved' }));
-  };
-
-  const updateSavedPosts = (): string[] | null => {
-    if (!isSignedIn) return null;
-    // eslint-disable-next-line no-unsafe-optional-chaining
-    if (!user) return null;
-    const newSavedPosts = [...user.favorites];
-=======
-  // const toggleSavedPost = (): void => {
-  //   const updatedSavedPosts = updateSavedPosts();
-  //   if (!updatedSavedPosts) return;
-  //   dispatch(updateUserAsync({ newData: updatedSavedPosts, field: "saved" }));
-  // };
-
-  // const updateSavedPosts = (): string[] | null => {
-  //   if (!isSignedIn) return null;
-  //   // eslint-disable-next-line no-unsafe-optional-chaining
-  //   if (!user) return null;
-  //   const newSavedPosts = [...user.favourites];
->>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
-
-  //   const index = newSavedPosts.indexOf(id);
-  //   if (index === -1) {
-  //     newSavedPosts.push(id);
-  //   } else {
-  //     newSavedPosts.splice(index, 1);
-  //   }
-  //   return newSavedPosts;
-  // };
-
-  console.log(post);
 
   return (
     <S.Wrapper width="100%" alignItems="center">
-      {post.images.length > 0 && <LightBox images={post.images} />}
+      {post.images.length > 0 && (
+        <LightBox
+          setPrimaryImage={setPrimaryImage && setPrimaryImage}
+          isReview={isReview}
+          images={post.images}
+        />
+      )}
 
       <Box
         display="grid"
@@ -109,11 +72,11 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({ post }) => {
         <h1>{title}</h1>
         {user?.favorites && user.favorites.includes(id) ? (
           <Box width="4rem">
-            <HeartIcon postId={post._id} />
+            <HeartIcon disabled={isReview} postId={post.id} />
           </Box>
         ) : (
           <Box width="4rem">
-            <HeartIcon postId={post._id} />
+            <HeartIcon disabled={isReview} postId={post.id} />
           </Box>
         )}
       </Box>

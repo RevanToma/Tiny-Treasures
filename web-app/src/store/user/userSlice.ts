@@ -14,13 +14,8 @@ import {
   fetchtFavoritePosts,
   getAccessToken,
   signOutUserAsync,
-<<<<<<< HEAD
 } from '../../api/requests';
-import { socket, Socket } from '../../Sockets/Message.socket';
-=======
-} from "../../api/requests";
-import { Socket } from "../../Sockets/Message.socket";
->>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
+import { Socket } from '../../Sockets/Message.socket';
 
 interface UpdateData {
   [key: string]: string | number | string[];
@@ -35,7 +30,7 @@ const initialState: UserState = {
 };
 
 export const fetchFavoritePosts = createAsyncThunk(
-  "user/fetchFavoritePosts",
+  'user/fetchFavoritePosts',
   async () => {
     const favorites = await fetchtFavoritePosts();
     return favorites;
@@ -43,10 +38,9 @@ export const fetchFavoritePosts = createAsyncThunk(
 );
 
 export const addPostToFavourite = createAsyncThunk(
-  "user/addPostToFavourite",
+  'user/addPostToFavourite',
   async (postId: string) => {
     const updatedFavorites = await addPostToUserFavourite(postId);
-    console.log(updatedFavorites);
     return updatedFavorites;
   }
 );
@@ -68,7 +62,6 @@ export const signInUser = createAsyncThunk(
     const user: User = await ApiPostSignInUser(email, password);
 
     if (!user) return;
-    console.log(user._id);
 
     return user;
   }
@@ -80,7 +73,6 @@ export const signUpUser = createAsyncThunk(
     const user: User = await ApiPostSignUpUser(userData);
 
     if (!user) return;
-    // Socket.init(user._id);
 
     return user;
   }
@@ -116,10 +108,6 @@ const userSlice = createSlice({
     });
     builder.addCase(refreshAccessToken.fulfilled, (state, { payload }) => {
       if (payload) {
-<<<<<<< HEAD
-        console.log('payload ', payload.user);
-=======
->>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
         state.user = payload.user;
         state.isSignedIn = true;
         state.accessToken = payload.accessToken;
@@ -150,5 +138,6 @@ const userSlice = createSlice({
     });
   },
 });
+
 export const { setCurrentChatRoom } = userSlice.actions;
 export default userSlice.reducer;

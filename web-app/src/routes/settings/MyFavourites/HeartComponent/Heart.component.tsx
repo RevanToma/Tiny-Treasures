@@ -1,16 +1,26 @@
-import { FaHeart } from "react-icons/fa";
-import { useAppDispatch } from "../../../../hooks/useDispatch";
-import { useSelector } from "react-redux";
-import { selectUserFavouritePosts } from "../../../../store/user/userSelectors";
-import { addPostToFavourite } from "../../../../store/user/userSlice";
-import { useState } from "react";
-const HeartIcon = ({ postId }) => {
-  const userFavourites = useSelector(selectUserFavouritePosts);
-  const isFavourite = userFavourites?.includes(postId) || false;
+import { FaHeart } from 'react-icons/fa';
+import { useAppDispatch } from '../../../../hooks/useDispatch';
+import { useSelector } from 'react-redux';
+import {
+  selectUser,
+  selectUserFavouritePosts,
+} from '../../../../store/user/userSelectors';
+import { addPostToFavourite } from '../../../../store/user/userSlice';
+import { FC, useState } from 'react';
+
+interface IHeartProps {
+  postId: string;
+  disabled?: boolean;
+}
+
+const HeartIcon: FC<IHeartProps> = ({ postId, disabled = false }) => {
+  const user = useSelector(selectUser);
+  const isFavourite = user?.favorites?.includes(postId) || false;
   const dispatch = useAppDispatch();
   const [isFavouriteLocal, setIsFavouriteLocal] = useState(isFavourite);
 
   const handleHeartClick = () => {
+    if (disabled || !user) return;
     setIsFavouriteLocal(!isFavouriteLocal);
     if (isFavouriteLocal) {
       dispatch(addPostToFavourite(postId));
@@ -22,9 +32,9 @@ const HeartIcon = ({ postId }) => {
   return (
     <FaHeart
       onClick={handleHeartClick}
-      color={isFavourite ? "red" : "white"}
+      color={isFavourite ? 'red' : 'white'}
       size={29}
-      style={{ cursor: "pointer" }}
+      style={{ cursor: 'pointer' }}
       stroke="black"
       strokeWidth={35}
     />

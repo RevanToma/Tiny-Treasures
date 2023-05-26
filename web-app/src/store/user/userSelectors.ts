@@ -1,38 +1,40 @@
-import { RootState } from "../store";
-import { createSelector } from "@reduxjs/toolkit";
+import { RootState } from '../store';
+import { createSelector } from '@reduxjs/toolkit';
 
 const userSlice = (state: RootState) => state.user;
 // const userData = (state: RootState) => state.user;
 
 export const selectUser = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user
+  userSlice => userSlice.user
 );
+
 export const selectLocation = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user?.location
+  userSlice => userSlice.user?.location
 );
+
 export const selectIsSignedIn = createSelector(
   [userSlice],
-  (userSlice) => userSlice.isSignedIn
+  userSlice => userSlice.isSignedIn
 );
 
 export const selectCurrentChatRoom = createSelector(
   [userSlice],
-  (userSlice) => userSlice.currentChatRoom
+  userSlice => userSlice.currentChatRoom
 );
 
 export const selectUserCredits = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user?.credits
+  userSlice => userSlice.user?.credits
 );
 
 export const selectAccessToken = createSelector(
   [userSlice],
-  (userSlice) => userSlice.accessToken
+  userSlice => userSlice.accessToken
 );
 
 export const selectUserFavouritePosts = createSelector(
   [userSlice],
-  (userSlice) => userSlice.user.favorites
+  userSlice => userSlice.user?.favorites
 );

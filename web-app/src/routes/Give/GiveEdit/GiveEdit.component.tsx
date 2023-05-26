@@ -63,14 +63,9 @@ const GiveEdit: FC<GiveEditProps> = ({
   const handleChange = ({ name, value }: IConvertedChangeData) => {
     const newFormValues = { ...formValues };
     newFormValues[name] = value;
-    console.log(newFormValues);
 
     setFormValues(newFormValues);
   };
-
-  // FILE PICKING
-
-  // MULTIPLE SELECT OPTIONS
 
   const getIsChecked = (name: string, item: string) => {
     const choices = [...formValues[name]] as string[];
@@ -87,7 +82,7 @@ const GiveEdit: FC<GiveEditProps> = ({
           placeholder="Title"
           name="title"
           type="text"
-          // previousValue={formValues.title}
+          value={formValues.title}
           required
         />
         <Input
@@ -95,7 +90,7 @@ const GiveEdit: FC<GiveEditProps> = ({
           placeholder="Description"
           name="description"
           type="textarea"
-          // previousValue={formValues.description}
+          value={formValues.description}
           required
         />
         <SelectInput
@@ -140,7 +135,7 @@ const GiveEdit: FC<GiveEditProps> = ({
           name="itemCount"
           placeholder="Number of Items"
           type="number"
-          // previousValue={formValues.itemCount}
+          value={formValues.itemCount}
           min={1}
           max={10}
           required

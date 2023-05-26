@@ -2,12 +2,13 @@ import mongoose from 'mongoose';
 import User from './userModel';
 import AppError from '../utils/appError';
 import { EnumDocument } from './enumsModel';
+import { LocationData } from '../utils/interfaces';
 
 export enum Condition {
-  Used = 'used',
-  Fair = 'fair',
-  Good = 'good',
-  New = 'new',
+  Used = 'Used',
+  Fair = 'Fair',
+  Good = 'Good',
+  New = 'New',
 }
 
 export enum Sizes {
@@ -42,10 +43,7 @@ export interface PostDocumentWithoutEnum extends mongoose.Document {
   images: string[];
   user: mongoose.Schema.Types.ObjectId;
   userName: string;
-  location: {
-    type: string;
-    coordinates: [number, number];
-  };
+  location: LocationData;
   enumsAreValid: (post: PostDocumentWithEnums) => boolean;
 }
 
@@ -76,7 +74,7 @@ const postSchema = new mongoose.Schema<PostDocument>(
     enums: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Enum',
-      default: '6452654bfc9f011ef64dd9e1',
+      default: '645369da6fea72cad0792cbd',
     },
     group: String,
     typeOfItems: [String],
@@ -113,6 +111,7 @@ const postSchema = new mongoose.Schema<PostDocument>(
         enum: ['Point'],
       },
       coordinates: [Number],
+      city: String,
     },
   },
   {
@@ -121,7 +120,7 @@ const postSchema = new mongoose.Schema<PostDocument>(
   }
 );
 
-postSchema.index({ mainCategory: 1, age: 1 });
+postSchema.index({ typeOfItems: 1, age: 1 });
 
 postSchema.index({ location: '2dsphere' });
 
@@ -132,6 +131,11 @@ postSchema.pre('save', async function (next) {
   }
   this.location = user.location;
 
+  next();
+});
+
+postSchema.pre('save', async function (next) {
+  this.id = this._id;
   next();
 });
 

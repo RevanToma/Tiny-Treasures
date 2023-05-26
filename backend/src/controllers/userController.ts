@@ -1,11 +1,11 @@
-import { NextFunction, Response } from "express";
-import { catchAsync } from "../utils/catchAsync";
-import { CustomRequest } from "../utils/expressInterfaces";
-import User, { UserDocument } from "../models/userModel";
-import { decodeToken, getAccessToken } from "./authController";
-import AppError from "../utils/appError";
-import Post from "../models/postModel";
-import mongoose from "mongoose";
+import { NextFunction, Response } from 'express';
+import { catchAsync } from '../utils/catchAsync';
+import { CustomRequest } from '../utils/expressInterfaces';
+import User, { UserDocument } from '../models/userModel';
+import { decodeToken, getAccessToken } from './authController';
+import AppError from '../utils/appError';
+import Post from '../models/postModel';
+import mongoose from 'mongoose';
 
 // UTILITY MIDDLEWARE
 
@@ -37,14 +37,14 @@ export const getBasicUserData = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const basicUserData: UserDocument | null = await User.findById(
       req.user.id
-    ).select("id name email location saved");
+    ).select('id name email location favorites');
 
     if (!basicUserData) {
-      return next(new AppError("No user found", 400));
+      return next(new AppError('No user found', 400));
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         data: basicUserData,
       },
@@ -65,10 +65,10 @@ export const updateLocation = catchAsync(
     );
 
     if (!updatedUser) {
-      return next(new AppError("Error updating user location", 400));
+      return next(new AppError('Error updating user location', 400));
     }
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         user: updatedUser,
       },
@@ -80,11 +80,11 @@ export const getLocation = catchAsync(
     const user = await User.findById(req.user.id);
 
     if (!user) {
-      return next(new AppError("No user found", 400));
+      return next(new AppError('No user found', 400));
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         location: user.location,
       },
@@ -104,7 +104,7 @@ export const getAllUsersPosts = catchAsync(
     const userPosts = await Post.find({ user: userId });
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       TotalPosts: userPosts.length,
       data: {
         userPosts,
@@ -121,16 +121,16 @@ export const getFavoritePosts = catchAsync(
   ): Promise<void> => {
     const userId = req.user.id;
 
-    const user = await User.findById(userId).populate("favorites");
+    const user = await User.findById(userId).populate('favorites');
 
     if (!user) {
-      return next(new AppError("User not found", 404));
+      return next(new AppError('User not found', 404));
     }
 
     const favorites = user.favorites;
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       TotalFavPosts: favorites.length,
       data: {
         favorites,
@@ -152,7 +152,7 @@ export const updateFavouritePosts = catchAsync(
     const user = await User.findById(req.user.id);
 
     if (!user) {
-      return next(new AppError("No user found", 400));
+      return next(new AppError('No user found', 400));
     }
 
     if (user.favorites.includes(postId)) {
@@ -169,11 +169,11 @@ export const updateFavouritePosts = catchAsync(
 
     const updatedUser = await User.findById(req.user.id);
     if (!updatedUser) {
-      return next(new AppError("Error updating user favorites", 400));
+      return next(new AppError('Error updating user favorites', 400));
     }
 
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
         user: updatedUser,
       },

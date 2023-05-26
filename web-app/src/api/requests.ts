@@ -8,7 +8,7 @@ import {
   SignUpInfo,
 } from '../types';
 import api from './index';
-import { serverRoute } from '../utils/urls/serverUrls';
+import { apiUrl, serverRoute } from '../utils/urls/serverUrls';
 
 export interface ResponseWithData<T> {
   status: string;
@@ -157,6 +157,7 @@ export const patchEmail = async (newEmail: string, password: string) => {
   checkForError(data);
   return data;
 };
+
 export const patchPassword = async (passwordData: {
   password: string;
   passwordNew: string;
@@ -166,11 +167,13 @@ export const patchPassword = async (passwordData: {
   checkForError(data);
   return data;
 };
+
 export const patchLocation = async (locationData: LocationData) => {
   const { data } = await api.patch('/users/updateLocation', locationData);
   checkForError(data);
   return data;
 };
+
 export const fetchLocation = async () => {
   const { data } = await api.get('/users/getLocation');
   checkForError(data);
@@ -189,10 +192,12 @@ export const getCityFromCoordinates = async (
 
   return components;
 };
+
 export const getCoordinatesFromCity = async (cityName: string) => {
   const res = await axios.get(
     `https://api.opencagedata.com/geocode/v1/json?q=${cityName}&key=50886d99f1c442bc9e7276e71131cf35`
   );
+  console.log(res.data.results[0]);
   const geometry = res.data.results[0].geometry;
   console.log('GEO', geometry);
   return geometry;
@@ -207,18 +212,21 @@ export const getAccessToken = async () => {
 
   return data.data;
 };
+
 export const fetchUsersPosts = async () => {
   const { data } = await api.get('/users/posts');
   checkForError(data);
   console.log('USER POST FROM REQUEST', data);
   return data.data.userPosts;
 };
+
 export const fetchtFavoritePosts = async () => {
   const { data } = await api.get('/users/favoritePosts');
   checkForError(data);
 
   return data.data.favorites;
 };
+
 export const addPostToUserFavourite = async (postId: string) => {
   const { data } = await api.post(`/posts/${postId}`);
   checkForError(data);
@@ -229,5 +237,10 @@ export const addPostToUserFavourite = async (postId: string) => {
 // {user: ObjectId("645e7ad0b490c479f8416795")}
 
 export const postCreatePost = async (data: FormData) => {
-  await api.post('/posts', data);
+  await axios.post(`${apiUrl}/posts`, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    withCredentials: true,
+  });
 };

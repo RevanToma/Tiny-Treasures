@@ -54,7 +54,7 @@ export const checkIsFormValid = (data: IGivePreviewFormData) => {
     data.itemCount === '' ||
     data.condition === '' ||
     data.location === '' ||
-    !data.categories.length ||
+    !data.typeOfItems.length ||
     !data.sizes
   )
     return false;

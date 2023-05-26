@@ -45,11 +45,7 @@ export interface User {
   location?: {
     coordinates: [];
   };
-<<<<<<< HEAD
-  favorites: string[];
-=======
   favorites?: string[];
->>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
 }
 export interface SignUpInfo {
   name: string;
@@ -65,7 +61,7 @@ export interface Post {
   condition: string;
   createdAt: string;
   description: string;
-  id: string;
+  _id: string;
   images: string[];
   itemCount: number;
   location: {
@@ -78,7 +74,23 @@ export interface Post {
   age: string;
   title: string;
   user: string;
-  _id: string;
+}
+export interface IReviewPost {
+  typeOfItems: string[];
+  group: string;
+  condition: string;
+  createdAt: string;
+  description: string;
+  images: string[];
+  itemCount: number;
+  location: {
+    city: string;
+  };
+  distance: number;
+  sizes: string[];
+  age: string;
+  title: string;
+  id: string;
 }
 
 // REACT QUERY

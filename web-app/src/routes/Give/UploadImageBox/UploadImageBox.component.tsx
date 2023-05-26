@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useRef } from 'react';
+import { FC, MouseEvent, useEffect, useRef } from 'react';
 import { theme } from '../../../styles/themes';
 import { FaRegImages, FaPlus } from 'react-icons/fa';
 import * as S from './uploadImageBox.styles';
@@ -22,7 +22,13 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
   const imgPreviewMainRef = useRef<HTMLDivElement | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const imgFilesRef = useRef<File[]>([]);
+  const imgFilesRef = useRef<File[]>([...formValues.images]);
+
+  useEffect(() => {
+    if (formValues.images.length === 0) return;
+
+    handleChooseImage();
+  }, []);
 
   const setImagesToFormValues = (): void => {
     const data = {
@@ -47,13 +53,12 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
   const handleChooseImage = () => {
     if (!fileInputRef.current?.files) return;
 
-    clearImageElements();
-
     const files = [...fileInputRef.current.files];
     const newFileArray = [...imgFilesRef.current, ...files];
     imgFilesRef.current = newFileArray;
 
     setImagesToFormValues();
+    clearImageElements();
 
     newFileArray.forEach((file, i, arr) => {
       if (i >= MAX_POST_PHOTOS) return;
@@ -82,7 +87,6 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
         img.id = `${file.name}-${i}`;
         imgBox.appendChild(img);
         imgBox.appendChild(removeIcon);
-        console.log(i);
         if (i < arr.length - 1 && i < MAX_POST_PHOTOS - 1) {
           imgPreviewRef.current?.appendChild(imgBox);
         } else {

@@ -21,3 +21,16 @@ export const getListFromArray = (array: string[]) => {
   });
   return str;
 };
+
+export const moveToFrontOfArray = (
+  index: number,
+  array: (string | File)[]
+): (string | File)[] => {
+  const newArray = [...array];
+  console.log(newArray);
+  const [primary] = newArray.splice(index, 1);
+  newArray.unshift(primary);
+  console.log(newArray);
+
+  return newArray;
+};

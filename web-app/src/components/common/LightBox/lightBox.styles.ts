@@ -46,3 +46,14 @@ export const Breadcrumbs = styled.div<IBReadcrumbsProps>`
   border-radius: 50%;
   background-color: ${({ active }) => (active ? '#323232' : '#c9c8c8')};
 `;
+
+export const PrimaryLabel = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 0.4rem 1.6rem;
+  background-color: ${theme.color.primaryOffWhite};
+  ${theme.type.body}
+  font-weight: 700;
+  border-radius: ${theme.radius.button};
+`;

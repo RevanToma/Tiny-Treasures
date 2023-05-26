@@ -1,12 +1,13 @@
-import { FC, useState, useEffect, Dispatch } from 'react';
+import { FC, useState, useEffect, Dispatch, MouseEvent } from 'react';
 import Button from '../../../components/common/Button/Button.component';
 import { IGivePreviewFormData } from '../give.types';
-import { Post } from '../../../types';
+import { IReviewPost } from '../../../types';
 import PostCardLarge from '../../../components/common/PostCardLarge/PostCardLarge.component';
 import Box from '../../../components/common/Box/Box';
 import { ButtonType } from '../../../components/common/Button/button.types';
 import { useCreateNewPost } from '../../../hooks/useCreateNewPost';
 import * as S from './givePreview.styles';
+import { moveToFrontOfArray } from '../../../utils/helpers';
 
 interface GivePreviewProps {
   formData: IGivePreviewFormData;
@@ -15,20 +16,21 @@ interface GivePreviewProps {
 
 const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
   const [imgSrcArray, setImgSrcArray] = useState<string[]>([]);
-  const [postData, setPostData] = useState<Post | null>(null);
+  const [postData, setPostData] = useState<IReviewPost | null>(null);
 
   const mutation = useCreateNewPost();
 
-  const createPostData = (): Post => {
+  const createPostData = (): IReviewPost => {
     const post = {
       ...formData,
-      id: '',
       createdAt: new Date(Date.now()).toString(),
       location: {
         city: 'Stockholm',
       },
       images: imgSrcArray,
       itemCount: parseInt(formData.itemCount),
+      distance: 0,
+      id: '',
     };
     return post;
   };
@@ -66,36 +68,55 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
     });
   }, [formData.images]);
 
-  // const createPost = (e: FormEvent<HTMLFormElement>): void => {
-  //   e.preventDefault();
-  //   console.log('SUBMIT');
+  const createPost = (): void => {
+    const {
+      images,
+      title,
+      description,
+      group,
+      typeOfItems,
+      age,
+      sizes,
+      itemCount,
+      condition,
+    } = formData;
 
-  //   const form = new FormData();
-  //   imgFilesRef.current.forEach(file => {
-  //     form.append('photos', file);
-  //   });
-  //   form.append('title', title);
-  //   form.append('description', description);
-  //   form.append('mainCategory', group);
-  //   categories.forEach(category => {
-  //     form.append('subCategories', category);
-  //   });
-  //   form.append('age', age);
-  //   sizes.forEach(size => {
-  //     form.append('size', size);
-  //   });
-  //   form.append('itemCount', itemCount);
-  //   form.append('condition', condition);
-  //   // for (const [key, value] of form.entries()) {
-  //   //   console.log(key, value);
-  //   // }
-  //   // mutation.mutate(form);
-  // };
+    const form = new FormData();
+
+    images.forEach(file => {
+      form.append('photos', file);
+    });
+    form.append('title', title);
+    form.append('description', description);
+    form.append('group', group);
+    typeOfItems.forEach(typeOfItem => {
+      form.append('typeOfItems', typeOfItem);
+    });
+    form.append('age', age);
+    sizes.forEach(size => {
+      form.append('sizes', size);
+    });
+    form.append('itemCount', itemCount);
+    form.append('condition', condition);
+
+    mutation.mutate(form);
+  };
+
+  const setPrimaryImage = (index: number) => {
+    const newArray = moveToFrontOfArray(index, formData.images) as File[];
+    formData.images = newArray;
+  };
 
   return (
     <S.Wrapper gap="5rem">
       <h1>Review Item</h1>
-      {postData && <PostCardLarge post={postData} />}
+      {postData && (
+        <PostCardLarge
+          setPrimaryImage={setPrimaryImage}
+          isReview={true}
+          post={postData}
+        />
+      )}
       <Box flexDirection="row" justifyContent="center" gap="3rem">
         <Button
           onClick={() => setShowPreview(false)}
@@ -103,7 +124,9 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
         >
           Edit
         </Button>
-        <Button buttonType={ButtonType.SmallGreen}>Publish</Button>
+        <Button onClick={createPost} buttonType={ButtonType.SmallGreen}>
+          Publish
+        </Button>
       </Box>
     </S.Wrapper>
   );

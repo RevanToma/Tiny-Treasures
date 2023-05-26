@@ -22,26 +22,19 @@ const Post: React.FC = () => {
 
   const { data: post, isError, error, isLoading } = usePost(postId);
 
-<<<<<<< HEAD
-=======
-  // console.log("POST FROM POST", post?.user);
-  // console.log("USER FROM POST", user);
-  // console.log("POST OBJCET FROM POST", post);
-  // console.log("POST OBJCET FROM POST", user);
-
->>>>>>> a66734963b90dfc5c703080876a70fc8e84c3357
   useEffect(() => {
+    if (!user) return;
     const refetchChatsAndGoToChat = (data: IChatRoom) => {
       queryClient.invalidateQueries([fetchChats.name]);
-      if (post?._id) {
-        navigate(`/chat/${data._id}/${post?._id}`);
+      if (post?.id) {
+        navigate(`/chat/${data._id}/${post?.id}`);
       }
     };
 
     if (user._id) {
       socket().on('create-chat', refetchChatsAndGoToChat);
     }
-  }, [user._id, queryClient, navigate, post?._id]);
+  }, [user?._id, queryClient, navigate, post?.id]);
 
   if (isLoading && postId) return <Spinner />;
   if (error instanceof Error) return <h1>{error.message}</h1>;
@@ -67,12 +60,16 @@ const Post: React.FC = () => {
         <Box padding="2.4rem">
           <PostCardLarge post={post} />
           <Box alignItems="center">
-            {post.user === user._id ? (
+            {post.user === user?._id ? (
               <Button onClick={handleEditPost} buttonType={ButtonType.Primary}>
                 Edit
               </Button>
             ) : (
-              <Button onClick={goToChat} buttonType={ButtonType.Primary}>
+              <Button
+                onClick={goToChat}
+                buttonType={user ? ButtonType.Primary : ButtonType.Disabled}
+                disabled={user === null}
+              >
                 Message
               </Button>
             )}

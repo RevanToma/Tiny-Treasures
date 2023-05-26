@@ -33,7 +33,7 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json());
 app.use(cookieParser());
 
 // ROUTES

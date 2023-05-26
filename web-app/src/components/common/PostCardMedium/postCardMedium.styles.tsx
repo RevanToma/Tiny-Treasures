@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Box from "../Box/Box";
+import styled from 'styled-components';
+import Box from '../Box/Box';
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export const ImageBox = styled.div`
   }
 `;
 
-export const BoxWithChildren = styled(Box)`
+export const Wrapper = styled(Box)`
   position: relative;
   p {
     font-size: 1.3rem;
