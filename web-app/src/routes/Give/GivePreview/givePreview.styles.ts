@@ -38,3 +38,13 @@ export const Uploading = styled.div`
 export const Success = styled.div`
   ${commonStyles}
 `;
+
+export const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  width: 100vw;
+  height: 150vh;
+  background-color: rgba(0, 0, 0, 0.4);
+`;

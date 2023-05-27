@@ -96,49 +96,53 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
   };
 
   return (
-    <S.Wrapper gap="5rem" position="relative">
-      {isLoading && (
-        <S.Uploading>
-          <Spinner size="large" />
-          <p>Uploading</p>
-        </S.Uploading>
-      )}
+    <>
+      {(isLoading || isSuccess) && <S.Overlay></S.Overlay>}
 
-      {isSuccess && (
-        <S.Success>
-          <Box>
-            <p>Success</p>
-            <p>Your item has been published</p>
-          </Box>
-          <Button onClick={resetGive} buttonType={ButtonType.Secondary}>
-            Upload another item
-          </Button>
-          <Button onClick={goToHome} buttonType={ButtonType.Google}>
-            Home
-          </Button>
-        </S.Success>
-      )}
+      <S.Wrapper gap="5rem" position="relative">
+        {isLoading && (
+          <S.Uploading>
+            <Spinner size="large" />
+            <p>Uploading</p>
+          </S.Uploading>
+        )}
 
-      <h1>Review Item</h1>
-      {postData && (
-        <PostCardLarge
-          setPrimaryImage={setPrimaryImage}
-          isReview={true}
-          post={postData}
-        />
-      )}
-      <Box flexDirection="row" justifyContent="center" gap="3rem">
-        <Button
-          onClick={() => setShowPreview(false)}
-          buttonType={ButtonType.SmallYellow}
-        >
-          Edit
-        </Button>
-        <Button onClick={createPost} buttonType={ButtonType.SmallGreen}>
-          Publish
-        </Button>
-      </Box>
-    </S.Wrapper>
+        {isSuccess && (
+          <S.Success>
+            <Box>
+              <p>Success</p>
+              <p>Your item has been published</p>
+            </Box>
+            <Button onClick={resetGive} buttonType={ButtonType.Secondary}>
+              Upload another item
+            </Button>
+            <Button onClick={goToHome} buttonType={ButtonType.Google}>
+              Home
+            </Button>
+          </S.Success>
+        )}
+
+        <h1>Review Item</h1>
+        {postData && (
+          <PostCardLarge
+            setPrimaryImage={setPrimaryImage}
+            isReview={true}
+            post={postData}
+          />
+        )}
+        <Box flexDirection="row" justifyContent="center" gap="3rem">
+          <Button
+            onClick={() => setShowPreview(false)}
+            buttonType={ButtonType.SmallYellow}
+          >
+            Edit
+          </Button>
+          <Button onClick={createPost} buttonType={ButtonType.SmallGreen}>
+            Publish
+          </Button>
+        </Box>
+      </S.Wrapper>
+    </>
   );
 };
 

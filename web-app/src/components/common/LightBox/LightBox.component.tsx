@@ -35,7 +35,7 @@ const LightBox: FC<LightBoxProps> = ({ images, isReview, setPrimaryImage }) => {
     <>
       <Box
         // maxWidth="40rem"
-        height="30rem"
+        // height="30rem"
         margin="0 .4rem"
         alignItems="center"
         justifyContent="center"

@@ -20,6 +20,7 @@ export const Wrapper = styled(Box)`
 export const ImagePreviewBox = styled.div`
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   gap: 2.4rem;
   max-height: 16rem;
   overflow-x: scroll;
@@ -40,6 +41,7 @@ export const ImagePreviewBox = styled.div`
 export const ImagePreviewBoxMain = styled.div`
   display: flex;
   justify-content: center;
+  align-items: flex-start;
 
   img {
     height: 100%;

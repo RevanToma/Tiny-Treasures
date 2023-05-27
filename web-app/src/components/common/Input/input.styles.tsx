@@ -8,6 +8,15 @@ const commonStyles = css`
   cursor: text;
   box-shadow: ${theme.shadow};
   ${theme.type.body}
+
+  &:hover {
+    outline: 1px solid ${theme.color.black};
+  }
+
+  &:active,
+  &:focus {
+    outline: 3px solid ${theme.color.primaryBlue};
+  }
 `;
 
 export const StyledInput = styled.input`

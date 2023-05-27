@@ -25,7 +25,6 @@ export const getImgBox = (name: string, i: number): Node => {
 export const getMainImgBox = (name: string, i: number): Node => {
   const div = document.createElement('div');
   div.id = `img-box-${name}-${i}`;
-  div.style.minHeight = '23rem';
   div.style.minWidth = '23rem';
   div.style.width = '23rem';
   div.style.borderRadius = '8px';
