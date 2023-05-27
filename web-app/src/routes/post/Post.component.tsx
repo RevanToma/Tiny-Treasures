@@ -26,15 +26,15 @@ const Post: React.FC = () => {
     if (!user) return;
     const refetchChatsAndGoToChat = (data: IChatRoom) => {
       queryClient.invalidateQueries([fetchChats.name]);
-      if (post?.id) {
-        navigate(`/chat/${data._id}/${post?.id}`);
+      if (post?._id) {
+        navigate(`/chat/${data._id}/${post?._id}`);
       }
     };
 
     if (user._id) {
       socket().on('create-chat', refetchChatsAndGoToChat);
     }
-  }, [user?._id, queryClient, navigate, post?.id]);
+  }, [user?._id, queryClient, navigate, post?._id]);
 
   if (isLoading && postId) return <Spinner />;
   if (error instanceof Error) return <h1>{error.message}</h1>;
@@ -48,6 +48,8 @@ const Post: React.FC = () => {
   const handleEditPost = () => {
     console.log('edit');
   };
+  console.log(post.user);
+  console.log(user._id);
 
   return (
     <Box padding="2.4rem" gap="3rem" backgroundColor="##F3F0E6">
@@ -57,7 +59,7 @@ const Post: React.FC = () => {
       ) : isError ? (
         <p>error message: ${error instanceof Error && error.message}</p>
       ) : (
-        <Box padding="2.4rem">
+        <Box padding="2.4rem 0">
           <PostCardLarge post={post} />
           <Box alignItems="center">
             {post.user === user?._id ? (

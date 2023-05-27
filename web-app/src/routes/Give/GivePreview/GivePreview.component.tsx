@@ -38,7 +38,7 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
       images: imgSrcArray,
       itemCount: parseInt(formData.itemCount),
       distance: 0,
-      id: '',
+      _id: '',
     };
     return post;
   };

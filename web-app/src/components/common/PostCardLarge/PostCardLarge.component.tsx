@@ -25,7 +25,7 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({
   isReview = false,
   setPrimaryImage,
 }) => {
-  const { title, description, condition, id } = post;
+  const { title, description, condition, _id } = post;
   const user = useSelector(selectUser);
 
   return (
@@ -63,22 +63,16 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({
       </Box>
       <Box
         flexDirection="row"
-        justifyContent="space-between"
         alignItems="flex-start"
         gap="2rem"
         marginBottom="1rem"
         width="100%"
       >
         <h1>{title}</h1>
-        {user?.favorites && user.favorites.includes(id) ? (
-          <Box width="4rem">
-            <HeartIcon disabled={isReview} postId={post.id} />
-          </Box>
-        ) : (
-          <Box width="4rem">
-            <HeartIcon disabled={isReview} postId={post.id} />
-          </Box>
-        )}
+
+        <Box width="20rem" alignItems="center">
+          <HeartIcon disabled={isReview} postId={_id} />
+        </Box>
       </Box>
       <Box
         width="100%"

@@ -90,7 +90,7 @@ export interface IReviewPost {
   sizes: string[];
   age: string;
   title: string;
-  id: string;
+  _id: string;
 }
 
 // REACT QUERY

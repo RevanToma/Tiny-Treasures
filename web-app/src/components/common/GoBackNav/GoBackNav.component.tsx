@@ -11,7 +11,7 @@ interface GoBackNavProps {
 const GoBackNav: FC<GoBackNavProps> = ({ title, size }) => {
   return (
     <Box
-      width="100vw"
+      width="100%"
       alignItems="center"
       justifyContent="center"
       position="relative"
