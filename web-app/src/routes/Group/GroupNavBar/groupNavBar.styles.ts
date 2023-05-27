@@ -19,7 +19,7 @@ export const NavItem = styled.li<IWrapperProps>`
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 1rem 0;
+  padding-bottom: 1rem;
   border-bottom: ${({ active }) =>
     active ? `3px solid ${theme.color.primaryBlue}` : 'none'};
 `;

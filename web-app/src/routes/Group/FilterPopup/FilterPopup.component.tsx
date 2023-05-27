@@ -50,7 +50,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
 
   const getNewQueryData = (): QueryData => {
     return {
-      TypeOfItems: [...tempQueryData.Categories],
+      TypeOfItems: [...tempQueryData.TypeOfItems],
       Sizes: [...tempQueryData.Sizes],
       Age: [...tempQueryData.Age],
       Condition: [...tempQueryData.Condition],
@@ -77,6 +77,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
       if (i === -1) return;
       newData[category].splice(i, 1);
     }
+    console.log(newData);
     dispatch(setTempQueryData(newData));
   };
 
@@ -136,7 +137,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
       >
         <CheckboxList
           label="Type of Item"
-          name="typeOfItems"
+          name="TypeOfItems"
           items={filterItems[capitalize(groupName)]}
           size={CheckboxSizes.Large}
           setOptions={handleOptions}

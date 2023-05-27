@@ -8,6 +8,7 @@ export enum ButtonType {
   Tertiary = 'tertiary',
   SmallGreen = 'smallGreen',
   SmallYellow = 'smallYellow',
+  SmallBlue = 'smallBlue',
   Disabled = 'disabled',
   SmallTransparent = 'smallTransparent',
   Pending = 'pending',
@@ -66,6 +67,12 @@ export const buttons: Buttons = {
     width: theme.button.widthSmall,
     hoverBackground: theme.gradient.tradePending,
     activeBackground: theme.gradient.tradePending,
+  },
+  smallBlue: {
+    background: theme.color.primaryBlue,
+    width: theme.button.widthSmall,
+    hoverBackground: theme.color.darkBlueHover,
+    activeBackground: theme.color.lighterBlueActive,
   },
   smallTransparent: {
     color: theme.color.primaryBlue,

@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { theme } from "../../styles/themes";
+import styled from 'styled-components';
+import { theme } from '../../styles/themes';
 
 export const PostListContainer = styled.ul`
   display: flex;
@@ -13,15 +13,17 @@ export const MainImg = styled.img`
 `;
 
 export const SearchInput = styled.input`
-  padding: 2rem 3rem;
+  height: 4.5rem;
   width: 100%;
   max-width: 45rem;
   margin: 0 10px;
+  padding: 0 2rem;
+  ${theme.type.body}
   border: none;
+
   &:focus {
     outline: 3px solid ${theme.color.grayDark};
     outline-offset: 2px;
   }
   border-radius: 15px;
-  height: 20px;
 `;

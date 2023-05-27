@@ -98,13 +98,11 @@ export const fetchPosts = async ({
   query = '',
   searchQuery,
 }: getPostParams): Promise<PostQueryResult> => {
+  console.log('fetched', searchQuery);
   const limit = 20;
   let urlQuery = 'posts/?';
   if (pageParam) {
-    urlQuery += `&page=${pageParam}&limit=${limit}`;
-  }
-  if (query) {
-    urlQuery += `&limit=${limit}`;
+    urlQuery += `&page=${pageParam}&limit=${limit}&${query}`;
   }
   if (searchQuery) {
     urlQuery += `&search=${searchQuery}`;

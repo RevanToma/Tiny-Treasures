@@ -92,10 +92,10 @@ const Group: React.FC = () => {
         ? 'distance'
         : '';
 
-    let newQuery = `mainCategory=${group}`;
+    let newQuery = `group=${group}`;
 
     if (typeOfItemsString.length) {
-      newQuery += `&subCategories=${typeOfItemsString}`;
+      newQuery += `&typeOfItems=${typeOfItemsString}`;
     }
 
     if (sizesString.length) {
@@ -189,7 +189,7 @@ const Group: React.FC = () => {
             <Box width="100%" alignItems="center">
               <Button
                 onClick={() => setIsFilterPopupOpen(true)}
-                buttonType={ButtonType.SmallGreen}
+                buttonType={ButtonType.SmallBlue}
               >
                 Filter
               </Button>
