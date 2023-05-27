@@ -7,7 +7,7 @@ import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component'
 import { Title } from '../../../components/common/GoBackNav/goBackNav.styles';
 import Input from '../../../components/common/Input/input.component';
 import * as S from './Location.styles';
-import { IGeoJson, ILocation, Point } from '../../../types';
+import { IGeoJson, ILocation, IPoint } from '../../../types';
 import { getCityFromAddress, getCityFromCoords } from '../../../api/requests';
 import { useNavigate } from 'react-router-dom';
 import { getGeoJson } from './location.helpers';
@@ -40,7 +40,7 @@ const Location: React.FC = () => {
 
         const geoJson: IGeoJson = {
           coordinates: [lng, lat],
-          type: Point.Point,
+          type: IPoint.Point,
           city,
         };
         setLocation(geoJson);

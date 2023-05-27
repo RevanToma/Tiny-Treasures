@@ -1,9 +1,9 @@
-import { IGeoJson, ILocation, Point } from '../../../types';
+import { IGeoJson, ILocation, IPoint } from '../../../types';
 
 export const getGeoJson = (location: ILocation): IGeoJson => {
   const { city, lat, lng } = location;
   return {
-    type: Point.Point,
+    type: IPoint.Point,
     coordinates: [parseFloat(lng), parseFloat(lat)],
     city,
   };

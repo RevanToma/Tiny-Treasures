@@ -181,24 +181,6 @@ export const updateEmail = catchAsync(
     createAndSendRefreshToken(req.user, 200, req, res, next);
   }
 );
-export const updateName = catchAsync(
-  async (
-    req: CustomRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> => {
-    const { newName } = req.body;
-
-    if (!newName) {
-      return next(new AppError('Please provide a new name.', 401));
-    }
-    req.user.name = newName;
-
-    await req.user.save();
-
-    createAndSendRefreshToken(req.user, 200, req, res, next);
-  }
-);
 
 export const verifyPassword = catchAsync(
   async (

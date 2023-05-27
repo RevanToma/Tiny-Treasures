@@ -12,11 +12,6 @@ userRouter.post(
   authController.verifyPassword,
   authController.signIn
 );
-userRouter.patch(
-  '/updateLocation',
-  authController.protect,
-  userController.updateLocation
-);
 
 userRouter.post('/signout', authController.signOut);
 
@@ -29,12 +24,13 @@ userRouter.patch(
   authController.verifyPassword,
   authController.updatePassword
 );
+
 userRouter.patch(
   '/updateEmail',
   authController.verifyPassword,
   authController.updateEmail
 );
-userRouter.patch('/updateName', authController.updateName);
+
 userRouter.get('/checkLoggedIn', userController.getBasicUserData);
 
 userRouter.get(

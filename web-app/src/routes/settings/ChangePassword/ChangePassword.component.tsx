@@ -5,36 +5,32 @@ import Input from '../../../components/common/Input/input.component';
 import Button from '../../../components/common/Button/Button.component';
 import { ButtonType } from '../../../components/common/Button/button.types';
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { patchPassword } from '../../../api/requests';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../../../hooks/useDispatch';
+import { updatePasswordAsync } from '../../../store/user/userSlice';
 const ChangePassword: React.FC = () => {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const mutation = useMutation(patchPassword, {
-    onSuccess: () => {
-      alert('Password changed successfully');
-      navigate('/account');
-    },
-    onError: () => {
-      alert('Failed to change password');
-    },
-  });
+  const [password, setPassword] = useState('');
+  const [passwordNew, setPasswordNew] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+
   const handleSavePassword = () => {
-    if (newPassword !== confirmPassword) {
+    if (passwordNew !== passwordConfirm) {
       alert('New password and confirm password do not match');
       return;
     }
 
-    mutation.mutate({
-      password: oldPassword,
-      passwordNew: newPassword,
-      passwordConfirm: confirmPassword,
-    });
+    dispatch(
+      updatePasswordAsync({
+        password,
+        passwordNew,
+        passwordConfirm,
+      })
+    );
   };
+
   return (
     <Box gap="2.4rem" width="100%">
       <GoBackNav title="Change Password" />
@@ -49,24 +45,20 @@ const ChangePassword: React.FC = () => {
         <Input
           placeholder="Old Password"
           type="password"
-          onChange={e => setOldPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
         />
         <Input
           placeholder="New Password"
           type="password"
-          onChange={e => setNewPassword(e.target.value)}
+          onChange={e => setPasswordNew(e.target.value)}
         />
         <Input
           placeholder="Repeat New Password"
           type="password"
-          onChange={e => setConfirmPassword(e.target.value)}
+          onChange={e => setPasswordConfirm(e.target.value)}
         />
       </Box>
-      <Button
-        buttonType={ButtonType.Primary}
-        onClick={handleSavePassword}
-        isLoading={mutation.isLoading}
-      >
+      <Button buttonType={ButtonType.Primary} onClick={handleSavePassword}>
         Save
       </Button>
     </Box>

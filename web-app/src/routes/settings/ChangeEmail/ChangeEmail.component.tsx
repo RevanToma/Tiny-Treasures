@@ -6,25 +6,16 @@ import Input from '../../../components/common/Input/input.component';
 import Button from '../../../components/common/Button/Button.component';
 import { ButtonType } from '../../../components/common/Button/button.types';
 import { useNavigate } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
-import { patchEmail } from '../../../api/requests';
+import { useAppDispatch } from '../../../hooks/useDispatch';
+import { updateEmailAsync } from '../../../store/user/userSlice';
 
 const ChangeEmail: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [newEmail, setNewEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const navigate = useNavigate();
-
-  const mutation = useMutation(() => patchEmail(newEmail, password), {
-    onSuccess: () => {
-      alert(`Successfully changed email to: ${newEmail}`);
-      navigate('/account');
-    },
-    onError: () => {
-      console.log('error');
-    },
-  });
 
   const handleSaveEmail = () => {
     if (newEmail !== confirmEmail) {
@@ -36,8 +27,7 @@ const ChangeEmail: React.FC = () => {
       alert('Please enter your password.');
       return;
     }
-
-    mutation.mutate();
+    dispatch(updateEmailAsync({ newEmail, password }));
   };
 
   return (
@@ -60,11 +50,7 @@ const ChangeEmail: React.FC = () => {
         />
       </Box>
       <Box marginTop="3.2rem">
-        <Button
-          buttonType={ButtonType.Primary}
-          onClick={handleSaveEmail}
-          isLoading={mutation.isLoading}
-        >
+        <Button buttonType={ButtonType.Primary} onClick={handleSaveEmail}>
           Save
         </Button>
       </Box>

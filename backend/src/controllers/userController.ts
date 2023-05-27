@@ -87,30 +87,6 @@ export const updateMe = catchAsync(
   }
 );
 
-export const updateLocation = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const newLocation = req.body;
-    console.log(newLocation);
-
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-
-      { location: newLocation },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedUser) {
-      return next(new AppError('Error updating user location', 400));
-    }
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user: updatedUser,
-      },
-    });
-  }
-);
-
 export const getAllUsersPosts = catchAsync(
   async (
     req: CustomRequest,

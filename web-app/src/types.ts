@@ -13,11 +13,11 @@ export type IChatRoom = {
   members: string[];
   messages: IMessage[];
   _id?: string;
-  post: Post;
+  post: IPost;
 };
 export interface IUser {
   data: {
-    user: User | null;
+    user: IUser | null;
   };
 
   // token: string;
@@ -25,17 +25,17 @@ export interface IUser {
   accessToken?: string;
   currentChatRoom?: IChatRoom;
 }
-export interface UserState {
-  user: User | null;
+export interface IUserState {
+  user: IUser | null;
   isSignedIn: boolean;
   currentChatRoom?: IChatRoom;
   accessToken: string;
 }
-export type SignInInfo = {
+export type ISignInInfo = {
   email: string;
   password: string;
 };
-export interface User {
+export interface IUser {
   // data?: any;
   _id?: string;
   email: string;
@@ -47,7 +47,7 @@ export interface User {
   };
   favorites?: string[];
 }
-export interface SignUpInfo {
+export interface ISignUpInfo {
   name: string;
   email: string;
   confirmEmail?: string;
@@ -55,7 +55,7 @@ export interface SignUpInfo {
   passwordConfirm: string;
 }
 
-export interface Post {
+export interface IPost {
   typeOfItems: string[];
   group: string;
   condition: string;
@@ -94,32 +94,32 @@ export interface IReviewPost {
 }
 
 // REACT QUERY
-export interface QueryClientResults<T> {
+export interface IQueryClientResults<T> {
   data: {
     data: T;
   };
 }
 
-interface Metadata {
+interface IMetadata {
   nextPage: number;
   totalPages: number;
   totalResults: number;
   _id: null;
 }
 
-export interface PostQueryResult {
-  metadata: Metadata;
-  posts: Post[];
+export interface IPostQueryResult {
+  metadata: IMetadata;
+  posts: IPost[];
 }
 
-export interface GeoLocation {
+export interface IGeoLocation {
   coordinates: [number, number];
   type: string;
   city?: string;
 }
 
 // ENUMS
-export interface Enum {
+export interface IEnum {
   [key: string]: string[];
   sizes: string[];
   clothes: string[];
@@ -136,16 +136,35 @@ export interface ILocation {
   lng: string;
 }
 export interface IGeoJson {
-  type: Point;
+  type: IPoint;
   coordinates: [number, number];
   city?: string;
 }
-export enum Point {
+export enum IPoint {
   Point = 'Point',
 }
 
-export interface checkBox {
+export interface ICheckBox {
   checked?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+}
+
+export interface IUpdateData {
+  newData: IGeoJson | string;
+  field: string;
+}
+
+export interface IStringObj {
+  [key: string]: string;
+}
+
+export interface IUpdateEmailProps {
+  newEmail: string;
+  password: string;
+}
+export interface IUpdatePasswordProps {
+  password: string;
+  passwordNew: string;
+  passwordConfirm: string;
 }

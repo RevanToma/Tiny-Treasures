@@ -2,10 +2,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IChatRoom,
   IGeoJson,
-  SignInInfo,
-  SignUpInfo,
-  User,
-  UserState,
+  ISignInInfo,
+  ISignUpInfo,
+  IStringObj,
+  IUpdateData,
+  IUpdateEmailProps,
+  IUpdatePasswordProps,
+  IUser,
+  IUserState,
 } from '../../types';
 import api from '../../api';
 import {
@@ -14,16 +18,14 @@ import {
   ApiPostSignUpUser,
   fetchtFavoritePosts,
   getAccessToken,
+  patchUpdateEmail,
+  patchUpdatePassword,
+  patchUpdateUser,
   signOutUserAsync,
 } from '../../api/requests';
 import { Socket } from '../../Sockets/Message.socket';
 
-interface UpdateData {
-  newData: IGeoJson | string;
-  field: string;
-}
-
-const initialState: UserState = {
+const initialState: IUserState = {
   user: null,
   isSignedIn: false,
   currentChatRoom: undefined,
@@ -48,19 +50,32 @@ export const addPostToFavourite = createAsyncThunk(
 
 export const updateUserAsync = createAsyncThunk(
   'user/updateUser',
-  async ({ newData, field }: UpdateData) => {
-    const res = await api.patch('users/updateMe', {
-      [field]: newData,
-    });
-    const user: User = res.data.data.data;
+  async (data: IUpdateData) => {
+    const user = patchUpdateUser(data);
+    return user;
+  }
+);
+
+export const updateEmailAsync = createAsyncThunk(
+  'user/updateEmail',
+  async (data: IUpdateEmailProps) => {
+    const user = patchUpdateEmail(data);
+    return user;
+  }
+);
+
+export const updatePasswordAsync = createAsyncThunk(
+  'user/updatePassword',
+  async (data: IUpdatePasswordProps) => {
+    const user = patchUpdatePassword(data);
     return user;
   }
 );
 
 export const signInUser = createAsyncThunk(
   'user/signInUser',
-  async ({ email, password }: SignInInfo) => {
-    const user: User = await ApiPostSignInUser(email, password);
+  async ({ email, password }: ISignInInfo) => {
+    const user: IUser = await ApiPostSignInUser(email, password);
 
     if (!user) return;
 
@@ -70,8 +85,8 @@ export const signInUser = createAsyncThunk(
 
 export const signUpUser = createAsyncThunk(
   'user/signUpUser',
-  async (userData: SignUpInfo) => {
-    const user: User = await ApiPostSignUpUser(userData);
+  async (userData: ISignUpInfo) => {
+    const user: IUser = await ApiPostSignUpUser(userData);
 
     if (!user) return;
 
@@ -107,6 +122,15 @@ const userSlice = createSlice({
     builder.addCase(updateUserAsync.fulfilled, (state, { payload }) => {
       state.user = payload;
     });
+
+    builder.addCase(updateEmailAsync.fulfilled, (state, { payload }) => {
+      state.user = payload;
+    });
+
+    builder.addCase(updatePasswordAsync.fulfilled, (state, { payload }) => {
+      state.user = payload;
+    });
+
     builder.addCase(refreshAccessToken.fulfilled, (state, { payload }) => {
       if (payload) {
         state.user = payload.user;

@@ -1,5 +1,15 @@
 import axios, { AxiosResponse } from 'axios';
-import { Enum, IChatRoom, Post, PostQueryResult, SignUpInfo } from '../types';
+import {
+  IEnum,
+  IChatRoom,
+  IPost,
+  IPostQueryResult,
+  ISignUpInfo,
+  IUpdateData,
+  IStringObj,
+  IUpdateEmailProps,
+  IUpdatePasswordProps,
+} from '../types';
 import api from './index';
 import { apiUrl, geocodeUrl, serverRoute } from '../utils/urls/serverUrls';
 
@@ -20,7 +30,7 @@ export interface ResponseWithError {
 
 export const checkForError = (
   data:
-    | ResponseWithData<Post[] | PostQueryResult[] | Enum[]>
+    | ResponseWithData<IPost[] | IPostQueryResult[] | IEnum[]>
     | ResponseWithError
 ): void => {
   if (data.status === 'error' || data.status === 'fail') {
@@ -68,7 +78,7 @@ export const ApiPostSignUpUser = async ({
   confirmEmail,
   password,
   passwordConfirm,
-}: SignUpInfo) => {
+}: ISignUpInfo) => {
   const { data } = await api.post('users/signup', {
     name,
     email,
@@ -90,8 +100,7 @@ export const fetchPosts = async ({
   pageParam = 1,
   query = '',
   searchQuery,
-}: getPostParams): Promise<PostQueryResult> => {
-  console.log('fetched', searchQuery);
+}: getPostParams): Promise<IPostQueryResult> => {
   const limit = 20;
   let urlQuery = 'posts/?';
   if (pageParam) {
@@ -101,7 +110,7 @@ export const fetchPosts = async ({
     urlQuery += `&search=${searchQuery}`;
   }
 
-  const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
+  const data: AxiosResponse<ResponseWithData<IPostQueryResult[]>> =
     await api.get(urlQuery);
   checkForError(data.data);
   return data.data.data.data[0];
@@ -110,7 +119,7 @@ export const fetchPosts = async ({
 export const fetchPostById = async (id: string | undefined) => {
   const { data } = await api.get(`/posts/${id}`);
   checkForError(data);
-  const post: Post = data.data.post[0];
+  const post: IPost = data.data.post[0];
   return post;
 };
 
@@ -120,7 +129,7 @@ export const signOutUserAsync = async () => {
 };
 
 export const fetchEnums = async () => {
-  const data: AxiosResponse<ResponseWithData<Enum[]>> = await api.get(`enums`);
+  const data: AxiosResponse<ResponseWithData<IEnum[]>> = await api.get(`enums`);
   checkForError(data.data);
   return data.data.data.data[0];
 };
@@ -131,29 +140,31 @@ export const getUserFromJwt = async () => {
   return data.data.data;
 };
 
-export const patchName = async (newName: string) => {
-  const { data } = await api.patch('/users/updateName', { newName });
-  checkForError(data);
-  return data;
+export const patchUpdateUser = async ({ newData, field }: IUpdateData) => {
+  const res = await api.patch('users/updateMe', {
+    [field]: newData,
+  });
+  return res.data.data.data;
 };
 
-export const patchEmail = async (newEmail: string, password: string) => {
-  const { data } = await api.patch('/users/updateEmail', {
+export const patchUpdateEmail = async ({
+  newEmail,
+  password,
+}: IUpdateEmailProps) => {
+  const res = await api.patch('/users/updateEmail', {
     newEmail,
     password,
   });
-  checkForError(data);
-  return data;
+  checkForError(res.data);
+  return res.data.data.data;
 };
 
-export const patchPassword = async (passwordData: {
-  password: string;
-  passwordNew: string;
-  passwordConfirm: string;
-}) => {
-  const { data } = await api.patch('/users/updatePassword', passwordData);
-  checkForError(data);
-  return data;
+export const patchUpdatePassword = async (
+  passwordData: IUpdatePasswordProps
+) => {
+  const res = await api.patch('/users/updatePassword', passwordData);
+  checkForError(res.data);
+  return res.data.data.data;
 };
 
 export const getCityFromAddress = async (address: string) => {

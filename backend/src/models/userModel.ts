@@ -1,8 +1,8 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import { BasicUserData, LocationData } from '../utils/interfaces';
-import { PostDocument } from './postModel';
+import { IBasicUserData, ILocationData } from '../utils/interfaces';
+import { IPostDocument } from './postModel';
 
 export interface UserDocument extends Document {
   id: string;
@@ -12,7 +12,7 @@ export interface UserDocument extends Document {
   password: string | undefined;
   passwordConfirm: string | undefined;
   createdAt: Date;
-  location: LocationData;
+  location: ILocationData;
   credits: number;
   favorites: (string | Types.ObjectId)[];
   newMessages: number;
@@ -104,7 +104,7 @@ userSchema.methods.correctPassword = async function (
 };
 
 // DATA MANIPULATION
-export const modifyBasicUserData = (userDoc: UserDocument): BasicUserData => {
+export const modifyBasicUserData = (userDoc: UserDocument): IBasicUserData => {
   return {
     id: userDoc._id,
     name: userDoc.name,
