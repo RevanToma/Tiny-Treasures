@@ -1,10 +1,17 @@
 import { NextFunction, Response } from 'express';
-import Post, { PostDocument, PostDocumentWithEnums } from '../models/postModel';
+import Post, {
+  IPostDocument,
+  IPostDocumentWithEnums,
+} from '../models/postModel';
 import { catchAsync } from '../utils/catchAsync';
 import { PostFeatures } from '../utils/apiFeatures';
 import { CustomRequest } from '../utils/expressInterfaces';
 import AppError from '../utils/appError';
-import { LocationData, NumberObject, StringObject } from '../utils/interfaces';
+import {
+  ILocationData,
+  INumberObject,
+  IStringObject,
+} from '../utils/interfaces';
 import mongoose, { PipelineStage } from 'mongoose';
 import multer from 'multer';
 import sharp from 'sharp';
@@ -39,7 +46,7 @@ const fileFilter = (
   }
 };
 // can use a limit option to limit the data
-const limits: NumberObject = {
+const limits: INumberObject = {
   fileSize: 4000000,
   files: 5,
   fields: 10,
@@ -86,7 +93,7 @@ export const getAllPosts = catchAsync(
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const query: StringObject = req.query;
+    const query: IStringObject = req.query;
 
     const pipeline = new PostFeatures(query, req.user?.location)
       .distanceFrom()
@@ -96,7 +103,7 @@ export const getAllPosts = catchAsync(
       .limitFields()
       .countAndPaginate();
 
-    const posts: PostDocument[] = await Post.aggregate(pipeline.stages);
+    const posts: IPostDocument[] = await Post.aggregate(pipeline.stages);
 
     res.status(200).json({
       status: 'success',
@@ -171,7 +178,7 @@ export const createPost = catchAsync(
     };
     const x = await new Post(postData).populate('enums');
 
-    const post: PostDocumentWithEnums = await new Post(postData).populate(
+    const post: IPostDocumentWithEnums = await new Post(postData).populate(
       'enums'
     );
 

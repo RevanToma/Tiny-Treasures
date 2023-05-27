@@ -1,5 +1,5 @@
 import { PipelineStage } from 'mongoose';
-import { LocationData, StringObject } from './interfaces';
+import { ILocationData, IStringObject } from './interfaces';
 
 interface ProjectStage {
   $project: {
@@ -10,8 +10,8 @@ interface ProjectStage {
 export class PostFeatures {
   stages: PipelineStage[] = [];
   constructor(
-    public queryString: StringObject,
-    public userLocation: LocationData | null = null
+    public queryString: IStringObject,
+    public userLocation: ILocationData | null = null
   ) {}
 
   distanceFrom(): this {
@@ -35,6 +35,7 @@ export class PostFeatures {
 
     let matchStage: PipelineStage.Match = { $match: {} };
     Object.entries(queryObj).forEach(([key, value]) => {
+      if (!value) return;
       if (value.includes(',')) {
         matchStage.$match[key] = { $in: value.split(',') };
       } else {
@@ -98,6 +99,7 @@ export class PostFeatures {
   };
 
   countAndPaginate(): this {
+    if (!this.queryString.page || !this.queryString.limit) return this;
     const page: number = parseInt(this.queryString.page) || 1;
     const limit: number = parseInt(this.queryString.limit) || 20;
     const skip = (page - 1) * limit;

@@ -1,50 +1,50 @@
 import mongoose from 'mongoose';
-import { PostDocument } from '../models/postModel';
+import { IPostDocument } from '../models/postModel';
 
-export interface StringObject {
-  [key: string]: string;
+export interface IStringObject {
+  [key: string]: string | undefined;
 }
 
-export interface NumberObject {
+export interface INumberObject {
   [key: string]: number | undefined;
 }
 
-export interface BasicUserData {
+export interface IBasicUserData {
   id: string;
   name: string;
   email: string;
-  location: LocationData;
+  location: ILocationData;
 }
 
-export interface ChatMessage {
+export interface IChatMessage {
   user: mongoose.Schema.Types.ObjectId;
   text: string;
   createdAt: Date;
   seen: boolean;
 }
 
-export interface ChatData {
+export interface IChatData {
   chatId: string;
   newMsgs: number;
-  latestMsg: ChatMessage;
+  latestMsg: IChatMessage;
 }
 
-export interface UserMsgData {
+export interface IUserMsgData {
   newMessages: number;
-  chatData: ChatData[];
+  chatData: IChatData[];
 }
 
-export enum Point {
+export enum EPoint {
   Point = 'Point',
 }
 
-export interface LocationData {
-  type: Point;
+export interface ILocationData {
+  type: EPoint;
   coordinates: [number, number];
   city?: string;
 }
 
-export interface PostsWithData {
-  posts: PostDocument[];
+export interface IPostsWithData {
+  posts: IPostDocument[];
   nextPage: number;
 }

@@ -2,16 +2,16 @@ import mongoose from 'mongoose';
 import User from './userModel';
 import AppError from '../utils/appError';
 import { EnumDocument } from './enumsModel';
-import { LocationData } from '../utils/interfaces';
+import { ILocationData } from '../utils/interfaces';
 
-export enum Condition {
+export enum ECondition {
   Used = 'Used',
   Fair = 'Fair',
   Good = 'Good',
   New = 'New',
 }
 
-export enum Sizes {
+export enum ESizes {
   A = '44',
   B = '50/56',
   C = '62/68',
@@ -24,7 +24,7 @@ export enum Sizes {
   J = '146/152',
 }
 
-enum Ages {
+enum EAges {
   A = '0-3',
   B = '4-7',
   C = '8-11',
@@ -34,28 +34,28 @@ export interface PostDocumentWithoutEnum extends mongoose.Document {
   title: string;
   description: string;
   itemCount: number;
-  sizes?: Sizes[];
-  age: Ages;
+  sizes?: ESizes[];
+  age: EAges;
   group: string;
   typeOfItems: string[];
-  condition: Condition;
+  condition: ECondition;
   createdAt: Date;
   images: string[];
   user: mongoose.Schema.Types.ObjectId;
   userName: string;
-  location: LocationData;
-  enumsAreValid: (post: PostDocumentWithEnums) => boolean;
+  location: ILocationData;
+  enumsAreValid: (post: IPostDocumentWithEnums) => boolean;
 }
 
-export interface PostDocument extends PostDocumentWithoutEnum {
+export interface IPostDocument extends PostDocumentWithoutEnum {
   enums: mongoose.Schema.Types.ObjectId;
 }
 
-export interface PostDocumentWithEnums extends PostDocumentWithoutEnum {
+export interface IPostDocumentWithEnums extends PostDocumentWithoutEnum {
   enums: EnumDocument;
 }
 
-const postSchema = new mongoose.Schema<PostDocument>(
+const postSchema = new mongoose.Schema<IPostDocument>(
   {
     title: String,
     description: {
@@ -80,15 +80,15 @@ const postSchema = new mongoose.Schema<PostDocument>(
     typeOfItems: [String],
     sizes: {
       type: [String],
-      enum: Sizes,
+      enum: ESizes,
     },
     age: {
       type: String,
-      enum: Ages,
+      enum: EAges,
     },
     condition: {
       type: String,
-      enum: Condition,
+      enum: ECondition,
       required: [true, 'Please provide a condition.'],
     },
     createdAt: {
@@ -167,7 +167,7 @@ postSchema.pre('save', async function (next) {
 //   next();
 // });
 
-postSchema.methods.enumsAreValid = function (post: PostDocumentWithEnums) {
+postSchema.methods.enumsAreValid = function (post: IPostDocumentWithEnums) {
   const { group, typeOfItems } = post;
   const { main } = post.enums;
 
@@ -179,5 +179,5 @@ postSchema.methods.enumsAreValid = function (post: PostDocumentWithEnums) {
   );
 };
 
-const Post = mongoose.model<PostDocument>('Post', postSchema);
+const Post = mongoose.model<IPostDocument>('Post', postSchema);
 export default Post;

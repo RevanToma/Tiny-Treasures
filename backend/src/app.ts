@@ -10,6 +10,7 @@ import { postsRouter } from './routes/posts.router';
 import { userRouter } from './routes/user.router';
 import webRouter from './routes/web.router';
 import enumRouter from './routes/enum.routes';
+import geocodeRouter from './routes/geocodeRoutes';
 import AppError from './utils/appError';
 import { globalErrorHandler } from './utils/errorHandler';
 import { passportConfig } from './utils/passportConfig';
@@ -41,6 +42,7 @@ app.use('/api/v1/posts', postsRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/enums', enumRouter);
 app.use('/api/v1/chat', chatRouter);
+app.use('/geocode', geocodeRouter);
 app.use('/', webRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can not find ${req.originalUrl}!`, 404));

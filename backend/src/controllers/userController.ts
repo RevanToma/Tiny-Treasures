@@ -6,6 +6,16 @@ import { decodeToken, getAccessToken } from './authController';
 import AppError from '../utils/appError';
 import Post from '../models/postModel';
 import mongoose from 'mongoose';
+import { IStringObject } from '../utils/interfaces';
+
+// HELPERS
+const filterObj = (obj: IStringObject, ...allowedFields: string[]) => {
+  const newObj: IStringObject = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
 
 // UTILITY MIDDLEWARE
 
@@ -52,6 +62,31 @@ export const getBasicUserData = catchAsync(
   }
 );
 
+export const updateMe = catchAsync(
+  async (
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const filteredBody = filterObj(req.body, 'name', 'location', 'saved');
+
+    const updatedUser: UserDocument | null = await User.findByIdAndUpdate(
+      req.user.id,
+      filteredBody,
+      {
+        new: true,
+      }
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        data: updatedUser,
+      },
+    });
+  }
+);
+
 export const updateLocation = catchAsync(
   async (req: CustomRequest, res: Response, next: NextFunction) => {
     const newLocation = req.body;
@@ -75,22 +110,7 @@ export const updateLocation = catchAsync(
     });
   }
 );
-export const getLocation = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
-    const user = await User.findById(req.user.id);
 
-    if (!user) {
-      return next(new AppError('No user found', 400));
-    }
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        location: user.location,
-      },
-    });
-  }
-);
 export const getAllUsersPosts = catchAsync(
   async (
     req: CustomRequest,
