@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import { theme } from "./themes";
+import { createGlobalStyle } from 'styled-components';
+import { theme } from './themes';
 
 export const GlobalStyles = createGlobalStyle`
 
@@ -42,9 +42,8 @@ button {
   border-radius: ${theme.radius.button};
   box-shadow: ${theme.shadow};
   transition: ${theme.button.transition};
-  width: fit-content;
-  height: ${theme.button.height1};
-  color: #fff;
-  padding: ${theme.button.padding};
+  height: ${theme.button.height};
+  color: ${theme.color.primaryOffWhite};
+  ${theme.type.buttons}
 }
 `;

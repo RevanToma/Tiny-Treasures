@@ -2,12 +2,7 @@ import mongoose, { Document, Schema } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import AppError from "../utils/appError";
-import {
-  BasicUserData,
-  ChatData,
-  LocationData,
-  UserMsgData,
-} from "../utils/interfaces";
+import { BasicUserData, LocationData } from "../utils/interfaces";
 import { PostDocument } from "./postModel";
 
 export interface UserDocument extends Document {
@@ -21,8 +16,11 @@ export interface UserDocument extends Document {
   location: LocationData;
   // posts: mongoose.Schema.Types.ObjectId[];
   credits: number;
+  saved: PostDocument[];
   favorites: PostDocument[];
   newMessages: number;
+  method: "password" | "google";
+  googleId?: string;
 
   correctPassword(a: string, b: string): Promise<boolean>;
 }
@@ -46,15 +44,18 @@ const userSchema = new Schema<UserDocument>(
       validate: [validator.isEmail, "Please provide a valid email address."],
       lowercase: true,
     },
+    method: {
+      type: String,
+      default: "password",
+    },
+    googleId: String,
     password: {
       type: String,
-      required: [true, "Please provide a password."],
       minLength: [8, "Passwords must have at least 8 characters"],
       select: false,
     },
     passwordConfirm: {
       type: String,
-      required: [true, "Please confirm your password."],
       minLength: [8, "Passwords must have at least 8 characters"],
       select: false,
     },
@@ -71,6 +72,12 @@ const userSchema = new Schema<UserDocument>(
       coordinates: [Number],
       city: String,
     },
+    saved: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
     favorites: [
       {
         type: mongoose.Schema.Types.ObjectId,

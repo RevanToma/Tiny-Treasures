@@ -1,10 +1,10 @@
-import React, { useRef, useEffect } from "react";
-import Box from "../../components/common/Box/Box";
-import { Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectIsSignedIn } from "../../store/user/userSelectors";
-import Navbar from "../../components/Navbar/navbar.component";
-import styled from "styled-components";
+import React, { useRef, useEffect } from 'react';
+import Box from '../../components/common/Box/Box';
+import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsSignedIn } from '../../store/user/userSelectors';
+import Navbar from '../../components/Navbar/navbar.component';
+import styled from 'styled-components';
 
 const LayoutStyle = styled.div`
   overflow: hidden;
@@ -32,14 +32,14 @@ const Layout: React.FC<LayoutProps> = () => {
         justifyContent="space-between"
         margin="0"
       >
-        <div id="chat-post-item-portal"></div>
+        <div style={{ width: "100%" }} id="chat-post-item-portal"></div>
         <PageStyle>
           <Box width="100%">
             <Outlet />
           </Box>
         </PageStyle>
         <Box width="100%" padding="10px 15px">
-          <div id="chat-input-portal"></div>
+          <div style={{ width: "100%" }} id="chat-input-portal"></div>
         </Box>
         {userSignedIn && <Navbar />}
       </Box>

@@ -11,11 +11,12 @@ import Input from "../../components/common/Input/input.component";
 import { InputType } from "../../components/common/Input/input.types";
 import Box from "../../components/common/Box/Box";
 import Button from "../../components/common/Button/Button.component";
-import { ButtonType } from "../../components/common/Button/button.types";
+
 import * as S from "./signIn.styles";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { SignUpFooter } from "../signUp/SignUp.styles";
+import { ButtonType } from "../../components/common/Button/button.types";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -35,6 +36,7 @@ const SignIn: React.FC = () => {
         onSuccess: (data: IUser) => {
           dispatch(signSuccess(data));
           document.cookie = `jwt=${data.token}`;
+          navigate("/");
         },
         onError: (error) => {
           if (error instanceof AxiosError) alert(error.message);
@@ -73,7 +75,7 @@ const SignIn: React.FC = () => {
               <p>Forgot your password?</p>
             </S.TextContainer>
             <Box gap="2rem">
-              <Button buttonType={ButtonType.ReviewOrSignIn}>Sign In</Button>
+              <Button buttonType={ButtonType.SignIn}>Sign In</Button>
               <Button
                 buttonType={ButtonType.Primary}
                 onClick={() => navigate("/signup")}
@@ -83,14 +85,15 @@ const SignIn: React.FC = () => {
               <S.TextContainer>
                 <p>or</p>
               </S.TextContainer>
-
+            </Box>
+          </form>
+          <SignUpFooter>
+            <a href="http://localhost:8000/auth/google">
               <S.GoogleButton buttonType={ButtonType.Secondary}>
                 <FcGoogle size={32} />
                 Continue with Google
               </S.GoogleButton>
-            </Box>
-          </form>
-          <SignUpFooter>
+            </a>
             <span>Support</span>
             <span>How it Works</span>
             <span>Reviews</span>

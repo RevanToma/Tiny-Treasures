@@ -4,6 +4,8 @@ import * as S from "./styled";
 type BoxProps = {
   display?: "grid" | "flex" | "block" | "inline-block" | "none";
   gridTemplateColumns?: string;
+  columnGap?: string;
+  rowGap?: string;
   children?: ReactNode;
   className?: string;
   flexDirection?: "row";
@@ -31,6 +33,8 @@ type BoxProps = {
   flex?: string;
   padding?: string;
   margin?: string;
+  marginTop?: string;
+  marginBottom?: string;
   width?: string;
   height?: string;
   maxWidth?: string;
@@ -51,6 +55,8 @@ type BoxProps = {
   bottom?: string;
   right?: string;
   left?: string;
+  zIndex?: number;
+  transform?: string;
 };
 
 const Box: React.FC<BoxProps> = ({ ...props }) => {

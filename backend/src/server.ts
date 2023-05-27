@@ -33,7 +33,8 @@ io.on("connection", (socket) => {
   }
 
   socket.on("create-chat", async (data) => {
-    const { receiverId, userId } = data;
+    const { receiverId, userId, post } = data;
+    console.log("id", post._id);
 
     console.log(`RECIVERID: ${receiverId} , userId: ${userId}`);
 
@@ -43,12 +44,16 @@ io.on("connection", (socket) => {
       members: {
         $all: [receiverId, userId],
       },
+      post: post._id,
     });
 
     if (!chatRoom) {
       chatRoom = await ChatModel.create({
         members: [receiverId, userId],
         messages: [],
+        post: post._id,
+      }).then((doc) => {
+        return ChatModel.populate(doc, { path: "post" });
       });
     }
 
@@ -65,7 +70,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("chat-message", (msg) => {
-    const { text, senderId, receiverId, postId, roomId } = msg;
+    const { senderId, receiverId, postId, roomId } = msg;
     console.log("postid", postId);
     console.log("THIS", msg);
     io.to([connectedUsers[senderId], connectedUsers[receiverId]]).emit(
