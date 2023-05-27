@@ -1,3 +1,12 @@
+import { Dispatch } from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { AnyAction } from 'redux';
+import {
+  initialQueryData,
+  setQuery,
+  setQueryData,
+} from '../store/query/querySlice';
+
 export const capitalize = (str: string): string => {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
@@ -33,4 +42,16 @@ export const moveToFrontOfArray = (
   console.log(newArray);
 
   return newArray;
+};
+
+export const goToGroupPage = (
+  dispatch: Dispatch<AnyAction>,
+  navigate: NavigateFunction,
+  group: string
+) => {
+  const newQuery = `group=${group}`;
+  dispatch(setQuery(newQuery));
+  dispatch(setQueryData({ ...initialQueryData, Group: [group] }));
+
+  navigate(`/group/${group}`);
 };

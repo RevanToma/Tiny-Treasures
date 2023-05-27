@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import * as S from './group.styles';
@@ -10,14 +10,12 @@ import PostList from '../../components/common/PostList/PostList.component';
 import { theme } from '../../styles/themes';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import FilterPopup from './FilterPopup/FilterPopup.component';
-import { queryClient } from '../../main';
 
 import { imgUrls } from '../../utils/urls/imgUrls';
 import {
   selectQuery,
   selectTempQueryData,
 } from '../../store/query/query.selectors';
-import { Enum } from '../../types';
 import { fetchPosts } from '../../api/requests';
 import {
   initialQueryData,
@@ -26,10 +24,14 @@ import {
   setTempQueryData,
 } from '../../store/query/querySlice';
 import Box from '../../components/common/Box/Box';
+import { useEnums } from '../../hooks/useEnums';
+import GroupNavBar from './GroupNavBar/GroupNavBar.component';
+import { goToGroupPage } from '../../utils/helpers';
 
 const Group: React.FC = () => {
   const { group } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const LoadMoreButton = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState<undefined | string>(undefined);
@@ -37,8 +39,7 @@ const Group: React.FC = () => {
   const [isFitlerPopupOpen, setIsFilterPopupOpen] = useState<boolean>(false);
   const tempQueryData = useSelector(selectTempQueryData);
   const query = useSelector(selectQuery);
-
-  const enums: Enum | undefined = queryClient.getQueryData(['enums']);
+  const { data: enums } = useEnums();
 
   const {
     data,
@@ -123,6 +124,10 @@ const Group: React.FC = () => {
     refetchPosts();
   };
 
+  const handleChangeGroup = (item: string) => {
+    goToGroupPage(dispatch, navigate, item);
+  };
+
   const buttonType =
     isFetchingNextPage || isLoading
       ? ButtonType.SmallYellow
@@ -144,7 +149,7 @@ const Group: React.FC = () => {
           minHeight="100vh"
           height="100%"
           gap="2rem"
-          backgroundColor={theme.color.backgroundMain}
+          backgroundColor={theme.color.primaryOffWhite}
         >
           <Box
             width="100%"
@@ -161,6 +166,11 @@ const Group: React.FC = () => {
               Search
             </Button>
           </Box>
+          <GroupNavBar
+            handleChangeGroup={handleChangeGroup}
+            items={enums && enums.main}
+            currentItem={group}
+          />
           <Box
             width="100%"
             objectFit="contain"

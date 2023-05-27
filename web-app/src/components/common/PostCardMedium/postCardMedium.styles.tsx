@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Box from '../Box/Box';
+import { theme } from '../../../styles/themes';
 
 export const ButtonContainer = styled.div`
   display: flex;
@@ -8,21 +9,28 @@ export const ButtonContainer = styled.div`
 `;
 
 export const ImageBox = styled.div`
-  object-fit: contain;
+  width: 100%;
 
   img {
+    object-fit: cover;
     width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: ${theme.radius.image};
   }
 `;
 
 export const Wrapper = styled(Box)`
   position: relative;
-  p {
-    font-size: 1.3rem;
-    weight: 400;
-    line-height: 19.5px;
+
+  h2 {
+    ${theme.type.bodyBold}
+    /* text-align: center; */
+    margin-bottom: 1.6rem;
   }
   p {
+    ${theme.type.navbar}
+  }
+  h2 {
     /* white-space: normal; */
     display: -webkit-box;
     -webkit-line-clamp: 2;

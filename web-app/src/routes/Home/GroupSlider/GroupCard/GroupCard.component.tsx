@@ -12,7 +12,7 @@ interface GroupCardProps {
 const GroupCard: FC<GroupCardProps> = ({ image, age, onClick }) => {
   return (
     <S.Wrapper
-      width="10.6rem"
+      width="100%"
       height="16rem"
       borderRadius={theme.radius.image}
       cursor="pointer"

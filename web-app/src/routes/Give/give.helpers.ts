@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import { MainCategories, ages, clothes, other, toys } from '../../utils/enums';
+import { MainCategories, clothes, other, toys } from '../../utils/enums';
 import { IConvertedChangeData, IGivePreviewFormData } from './give.types';
 import { EAges } from '../../utils/enums/enums';
 
@@ -17,7 +17,6 @@ export const getImgBox = (name: string, i: number): Node => {
   div.style.minWidth = '10rem';
   div.style.width = '10rem';
   div.style.borderRadius = '8px';
-  // div.style.margin = '3rem 0';
   div.style.position = 'relative';
 
   return div;

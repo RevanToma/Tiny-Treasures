@@ -7,6 +7,7 @@ import {
 } from '../../../../store/user/userSelectors';
 import { addPostToFavourite } from '../../../../store/user/userSlice';
 import { FC, useState } from 'react';
+import { theme } from '../../../../styles/themes';
 
 interface IHeartProps {
   postId: string;
@@ -32,11 +33,11 @@ const HeartIcon: FC<IHeartProps> = ({ postId, disabled = false }) => {
   return (
     <FaHeart
       onClick={handleHeartClick}
-      color={isFavourite ? 'red' : 'white'}
+      color={isFavourite ? theme.color.primaryBlue : 'white'}
       size={29}
       style={{ cursor: 'pointer' }}
-      stroke="black"
-      strokeWidth={35}
+      stroke={theme.color.primaryBlue}
+      strokeWidth={50}
     />
   );
 };
