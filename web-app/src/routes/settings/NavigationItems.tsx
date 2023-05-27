@@ -1,7 +1,7 @@
-import Button from "../../components/common/Button/Button.component";
-import Box from "../../components/common/Box/Box";
-import { ButtonType } from "../../components/common/Button/button.types";
-import { IoMdArrowDropright } from "react-icons/io";
+import Button from '../../components/common/Button/Button.component';
+import Box from '../../components/common/Box/Box';
+import { ButtonType } from '../../components/common/Button/button.types';
+import { IoMdArrowDropright } from 'react-icons/io';
 
 interface NavigationItemProps {
   children?: React.ReactNode;
@@ -26,6 +26,7 @@ const NavigationItem = ({
         justifyContent="space-between"
         gap="1rem"
         padding="0rem 1.6rem"
+        width="100%"
       >
         {icon && (
           <Box alignItems="center" flexDirection="row">
@@ -33,7 +34,7 @@ const NavigationItem = ({
           </Box>
         )}
         {text}
-        {children ? <Box>{children}</Box> : ""}
+        {children ? <Box>{children}</Box> : ''}
 
         {showArrow && <IoMdArrowDropright color="#646464" size={29} />}
       </Box>

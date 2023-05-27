@@ -1,10 +1,10 @@
-import { fetchUsersPosts } from "../../../api/requests";
-import Box from "../../../components/common/Box/Box";
-import GoBackNav from "../../../components/common/GoBackNav/GoBackNav.component";
-import { useEffect } from "react";
-import { useState } from "react";
-import { Post } from "./../../../types";
-import PostList from "../../../components/common/PostList/PostList.component";
+import { fetchUsersPosts } from '../../../api/requests';
+import Box from '../../../components/common/Box/Box';
+import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { Post } from './../../../types';
+import PostList from '../../../components/common/PostList/PostList.component';
 
 const MyItems: React.FC = () => {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
@@ -13,18 +13,19 @@ const MyItems: React.FC = () => {
     const getUsersPosts = async () => {
       try {
         const posts = await fetchUsersPosts();
-        console.log("FROM MYITEMS", posts);
+        console.log('FROM MYITEMS', posts);
         setUserPosts(posts);
       } catch (error) {
-        console.error("Error fetching user posts:", error);
+        console.error('Error fetching user posts:', error);
       }
     };
 
     console.log(userPosts);
     getUsersPosts();
   }, []);
+
   return (
-    <Box>
+    <Box width="100%">
       <GoBackNav title="My Items" />
       <Box>
         {userPosts ? (

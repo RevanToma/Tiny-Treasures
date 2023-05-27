@@ -1,31 +1,31 @@
-import Box from "../../../components/common/Box/Box";
-import GoBackNav from "../../../components/common/GoBackNav/GoBackNav.component";
-import ChangePasswordSVG from "../../../assets/changePasswordSVG.svg";
-import Input from "../../../components/common/Input/input.component";
-import Button from "../../../components/common/Button/Button.component";
-import { ButtonType } from "../../../components/common/Button/button.types";
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { patchPassword } from "../../../api/requests";
-import { useNavigate } from "react-router-dom";
+import Box from '../../../components/common/Box/Box';
+import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component';
+import ChangePasswordSVG from '../../../assets/changePasswordSVG.svg';
+import Input from '../../../components/common/Input/input.component';
+import Button from '../../../components/common/Button/Button.component';
+import { ButtonType } from '../../../components/common/Button/button.types';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { patchPassword } from '../../../api/requests';
+import { useNavigate } from 'react-router-dom';
 const ChangePassword: React.FC = () => {
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
   const mutation = useMutation(patchPassword, {
     onSuccess: () => {
-      alert("Password changed successfully");
-      navigate("/account");
+      alert('Password changed successfully');
+      navigate('/account');
     },
     onError: () => {
-      alert("Failed to change password");
+      alert('Failed to change password');
     },
   });
   const handleSavePassword = () => {
     if (newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match");
+      alert('New password and confirm password do not match');
       return;
     }
 
@@ -36,8 +36,8 @@ const ChangePassword: React.FC = () => {
     });
   };
   return (
-    <Box gap="2.4rem">
-      <GoBackNav title="Change Password" size={35} />
+    <Box gap="2.4rem" width="100%">
+      <GoBackNav title="Change Password" />
       <img src={ChangePasswordSVG} />
       <Box
         gap="3.2rem"
@@ -47,22 +47,19 @@ const ChangePassword: React.FC = () => {
         marginTop="3.4rem"
       >
         <Input
-          padding="1.3rem"
           placeholder="Old Password"
           type="password"
-          onChange={(e) => setOldPassword(e.target.value)}
+          onChange={e => setOldPassword(e.target.value)}
         />
         <Input
-          padding="1.3rem"
           placeholder="New Password"
           type="password"
-          onChange={(e) => setNewPassword(e.target.value)}
+          onChange={e => setNewPassword(e.target.value)}
         />
         <Input
-          padding="1.3rem"
           placeholder="Repeat New Password"
           type="password"
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={e => setConfirmPassword(e.target.value)}
         />
       </Box>
       <Button
@@ -70,7 +67,7 @@ const ChangePassword: React.FC = () => {
         onClick={handleSavePassword}
         isLoading={mutation.isLoading}
       >
-        save
+        Save
       </Button>
     </Box>
   );

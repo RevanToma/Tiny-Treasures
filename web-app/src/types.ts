@@ -127,7 +127,15 @@ export interface Enum {
   toys: string[];
   other: string[];
 }
-export interface LocationData {
+
+// LOCATION
+
+export interface ILocation {
+  city: string;
+  lat: string;
+  lng: string;
+}
+export interface IGeoJson {
   type: Point;
   coordinates: [number, number];
   city?: string;

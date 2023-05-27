@@ -1,134 +1,110 @@
-import { useState, useEffect } from "react";
-import LocationSVG from "../../../assets/LocationSVG.svg";
-import Box from "../../../components/common/Box/Box";
-import Button from "../../../components/common/Button/Button.component";
-import { ButtonType } from "../../../components/common/Button/button.types";
-import GoBackNav from "../../../components/common/GoBackNav/GoBackNav.component";
-import { Title } from "../../../components/common/GoBackNav/goBackNav.styles";
-import Input from "../../../components/common/Input/input.component";
-import * as S from "./Location.styles";
-import { LocationData, Point } from "../../../types";
-import { getCoordinatesFromCity, patchLocation } from "../../../api/requests";
-import { useNavigate } from "react-router-dom";
-import { getCurrentLocation } from "../../../utils/helperfunctions";
-import CheckBox from "../../../components/common/CheckBox/CheckBox.component";
+import { useState, useEffect } from 'react';
+import LocationSVG from '../../../assets/LocationSVG.svg';
+import Box from '../../../components/common/Box/Box';
+import Button from '../../../components/common/Button/Button.component';
+import { ButtonType } from '../../../components/common/Button/button.types';
+import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component';
+import { Title } from '../../../components/common/GoBackNav/goBackNav.styles';
+import Input from '../../../components/common/Input/input.component';
+import * as S from './Location.styles';
+import { IGeoJson, ILocation, Point } from '../../../types';
+import { getCityFromAddress, getCityFromCoords } from '../../../api/requests';
+import { useNavigate } from 'react-router-dom';
+import { getGeoJson } from './location.helpers';
+import { useAppDispatch } from '../../../hooks/useDispatch';
+import { updateUserAsync } from '../../../store/user/userSlice';
 
 const Location: React.FC = () => {
-  const [location, setLocation] = useState<LocationData | null>(null);
-  const [isChecked, setIsChecked] = useState(false);
+  const dispatch = useAppDispatch();
 
-  const [cityInput, setCityInput] = useState("");
-  const navigate = useNavigate();
+  const [location, setLocation] = useState<IGeoJson | null>(null);
+  const [addressInput, setAddressInput] = useState('');
 
   const handleCityInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCityInput(event.target.value);
+    setAddressInput(event.target.value);
   };
 
-  const handleCitySave = async () => {
-    const geometry = await getCoordinatesFromCity(cityInput);
-
-    const newLocation = {
-      type: Point.Point,
-      coordinates: [geometry.lat, geometry.lng] as [number, number],
-      city: cityInput,
-    };
-
-    setCityInput("");
-    setLocation(newLocation);
-    localStorage.setItem("location", JSON.stringify(newLocation));
-    await patchLocation(newLocation);
-
-    return newLocation;
+  const fetchCityFromAddress = async () => {
+    const location: ILocation = await getCityFromAddress(addressInput);
+    const geoJson = getGeoJson(location);
+    setLocation(geoJson);
   };
 
-  const handleCheckboxChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const isChecked = event.target.checked;
-    setIsChecked(isChecked);
+  const fetchCityFromCoords = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async position => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
 
-    if (isChecked) {
-      const location = await getCurrentLocation();
-      setLocation(location);
+        const city: string = await getCityFromCoords(lat, lng);
 
-      localStorage.setItem("location", JSON.stringify(location));
+        const geoJson: IGeoJson = {
+          coordinates: [lng, lat],
+          type: Point.Point,
+          city,
+        };
+        setLocation(geoJson);
+      });
     } else {
-      setLocation(null);
-      localStorage.removeItem("location");
+      // Error message that browser doesn't support
     }
   };
-  const handleSaveClick = async () => {
-    let newLocation;
 
-    if (!cityInput && location) {
-      newLocation = location;
-    } else {
-      newLocation = await handleCitySave();
-    }
-
-    await patchLocation(newLocation);
-    setLocation(newLocation);
-    navigate("/account");
+  const saveLocationToUser = () => {
+    dispatch(updateUserAsync({ newData: location, field: 'location' }));
   };
-
-  const initializeLocationFromLocalStorage = () => {
-    const savedLocation = JSON.parse(
-      localStorage.getItem("location") || "null"
-    );
-    setLocation(savedLocation);
-    setIsChecked(!!savedLocation);
-  };
-
-  useEffect(() => {
-    initializeLocationFromLocalStorage();
-  }, []);
 
   return (
-    <Box gap="2.4rem">
-      <GoBackNav title="Location" size={35} />
+    <Box gap="2.4rem" width="100%">
+      <GoBackNav title="Location" />
       <img src={LocationSVG} />
-      <Box
-        alignItems="flex-start"
-        width="100%"
-        padding="24px 48px 0px"
-        gap="2.4rem"
-      >
+      <Box alignItems="center" width="100%" padding="0 2.4rem" gap="1rem">
         <Title color="#646464"> Set your location</Title>
         <S.InfoPara>
           This helps for pick ups and finding items near you
         </S.InfoPara>
-        <Box flexDirection="row" gap="2rem" marginBottom="1rem">
-          <CheckBox checked={isChecked} onChange={handleCheckboxChange} />
-          <S.Label htmlFor="locationCheckbox">Get current Location</S.Label>
-        </Box>
       </Box>
-      <h4>Or</h4>
 
       <S.LocationDiv>
-        <p>Type in a location</p>
-        <Input
-          placeholder="Street, city"
-          type="text"
-          name="city"
-          padding="1.2rem"
-          onChange={handleCityInput}
-          value={cityInput}
-        />
-
-        <p>Your location has been set to:</p>
-        <Input
-          placeholder="City, city"
-          type="text"
-          padding="1.2rem"
-          value={location?.city || ""}
-          readOnly
-        />
+        <Box alignItems="flex-start" gap=".8rem">
+          <p>Enter your address</p>
+          <Input
+            placeholder="Street, city"
+            type="text"
+            name="city"
+            onChange={handleCityInput}
+          />
+          <Button
+            onClick={fetchCityFromAddress}
+            buttonType={ButtonType.Primary}
+          >
+            Add Address
+          </Button>
+        </Box>
+        <h4>Or</h4>
+        <Box alignItems="flex-start" gap=".8rem">
+          <p>Get your current location</p>
+          <Button onClick={fetchCityFromCoords} buttonType={ButtonType.Primary}>
+            Get Location
+          </Button>
+        </Box>
       </S.LocationDiv>
+      <Box width="100%" alignItems="flex-start" gap=".8rem" padding="0 4.8rem">
+        <S.YourCity>
+          {location?.city ? (
+            <>
+              <p>Your city will be set to:</p>
+              <span>{location?.city}</span>
+            </>
+          ) : (
+            <p>Choose one of the above methods to get your city.</p>
+          )}
+        </S.YourCity>
+      </Box>
 
       <Button
-        buttonType={ButtonType.Primary}
-        onClick={handleSaveClick}
-        disabled={!cityInput && !location?.city}
+        buttonType={location?.city ? ButtonType.Secondary : ButtonType.Disabled}
+        onClick={saveLocationToUser}
       >
         Save
       </Button>

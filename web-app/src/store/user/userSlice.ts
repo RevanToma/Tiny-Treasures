@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IChatRoom,
+  IGeoJson,
   SignInInfo,
   SignUpInfo,
   User,
@@ -18,7 +19,7 @@ import {
 import { Socket } from '../../Sockets/Message.socket';
 
 interface UpdateData {
-  [key: string]: string | number | string[];
+  newData: IGeoJson | string;
   field: string;
 }
 

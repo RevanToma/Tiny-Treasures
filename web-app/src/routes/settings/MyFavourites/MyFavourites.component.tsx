@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { fetchtFavoritePosts } from "../../../api/requests";
-import Box from "../../../components/common/Box/Box";
-import GoBackNav from "../../../components/common/GoBackNav/GoBackNav.component";
-import PostList from "../../../components/common/PostList/PostList.component";
+import { useEffect, useState } from 'react';
+import { fetchtFavoritePosts } from '../../../api/requests';
+import Box from '../../../components/common/Box/Box';
+import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component';
+import PostList from '../../../components/common/PostList/PostList.component';
 
 const MyFavourites: React.FC = () => {
   const [favPosts, setFavPosts] = useState([]);
@@ -17,8 +17,8 @@ const MyFavourites: React.FC = () => {
   }, []);
 
   return (
-    <Box>
-      <GoBackNav title="My Favourites" size={35} />
+    <Box width="100%">
+      <GoBackNav title="My Favourites" s />
       <Box>
         {favPosts.length > 0 ? (
           <PostList posts={favPosts} />

@@ -1,14 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
-import {
-  Enum,
-  IChatRoom,
-  LocationData,
-  Post,
-  PostQueryResult,
-  SignUpInfo,
-} from '../types';
+import { Enum, IChatRoom, Post, PostQueryResult, SignUpInfo } from '../types';
 import api from './index';
-import { apiUrl, serverRoute } from '../utils/urls/serverUrls';
+import { apiUrl, geocodeUrl, serverRoute } from '../utils/urls/serverUrls';
 
 export interface ResponseWithData<T> {
   status: string;
@@ -65,7 +58,7 @@ export const ApiPostSignInUser = async (email: string, password: string) => {
     email,
     password,
   });
-  console.log('LOGIN!!!!!!!!!!', data.data.data);
+  // console.log('LOGIN!!!!!!!!!!', data.data.data);
   return data.data.data;
 };
 
@@ -108,8 +101,6 @@ export const fetchPosts = async ({
     urlQuery += `&search=${searchQuery}`;
   }
 
-  console.log(urlQuery);
-
   const data: AxiosResponse<ResponseWithData<PostQueryResult[]>> =
     await api.get(urlQuery);
   checkForError(data.data);
@@ -136,7 +127,7 @@ export const fetchEnums = async () => {
 
 export const getUserFromJwt = async () => {
   const { data } = await api.get('/users/checkLoggedIn');
-  console.log('DATA FROM CALL', data.data.data);
+  // console.log('DATA FROM CALL', data.data.data);
   return data.data.data;
 };
 
@@ -165,39 +156,19 @@ export const patchPassword = async (passwordData: {
   return data;
 };
 
-export const patchLocation = async (locationData: LocationData) => {
-  const { data } = await api.patch('/users/updateLocation', locationData);
-  checkForError(data);
+export const getCityFromAddress = async (address: string) => {
+  const url = `${geocodeUrl}/address/${address}`;
+  const response = await api.get(url);
+  const { data } = response.data.data;
   return data;
 };
 
-export const fetchLocation = async () => {
-  const { data } = await api.get('/users/getLocation');
-  checkForError(data);
-  return data;
-};
+export const getCityFromCoords = async (lat: number, lng: number) => {
+  const url = `${geocodeUrl}/coords/lat/${lat}/lng/${lng}`;
+  const response = await axios.get(url);
 
-export const getCityFromCoordinates = async (
-  latitude: number,
-  longitude: number
-) => {
-  const res = await axios.get(
-    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=50886d99f1c442bc9e7276e71131cf35`
-  );
-
-  const components = res.data.results[0].components;
-
-  return components;
-};
-
-export const getCoordinatesFromCity = async (cityName: string) => {
-  const res = await axios.get(
-    `https://api.opencagedata.com/geocode/v1/json?q=${cityName}&key=50886d99f1c442bc9e7276e71131cf35`
-  );
-  console.log(res.data.results[0]);
-  const geometry = res.data.results[0].geometry;
-  console.log('GEO', geometry);
-  return geometry;
+  const city = response.data.data.data;
+  return city;
 };
 
 export const getAccessToken = async () => {
@@ -230,8 +201,6 @@ export const addPostToUserFavourite = async (postId: string) => {
 
   return data.data.user.favorites;
 };
-
-// {user: ObjectId("645e7ad0b490c479f8416795")}
 
 export const postCreatePost = async (data: FormData) => {
   await axios.post(`${apiUrl}/posts`, data, {

@@ -1,6 +1,7 @@
 export const baseUrl = 'http://localhost:8000';
 export const homeUrl = `${baseUrl}/photos/home`;
 export const apiUrl = `${baseUrl}/api/v1`;
+export const geocodeUrl = `${baseUrl}/geocode`;
 
 export const serverRoute = {
   signIn: `${apiUrl}/users/signin`,
