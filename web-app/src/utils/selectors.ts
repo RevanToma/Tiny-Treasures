@@ -1,9 +1,9 @@
 import { queryClient } from '../main';
 import { ResponseWithData } from '../api/requests';
-import { Enum } from '../types';
+import { IEnum } from '../types';
 
 export const useEnums = () => {
-  const enumsData: ResponseWithData<Enum[]> | undefined =
+  const enumsData: ResponseWithData<IEnum[]> | undefined =
     queryClient.getQueryData(['enums']);
   console.log(enumsData?.data.data);
   return enumsData?.data.data;

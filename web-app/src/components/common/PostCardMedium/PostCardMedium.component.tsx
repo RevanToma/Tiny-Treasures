@@ -2,12 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import * as S from './postCardMedium.styles';
 
 import Box from '../Box/Box';
-import { Post } from '../../../types';
+import { IPost } from '../../../types';
 import { getDate } from '../../../utils/helpers';
 import HeartIcon from '../../../routes/settings/MyFavourites/HeartComponent/Heart.component';
 
 interface PostCardMediumProps {
-  post: Post;
+  post: IPost;
 }
 
 const PostCardMedium: React.FC<PostCardMediumProps> = ({ post }) => {

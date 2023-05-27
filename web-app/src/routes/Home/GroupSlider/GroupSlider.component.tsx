@@ -14,11 +14,11 @@ import {
   setQuery,
   setQueryData,
 } from '../../../store/query/querySlice';
-import { Enum } from '../../../types';
+import { IEnum } from '../../../types';
 
 interface GroupSliderProps {
   group: string;
-  enums: Enum;
+  enums: IEnum;
 }
 
 const ages = ['0-3', '4-7', '8-11'];

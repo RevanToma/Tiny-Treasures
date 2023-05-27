@@ -3,11 +3,11 @@ import Box from '../../../components/common/Box/Box';
 import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Post } from './../../../types';
+import { IPost } from './../../../types';
 import PostList from '../../../components/common/PostList/PostList.component';
 
 const MyItems: React.FC = () => {
-  const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [userPosts, setUserPosts] = useState<IPost[]>([]);
 
   useEffect(() => {
     const getUsersPosts = async () => {

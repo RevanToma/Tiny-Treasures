@@ -1,7 +1,7 @@
 import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import * as S from './postCardLarge.styles';
 import { useSelector } from 'react-redux';
-import { IReviewPost, Post } from '../../../types';
+import { IReviewPost, IPost } from '../../../types';
 import {
   selectIsSignedIn,
   selectUser,
@@ -15,7 +15,7 @@ import LightBox from '../LightBox/LightBox.component';
 import HeartIcon from '../../../routes/settings/MyFavourites/HeartComponent/Heart.component';
 
 interface PostCardLargeProps {
-  post: Post | IReviewPost;
+  post: IPost | IReviewPost;
   isReview?: boolean;
   setPrimaryImage?: (index: number) => void;
 }

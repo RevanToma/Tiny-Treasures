@@ -1,13 +1,13 @@
-import React from "react";
-import Box from "../../common/Box/Box";
-import { Post } from "../../../types";
-import * as S from "./styled";
-import { ButtonType } from "../../common/Button/button.types";
-import Button from "../../common/Button/Button.component";
-import { theme } from "../../../styles/themes";
+import React from 'react';
+import Box from '../../common/Box/Box';
+import { IPost } from '../../../types';
+import * as S from './styled';
+import { ButtonType } from '../../common/Button/button.types';
+import Button from '../../common/Button/Button.component';
+import { theme } from '../../../styles/themes';
 
 type ChatPostItemProps = {
-  post: Post;
+  post: IPost;
   navigateToPost: () => void;
 };
 
@@ -16,7 +16,7 @@ const ChatPostItem: React.FC<ChatPostItemProps> = ({
   navigateToPost,
 }) => {
   const handleTrade = () => {
-    console.log("trade");
+    console.log('trade');
   };
   return (
     <Box width="100%" boxShadow={theme.shadow} padding="30px" gap="20px">

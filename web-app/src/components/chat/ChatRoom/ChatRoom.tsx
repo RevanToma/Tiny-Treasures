@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
-import { socket } from "../../../Sockets/Message.socket";
-import Message from "../Message/Message";
-import { IChatRoom, IMessage, Post } from "../../../types";
-import * as S from "./styled";
-import TypingAnimation from "../TypingAnimation/TypingAnimation";
-import Box from "../../common/Box/Box";
-import { useNavigate } from "react-router-dom";
-import { createPortal } from "react-dom";
-import ChatInput from "../ChatInput/ChatInput";
-import ChatPostItem from "../ChatPostItem/ChatPostItem";
+import React, { useEffect, useState, useRef } from 'react';
+import { socket } from '../../../Sockets/Message.socket';
+import Message from '../Message/Message';
+import { IChatRoom, IMessage, IPost } from '../../../types';
+import * as S from './styled';
+import TypingAnimation from '../TypingAnimation/TypingAnimation';
+import Box from '../../common/Box/Box';
+import { useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
+import ChatInput from '../ChatInput/ChatInput';
+import ChatPostItem from '../ChatPostItem/ChatPostItem';
 
 function createJaggedArray(messagesArray: IMessage[]): IMessage[][] {
   const jaggedArray: IMessage[][] = [];
@@ -17,7 +17,7 @@ function createJaggedArray(messagesArray: IMessage[]): IMessage[][] {
 
   let currentGroup: IMessage[] = [];
 
-  console.log("äinput", messagesArray);
+  console.log('äinput', messagesArray);
 
   for (const obj of messagesArray) {
     if (obj.createdAt) {
@@ -31,7 +31,7 @@ function createJaggedArray(messagesArray: IMessage[]): IMessage[][] {
       currentGroup.push(obj);
     }
   }
-  console.log("output", jaggedArray);
+  console.log('output', jaggedArray);
   return jaggedArray;
 }
 
@@ -47,19 +47,19 @@ type Props = {
   room: IChatRoom;
   userId: string;
   receiverId: string;
-  post: Post;
+  post: IPost;
 };
 
-const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
-  const chatInputPlace = document.getElementById("chat-input-portal");
+const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = '' }) => {
+  const chatInputPlace = document.getElementById('chat-input-portal');
   const messageElRef = useRef<HTMLDivElement | null>(null);
-  const chatPostItemPlace = document.getElementById("chat-post-item-portal");
+  const chatPostItemPlace = document.getElementById('chat-post-item-portal');
   const navigate = useNavigate();
   const [messages, setMessages] = useState<IMessage[]>(room.messages);
   const [typing, setTyping] = useState(false);
   const chatInputRef = useRef<HTMLInputElement>(null);
   const [message, setMessage] = useState<IMessage>({
-    text: "",
+    text: '',
     senderId: userId,
     receiverId,
     roomId: room._id,
@@ -75,29 +75,29 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
     let timeout: ReturnType<typeof setTimeout>;
 
     const handleKeyDown = (e: any) => {
-      if (e.key != "enter") {
-        socket().emit("typing", { ...typingInfo, typing: true });
+      if (e.key != 'enter') {
+        socket().emit('typing', { ...typingInfo, typing: true });
         clearTimeout(timeout);
       }
     };
 
     const handleKeyUp = () => {
       timeout = setTimeout(() => {
-        socket().emit("typing", { ...typingInfo, typing: false });
+        socket().emit('typing', { ...typingInfo, typing: false });
       }, 3000);
     };
 
-    chatInputRef.current?.addEventListener("keydown", handleKeyDown);
-    chatInputRef.current?.addEventListener("keyup", handleKeyUp);
+    chatInputRef.current?.addEventListener('keydown', handleKeyDown);
+    chatInputRef.current?.addEventListener('keyup', handleKeyUp);
 
     return () => {
-      chatInputRef.current?.removeEventListener("keydown", handleKeyDown);
-      chatInputRef.current?.removeEventListener("keyup", handleKeyUp);
+      chatInputRef.current?.removeEventListener('keydown', handleKeyDown);
+      chatInputRef.current?.removeEventListener('keyup', handleKeyUp);
     };
   }, [room._id, userId, receiverId]);
 
   useEffect(() => {
-    socket().on("typing", (data) => {
+    socket().on('typing', data => {
       if (data.senderId == receiverId) {
         const { typing, userId: typingId } = data;
         const receiverIsTyping = userId !== typingId && typing;
@@ -116,30 +116,30 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
   useEffect(() => {
     const handleChatMessage = (data: IMessage) => {
       const senderIsMember = room.members.some(
-        (member) => member === data.senderId
+        member => member === data.senderId
       );
       const receiverIsMember = room.members.some(
-        (member) => member === receiverId
+        member => member === receiverId
       );
       if (senderIsMember && receiverIsMember) {
-        console.log("data", data);
+        console.log('data', data);
         const updatedMessages = [...messages, data];
         setMessages(updatedMessages);
       }
     };
 
-    socket().on("chat-message", handleChatMessage);
+    socket().on('chat-message', handleChatMessage);
 
     return () => {
-      socket().off("chat-message", handleChatMessage);
+      socket().off('chat-message', handleChatMessage);
     };
   }, [messages, receiverId, room, userId]);
 
   function onSubmit() {
     if (!message || !chatInputRef.current?.value) return null;
-    socket().emit("chat-message", message);
+    socket().emit('chat-message', message);
     if (chatInputRef.current) {
-      chatInputRef.current.value = "";
+      chatInputRef.current.value = '';
     }
   }
 
@@ -153,17 +153,15 @@ const ChatRoom: React.FC<Props> = ({ post, room, userId, receiverId = "" }) => {
 
   const jaggedMessageListByDay = createJaggedArray(messages);
 
-  const messageListWithFirst = jaggedMessageListByDay.map((sameDayMessages) => {
+  const messageListWithFirst = jaggedMessageListByDay.map(sameDayMessages => {
     return sameDayMessages.map((message, index) => ({
       ...message,
       firstOfDay: index === 0,
     }));
   });
 
-  const messageList = messageListWithFirst.map((messageArray) =>
-    messageArray.map((message) => (
-      <Message key={message._id} message={message} />
-    ))
+  const messageList = messageListWithFirst.map(messageArray =>
+    messageArray.map(message => <Message key={message._id} message={message} />)
   );
 
   return (

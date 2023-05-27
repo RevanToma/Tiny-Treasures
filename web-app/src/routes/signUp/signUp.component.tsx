@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { SignUpInfo } from "../../types";
-import { useAppDispatch } from "../../hooks/useDispatch";
-import { useMutation } from "@tanstack/react-query";
-import { ApiPostSignUpUser } from "../../api/requests";
-import Input from "../../components/common/Input/input.component";
-import Button from "../../components/common/Button/Button.component";
-import { ButtonType } from "../../components/common/Button/button.types";
-import Logo from "../../assets/logo.svg";
-import * as S from "./SignUp.styles";
-import Box from "../../components/common/Box/Box";
-import { InputType } from "../../components/common/Input/input.types";
-import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import Spinner from "../../components/common/spinner/spinner.component";
-import { signUpUser } from "../../store/user/userSlice";
+import { ISignUpInfo } from '../../types';
+import { useAppDispatch } from '../../hooks/useDispatch';
+import { useMutation } from '@tanstack/react-query';
+import { ApiPostSignUpUser } from '../../api/requests';
+import Input from '../../components/common/Input/input.component';
+import Button from '../../components/common/Button/Button.component';
+import { ButtonType } from '../../components/common/Button/button.types';
+import Logo from '../../assets/logo.svg';
+import * as S from './SignUp.styles';
+import Box from '../../components/common/Box/Box';
+import { InputType } from '../../components/common/Input/input.types';
+import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Spinner from '../../components/common/spinner/spinner.component';
+import { signUpUser } from '../../store/user/userSlice';
 
 export const SignUp: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,12 +23,12 @@ export const SignUp: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setIsLoading] = useState(false);
 
-  const [formFields, setFormFields] = useState<SignUpInfo>({
-    name: "",
-    email: "",
-    confirmEmail: "",
-    password: "",
-    passwordConfirm: "",
+  const [formFields, setFormFields] = useState<ISignUpInfo>({
+    name: '',
+    email: '',
+    confirmEmail: '',
+    password: '',
+    passwordConfirm: '',
   });
 
   const signUpWithEmailMutation = useMutation({
@@ -38,35 +38,35 @@ export const SignUp: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formFields.password !== formFields.passwordConfirm) {
-      alert("Password does not match");
+      alert('Password does not match');
       return;
     }
     if (formFields.email !== formFields.confirmEmail) {
-      alert("Emails does not match");
+      alert('Emails does not match');
       return;
     }
     setIsLoading(true);
     const action = await dispatch(signUpUser(formFields));
     if (signUpUser.rejected.match(action)) {
-      alert("Sign-up failed. Please fil in everything correctly.");
+      alert('Sign-up failed. Please fil in everything correctly.');
       setIsLoading(false);
       return;
     }
 
-    navigate("/");
+    navigate('/');
   };
 
   const toggleShowPassword = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
+    setShowPassword(prevShowPassword => !prevShowPassword);
   };
 
   const toggleShowConfirmPassword = () => {
-    setShowConfirmPassword((prevShowPassword) => !prevShowPassword);
+    setShowConfirmPassword(prevShowPassword => !prevShowPassword);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormFields((prevFields) => ({ ...prevFields, [name]: value }));
+    setFormFields(prevFields => ({ ...prevFields, [name]: value }));
   };
 
   return (

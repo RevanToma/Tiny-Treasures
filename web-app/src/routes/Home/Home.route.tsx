@@ -6,12 +6,12 @@ import * as S from './home.styles';
 import Divider from '../../components/common/Divider/Divider.component';
 import Box from '../../components/common/Box/Box';
 import { queryClient } from '../../main';
-import { Enum } from '../../types';
+import { IEnum } from '../../types';
 import { imgUrls } from '../../utils/urls/imgUrls';
 import IntroSlides from '../../components/IntroSlides/IntroSlides';
 
 const Home: FC = () => {
-  const enums: Enum | undefined = queryClient.getQueryData(['enums']);
+  const enums: IEnum | undefined = queryClient.getQueryData(['enums']);
 
   return (
     <Box gap="2.4rem">

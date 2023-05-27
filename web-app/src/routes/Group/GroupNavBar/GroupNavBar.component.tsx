@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import * as S from './groupNavBar.styles';
 import { capitalize } from '../../../utils/helpers';
-import { Link } from 'react-router-dom';
 
 interface IGroupNavBarProps {
   items: string[];

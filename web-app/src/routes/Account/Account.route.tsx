@@ -4,7 +4,7 @@ import axios from 'axios';
 import Button from '../../components/common/Button/Button.component';
 import { ButtonType } from '../../components/common/Button/button.types';
 import { useAppDispatch } from '../../hooks/useDispatch';
-import { GeoLocation } from '../../types';
+import { IGeoLocation } from '../../types';
 import { signOutUser } from '../../store/user/userSlice';
 
 const Account = () => {
@@ -17,7 +17,7 @@ const Account = () => {
     const response = await axios.get(url);
     const { data } = response.data.data;
 
-    const locationData: GeoLocation = {
+    const locationData: IGeoLocation = {
       coordinates: [data.lng, data.lat],
       type: 'Point',
       city: data.city,
@@ -35,7 +35,7 @@ const Account = () => {
         const response = await axios.get(url);
 
         const city = response.data.data.data;
-        const locationData: GeoLocation = {
+        const locationData: IGeoLocation = {
           coordinates: [lng, lat],
           type: 'Point',
           city,
