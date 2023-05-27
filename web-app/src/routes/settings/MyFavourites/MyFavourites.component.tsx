@@ -18,7 +18,7 @@ const MyFavourites: React.FC = () => {
 
   return (
     <Box width="100%">
-      <GoBackNav title="My Favourites" s />
+      <GoBackNav title="My Favourites" />
       <Box>
         {favPosts.length > 0 ? (
           <PostList posts={favPosts} />

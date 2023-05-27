@@ -1,7 +1,7 @@
 'use strict';
 
-import { Sizes } from '../models/postModel';
-import { Point } from '../utils/interfaces';
+import { ISizes } from '../models/postModel';
+import { IPoint } from '../utils/interfaces';
 
 interface PostData {
   title: string;
@@ -156,7 +156,7 @@ function getRandomNumber() {
 }
 
 function getRandomSize(): string {
-  const sizes = Object.values(Sizes); // Get an array of all the size values
+  const sizes: string[] = Object.values(ISizes); // Get an array of all the size values
   const randomIndex = Math.floor(Math.random() * sizes.length); // Get a random index in the array
   return sizes[randomIndex]; // Return the size at the random index
 }
@@ -239,7 +239,7 @@ const createPostost = (id: number) => {
     user: getRandomUser(),
     // user: '6457cd486cd32551062a6ca2',
     location: {
-      type: Point.Point,
+      type: IPoint.Point,
       coordinates: getRandomCoordinatesInSweden(),
     },
   };
