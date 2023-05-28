@@ -1,23 +1,17 @@
-import { IoIosHeartEmpty, IoIosHeart } from 'react-icons/io';
 import * as S from './postCardLarge.styles';
 import { useSelector } from 'react-redux';
 import { IReviewPost, IPost } from '../../../types';
-import {
-  selectIsSignedIn,
-  selectUser,
-} from '../../../store/user/userSelectors';
+import { selectUser } from '../../../store/user/userSelectors';
 import Box from '../Box/Box';
 import { getDate, getListFromArray } from '../../../utils/helpers';
 import { theme } from '../../../styles/themes';
-import { useAppDispatch } from '../../../hooks/useDispatch';
-import { updateUserAsync } from '../../../store/user/userSlice';
 import LightBox from '../LightBox/LightBox.component';
 import HeartIcon from '../../../routes/settings/MyFavourites/HeartComponent/Heart.component';
 
 interface PostCardLargeProps {
   post: IPost | IReviewPost;
   isReview?: boolean;
-  setPrimaryImage?: (index: number) => void;
+  setPrimaryImage?: (imageUrl: string) => void;
 }
 
 const PostCardLarge: React.FC<PostCardLargeProps> = ({
@@ -26,7 +20,6 @@ const PostCardLarge: React.FC<PostCardLargeProps> = ({
   setPrimaryImage,
 }) => {
   const { title, description, condition, _id } = post;
-  const user = useSelector(selectUser);
 
   return (
     <S.Wrapper width="100%" alignItems="center">

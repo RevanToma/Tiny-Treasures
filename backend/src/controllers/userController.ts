@@ -20,7 +20,7 @@ const filterObj = (obj: IStringObject, ...allowedFields: string[]) => {
 
 export const attatchUserToReq = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -43,7 +43,7 @@ export const attatchUserToReq = catchAsync(
 );
 
 export const getBasicUserData = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: CustomRequest<null>, res: Response, next: NextFunction) => {
     const basicUserData: UserDocument | null = await User.findById(
       req.user.id
     ).select('id name email location favorites');
@@ -63,7 +63,7 @@ export const getBasicUserData = catchAsync(
 
 export const updateMe = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IStringObject>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -88,13 +88,11 @@ export const updateMe = catchAsync(
 
 export const getAllUsersPosts = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     const userId = req.user.id;
-
-    console.log(userId);
 
     const userPosts = await Post.find({ user: userId });
 
@@ -110,7 +108,7 @@ export const getAllUsersPosts = catchAsync(
 
 export const getFavoritePosts = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -135,14 +133,13 @@ export const getFavoritePosts = catchAsync(
 );
 
 export const updateFavouritePosts = catchAsync(
-  async (req: CustomRequest, res: Response, next: NextFunction) => {
+  async (req: CustomRequest<null>, res: Response, next: NextFunction) => {
     const { postId } = req.params;
 
     // 1.Check if the post id is already in the user's favorites
     // 2.If it is already a favorite, remove it, otherwise add it
     // 3.If post id is not in favorites, add it
     // 4. Get the updated user
-    console.log(postId);
 
     const user = await User.findById(req.user.id);
 

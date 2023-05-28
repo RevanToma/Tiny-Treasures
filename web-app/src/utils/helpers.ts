@@ -35,11 +35,10 @@ export const moveToFrontOfArray = (
   index: number,
   array: (string | File)[]
 ): (string | File)[] => {
+  const value = array[index];
   const newArray = [...array];
-  console.log(newArray);
-  const [primary] = newArray.splice(index, 1);
-  newArray.unshift(primary);
-  console.log(newArray);
+  newArray.splice(index, 1);
+  newArray.unshift(value);
 
   return newArray;
 };

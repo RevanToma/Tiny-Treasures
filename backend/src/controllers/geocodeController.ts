@@ -7,7 +7,7 @@ import { handleAxiosError } from '../utils/axiosErrorHandler';
 
 export const getCityFromCoords = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -37,12 +37,11 @@ export const getCityFromCoords = catchAsync(
 
 export const getCityFromAddress = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     const address = req.params.address;
-    console.log(address);
 
     const key = process.env.GEOCODE_API_KEY;
     const url = `https://geocode.xyz/${address}?json=1&auth=${key}`;
@@ -54,7 +53,6 @@ export const getCityFromAddress = catchAsync(
     if (!response) {
       return next(new AppError('An error occured', 400));
     }
-    console.log(response.data);
     const city = response.data.standard.city;
     const lat = response.data.latt;
     const lng = response.data.longt;

@@ -1,7 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
-import logger from "redux-logger";
-import userReducer from "./user/userSlice";
-import queryReducer from "./query/querySlice";
+import { configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
+import userReducer from './user/userSlice';
+import queryReducer from './query/querySlice';
+import giveFormValuesReducer from './giveFormValues/giveFormValuesSlice';
 
 // const rootReducer = combineReducers({
 //   user: userReducer,
@@ -14,9 +15,10 @@ const store = configureStore({
   reducer: {
     user: userReducer,
     query: queryReducer,
+    giveFormValues: giveFormValuesReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    process.env.NODE_ENV === "development"
+  middleware: getDefaultMiddleware =>
+    process.env.NODE_ENV === 'development'
       ? getDefaultMiddleware({ serializableCheck: false }).concat(logger)
       : getDefaultMiddleware(),
 });

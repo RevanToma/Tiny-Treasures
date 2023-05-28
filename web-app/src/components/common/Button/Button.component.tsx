@@ -26,7 +26,7 @@ const Button: FC<ButtonProps> = ({
     <S.StyledButton
       onClick={onClick}
       buttonType={buttonType}
-      disabled={disabled}
+      disabled={disabled || buttonType === ButtonType.Disabled}
       {...otherProps}
     >
       <Box

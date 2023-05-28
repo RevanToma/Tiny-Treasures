@@ -13,9 +13,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { IChatRoom } from '../../types';
 import { fetchChats } from '../../api/requests';
 import Spinner from '../../components/common/spinner/spinner.component';
+import { getFormValuesFromPost } from './post.helpers';
+import { useDispatch } from 'react-redux';
+import { setGiveFormValues } from '../../store/giveFormValues/giveFormValuesSlice';
 
 const Post: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const postId = useParams().id;
   const user = useSelector(selectUser);
@@ -34,6 +38,8 @@ const Post: React.FC = () => {
     if (user._id) {
       socket().on('create-chat', refetchChatsAndGoToChat);
     }
+
+    return () => socket().off('create-chat', refetchChatsAndGoToChat);
   }, [user?._id, queryClient, navigate, post?._id]);
 
   if (isLoading && postId) return <Spinner />;
@@ -46,10 +52,10 @@ const Post: React.FC = () => {
   };
 
   const handleEditPost = () => {
-    console.log('edit');
+    const giveFormValues = getFormValuesFromPost(post);
+    dispatch(setGiveFormValues(giveFormValues));
+    navigate(`/giveaway/${postId}`);
   };
-  console.log(post.user);
-  console.log(user._id);
 
   return (
     <Box padding="2.4rem" gap="3rem" backgroundColor="##F3F0E6">

@@ -3,7 +3,8 @@ import { catchAsync } from '../utils/catchAsync';
 import AppError from '../utils/appError';
 import User, { UserDocument } from '../models/userModel';
 import jwt, { Secret, JwtPayload } from 'jsonwebtoken';
-import { CustomRequest } from '../utils/expressInterfaces';
+import { CustomRequest, FilterObj } from '../utils/expressInterfaces';
+import { IUpdateEmailReqBody, IUpdatePassReqBody } from '../utils/interfaces';
 
 interface DecodedJwt extends JwtPayload {
   id: string;
@@ -69,12 +70,12 @@ const createAndSendRefreshToken = (
 
 export const signUp = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<FilterObj>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     // Removes the method property if user tries to add it
-    if (req.body.method) delete req.body.method;
+    if (req.body?.method) delete req.body.method;
 
     const newUser: UserDocument = await User.create(req.body);
 
@@ -84,7 +85,7 @@ export const signUp = catchAsync(
 
 export const signIn = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -95,7 +96,7 @@ export const signIn = catchAsync(
 // FIXME: Don't really need catchAsync but getting errors without
 export const googleAuthCallback = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -106,7 +107,7 @@ export const googleAuthCallback = catchAsync(
 
 export const sendUser = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -127,7 +128,7 @@ export const signOut: RequestHandler = (req, res, next): void => {
 
 export const updatePassword = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IUpdatePassReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -150,7 +151,7 @@ export const updatePassword = catchAsync(
 
 export const updateEmail = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IUpdateEmailReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -184,7 +185,7 @@ export const updateEmail = catchAsync(
 
 export const verifyPassword = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IUpdateEmailReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -215,7 +216,7 @@ export const verifyPassword = catchAsync(
   }
 );
 
-export const getRefreshToken = (req: CustomRequest) => {
+export const getRefreshToken = (req: CustomRequest<null>) => {
   let token: string = '';
   console.log(req.cookies.jwt);
   if (req.cookies.jwt) {
@@ -228,7 +229,7 @@ export const getRefreshToken = (req: CustomRequest) => {
   return token;
 };
 
-export const getAccessToken = (req: CustomRequest) => {
+export const getAccessToken = (req: CustomRequest<null>) => {
   let token: string = '';
 
   if (req.headers.authorization?.startsWith('Bearer')) {
@@ -263,11 +264,10 @@ export const decodeToken = async (token: string): Promise<DecodedJwt> => {
 
 export const protect = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    console.log(req.body);
     const token = getAccessToken(req);
 
     if (!token) {
@@ -305,7 +305,7 @@ export const protect = catchAsync(
 
 export const refreshToken = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {

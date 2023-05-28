@@ -13,11 +13,12 @@ export const getCategory = (group: string): string[] => {
 export const getImgBox = (name: string, i: number): Node => {
   const div = document.createElement('div');
   div.id = `img-box-${name}-${i}`;
-  div.style.minHeight = '10rem';
-  div.style.minWidth = '10rem';
-  div.style.width = '10rem';
-  div.style.borderRadius = '8px';
-  div.style.position = 'relative';
+  div.className = 'img-box';
+  // div.style.minHeight = '10rem';
+  // div.style.minWidth = '10rem';
+  // div.style.width = '10rem';
+  // div.style.borderRadius = '8px';
+  // div.style.position = 'relative';
 
   return div;
 };
@@ -25,11 +26,11 @@ export const getImgBox = (name: string, i: number): Node => {
 export const getMainImgBox = (name: string, i: number): Node => {
   const div = document.createElement('div');
   div.id = `img-box-${name}-${i}`;
-  div.style.minWidth = '23rem';
-  div.style.width = '23rem';
-  div.style.borderRadius = '8px';
-  div.style.margin = '3rem 0';
-  div.style.position = 'relative';
+  // div.style.minWidth = '23rem';
+  // div.style.width = '23rem';
+  // div.style.borderRadius = '8px';
+  // div.style.margin = '3rem 0';
+  // div.style.position = 'relative';
 
   return div;
 };
@@ -53,23 +54,10 @@ export const checkIsFormValid = (data: IGivePreviewFormData) => {
     data.condition === '' ||
     !data.typeOfItems.length ||
     (data.group === 'clothes' && !data.sizes.length) ||
-    !data.images.length
+    (!data.images?.length && !data.imgUrls.length)
   )
     return false;
   return true;
-};
-
-export const initialFormValues: IGivePreviewFormData = {
-  title: '',
-  description: '',
-  group: '',
-  typeOfItems: [],
-  age: '',
-  condition: '',
-  itemCount: '',
-  sizes: [],
-  location: '',
-  images: [],
 };
 
 // GiveEdit HELPERS
@@ -101,12 +89,18 @@ export const getFormData = (formData: IGivePreviewFormData) => {
     sizes,
     itemCount,
     condition,
+    imgUrls,
+    id,
+    frontImageArray,
   } = formData;
 
   const form = new FormData();
 
   images.forEach(file => {
     form.append('photos', file);
+  });
+  imgUrls.forEach(url => {
+    form.append('imgUrls', url);
   });
   form.append('title', title);
   form.append('description', description);
@@ -121,5 +115,25 @@ export const getFormData = (formData: IGivePreviewFormData) => {
   form.append('itemCount', itemCount);
   form.append('condition', condition);
 
+  if (id) {
+    form.append('id', id);
+  }
+  if (frontImageArray) {
+    form.append('frontImageArray', frontImageArray);
+  }
   return form;
+};
+
+export const initialFormValues: IGivePreviewFormData = {
+  title: '',
+  description: '',
+  group: '',
+  typeOfItems: [],
+  age: '',
+  condition: '',
+  itemCount: '',
+  sizes: [],
+  location: '',
+  images: [],
+  imgUrls: [],
 };

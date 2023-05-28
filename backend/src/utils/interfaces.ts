@@ -47,3 +47,26 @@ export interface IPostsWithData {
   posts: IPostDocument[];
   nextPage: number;
 }
+
+export interface IPostReqBody {
+  frontImageArray: string;
+  imgUrls: string[];
+  itemCount: string;
+  title: string;
+  description: string;
+  sizes: string[];
+  group: string;
+  typeOfItems: string[];
+  condition: string;
+  images: File[];
+  id?: string;
+}
+export interface IUpdatePassReqBody {
+  passwordNew: string;
+  passwordConfirm: string;
+}
+export interface IUpdateEmailReqBody {
+  newEmail: string;
+  password: string;
+  email?: string;
+}

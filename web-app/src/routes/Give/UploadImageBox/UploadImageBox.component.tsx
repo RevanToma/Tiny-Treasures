@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useEffect, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { theme } from '../../../styles/themes';
 import { FaRegImages, FaPlus } from 'react-icons/fa';
 import * as S from './uploadImageBox.styles';
@@ -23,6 +23,8 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imgFilesRef = useRef<File[]>([...formValues.images]);
+
+  const [imgUrls, setImgUrls] = useState(formValues.imgUrls);
 
   useEffect(() => {
     if (formValues.images.length === 0) return;
@@ -101,7 +103,19 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
   };
 
   const maxImages = (): boolean => {
-    return imgFilesRef.current.length >= MAX_POST_PHOTOS;
+    return imgFilesRef.current.length + imgUrls.length >= MAX_POST_PHOTOS;
+  };
+
+  const removeSavedImage = (i: number) => {
+    const newImgUrls = [...imgUrls];
+    newImgUrls.splice(i, 1);
+    setImgUrls(newImgUrls);
+
+    handleChange({ name: 'imgUrls', value: newImgUrls });
+  };
+
+  const getIsGap = () => {
+    return imgUrls.length > 0 && imgFilesRef.current.length > 0;
   };
 
   return (
@@ -109,7 +123,6 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
       borderRadius={theme.radius.image}
       alignItems="center"
       justifyContent="center"
-      onClick={openFilePicker}
       marginBottom="3.6rem"
     >
       <S.FileInput
@@ -118,7 +131,7 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
         type="file"
         multiple
       />
-      {formValues.images.length === 0 && (
+      {imgUrls.length === 0 && imgFilesRef.current.length > 0 && (
         <Box marginBottom="2.4rem">
           <FaRegImages color={theme.color.placeholderText} size={72} />
         </Box>
@@ -126,7 +139,44 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
 
       <p id="upload-item">Upload Item</p>
       <S.ImagePreviewBoxMain ref={imgPreviewMainRef}></S.ImagePreviewBoxMain>
-      <S.ImagePreviewBox ref={imgPreviewRef}></S.ImagePreviewBox>
+      <S.ImagePreviewBoxMain>
+        {imgUrls.length > 0 && !imgFilesRef.current.length && (
+          <Box>
+            <div onClick={() => removeSavedImage(0)} className="remove-icon">
+              x
+            </div>
+            <img src={imgUrls[0]} alt="Kids Items" />
+          </Box>
+        )}
+      </S.ImagePreviewBoxMain>
+      <S.ImagePreviewBoxWrapper isGap={getIsGap()}>
+        <S.ImagePreviewBox ref={imgPreviewRef}></S.ImagePreviewBox>
+
+        <S.ImagePreviewBox>
+          {imgUrls.length > 0 &&
+            imgUrls.map((image, i) => {
+              if (
+                (i === 0 && !imgFilesRef.current.length) ||
+                i >= MAX_POST_PHOTOS
+              ) {
+                return;
+              } else {
+                return (
+                  <Box className="img-box" key={image}>
+                    <div
+                      onClick={() => removeSavedImage(i)}
+                      className="remove-icon"
+                    >
+                      x
+                    </div>
+
+                    <img src={imgUrls[i]} alt="Kids Items" />
+                  </Box>
+                );
+              }
+            })}
+        </S.ImagePreviewBox>
+      </S.ImagePreviewBoxWrapper>
 
       {maxImages() ? (
         <p style={{ color: 'red' }}>
@@ -139,6 +189,7 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
       <Button
         iconLeft={maxImages() ? undefined : <FaPlus />}
         buttonType={maxImages() ? ButtonType.Disabled : ButtonType.Secondary}
+        onClick={openFilePicker}
       >
         Add Image
       </Button>

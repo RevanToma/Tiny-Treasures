@@ -1,4 +1,4 @@
-import { FC, Dispatch, useState, useEffect } from 'react';
+import { FC, Dispatch } from 'react';
 
 import UploadImageBox from '../UploadImageBox/UploadImageBox.component';
 import Button from '../../../components/common/Button/Button.component';
@@ -30,15 +30,6 @@ const GiveEdit: FC<GiveEditProps> = ({
   setShowPreview,
   formValues,
 }) => {
-  const [addCategorySelect, setAddCategorySelects] = useState(false);
-
-  useEffect(() => {
-    if (addCategorySelect || formValues.typeOfItems.length > 0) return;
-    if (formValues.typeOfItems.length === 0) {
-      setAddCategorySelects(true);
-    }
-  }, [formValues.typeOfItems]);
-
   // HANDLING CHANGE
   const handleSelectChange = (
     name: string,
@@ -58,11 +49,17 @@ const GiveEdit: FC<GiveEditProps> = ({
     };
 
     handleChange(data);
-    if (name === 'categories') setAddCategorySelects(false);
   };
 
   const handleChange = ({ name, value }: IConvertedChangeData) => {
     const newFormValues = { ...formValues };
+    if (name === 'age') {
+      newFormValues.sizes = [];
+    }
+    if (name === 'group') {
+      newFormValues.typeOfItems = [];
+      newFormValues.sizes = [];
+    }
     newFormValues[name] = value;
 
     setFormValues(newFormValues);

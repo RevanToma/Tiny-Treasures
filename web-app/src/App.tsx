@@ -111,6 +111,7 @@ function App() {
               <Route path="chat/:roomId/:postId" element={<DisplayedChat />} />
               <Route path="getUser" element={<SaveUserAndRedirect />} />
               <Route path="giveaway" element={<Give />} />
+              <Route path="giveaway/:postId" element={<Give />} />
               <Route path="*" element={<div>404 NOT FOUND</div>} />
             </Route>
             <Route path="account/*" element={<Layout />}>

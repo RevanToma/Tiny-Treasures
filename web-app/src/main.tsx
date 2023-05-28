@@ -14,14 +14,14 @@ export const queryClient = new QueryClient({
 });
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      {/* <PersistGate loading={<Spinner />} persistor={persistor}> */}
-      <QueryClientProvider client={queryClient}>
-        <App />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-      {/* </PersistGate> */}
-    </Provider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <Provider store={store}>
+    {/* <PersistGate loading={<Spinner />} persistor={persistor}> */}
+    <QueryClientProvider client={queryClient}>
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+    {/* </PersistGate> */}
+  </Provider>
+  // {/* </React.StrictMode> */}
 );

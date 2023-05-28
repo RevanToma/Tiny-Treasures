@@ -9,7 +9,7 @@ import { moveToFrontOfArray } from '../../../utils/helpers';
 interface LightBoxProps {
   images: string[];
   isReview: boolean;
-  setPrimaryImage?: (index: number) => void;
+  setPrimaryImage?: (imageUrl: string) => void;
 }
 
 const LightBox: FC<LightBoxProps> = ({ images, isReview, setPrimaryImage }) => {
@@ -28,20 +28,21 @@ const LightBox: FC<LightBoxProps> = ({ images, isReview, setPrimaryImage }) => {
   const setImageAsPrimary = () => {
     const newArray = moveToFrontOfArray(currentImg, imageArray) as string[];
     setImageArray(newArray);
-    setPrimaryImage(currentImg);
+    setPrimaryImage(imageArray[currentImg]);
   };
 
   return (
     <>
       <Box
-        // maxWidth="40rem"
-        // height="30rem"
+        height="30rem"
         margin="0 .4rem"
         alignItems="center"
         justifyContent="center"
         marginBottom="2.4rem"
+        width="30rem"
+        position="relative"
       >
-        <Box width="30rem" position="relative">
+        <Box max-width="30rem" height="30rem">
           <S.StyledArrowBack
             onClick={() => setCurrentImg(getImgIndex('back'))}
           />

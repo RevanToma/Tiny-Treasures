@@ -10,6 +10,7 @@ import AppError from '../utils/appError';
 import {
   ILocationData,
   INumberObject,
+  IPostReqBody,
   IStringObject,
 } from '../utils/interfaces';
 import mongoose, { PipelineStage } from 'mongoose';
@@ -35,7 +36,7 @@ import User from '../models/userModel';
 const storage = multer.memoryStorage();
 // determins which files to save
 const fileFilter = (
-  req: CustomRequest,
+  req: CustomRequest<IPostReqBody>,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ): void => {
@@ -49,7 +50,7 @@ const fileFilter = (
 const limits: INumberObject = {
   fileSize: 4000000,
   files: 5,
-  fields: 10,
+  fields: 15,
   parts: 15,
   headerPairs: 100,
 };
@@ -64,7 +65,7 @@ export const uploadPhotos = upload.array('photos', 4);
 
 export const resizePhoto = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IPostReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -89,7 +90,7 @@ export const resizePhoto = catchAsync(
 
 export const getAllPosts = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -117,7 +118,7 @@ export const getAllPosts = catchAsync(
 
 export const getPost = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -144,19 +145,39 @@ export const getPost = catchAsync(
   }
 );
 
+const setImgUrls = (imgUrls: undefined | string | string[]): string[] => {
+  if (!imgUrls) {
+    return [];
+  } else if (typeof imgUrls === 'string') {
+    return [imgUrls];
+  } else {
+    return [...imgUrls];
+  }
+};
+
 export const createPost = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IPostReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const images = req.filenames
-      ? [...req.filenames].map(fileName => `/photos/posts/${fileName}`)
+    const newImages = req.filenames
+      ? [...req.filenames].map(
+          fileName => `${process.env.BASE_URL}/photos/posts/${fileName}`
+        )
       : [];
+
+    const imgUrls = setImgUrls(req.body.imgUrls);
+    console.log(imgUrls);
+
+    const images =
+      req.body.frontImageArray === 'imgUrls'
+        ? [...imgUrls, ...newImages]
+        : [...newImages, ...imgUrls];
 
     const itemCount = req.body.itemCount && parseInt(req.body.itemCount);
 
-    const { title, description, sizes, group, typeOfItems, condition, enums } =
+    const { title, description, sizes, group, typeOfItems, condition, id } =
       req.body;
 
     const postData = {
@@ -171,21 +192,33 @@ export const createPost = catchAsync(
       user: req.user.id,
       userName: req.user.name,
     };
-    const x = await new Post(postData).populate('enums');
 
-    const post: IPostDocumentWithEnums = await new Post(postData).populate(
-      'enums'
-    );
+    // const post: IPostDocumentWithEnums = await new Post(postData).populate(
+    //   'enums'
+    // );
+
+    // if (!post) {
+    //   return next(new AppError('Unable to create post!', 400));
+    // }
+
+    // if (post.enumsAreValid(post)) {
+    //   return next(new AppError('Invalid categories!', 400));
+    // }
+
+    // post.save();
+    let post;
+    if (id) {
+      console.log(333333333);
+      post = await Post.findByIdAndUpdate(id, postData).populate('enums');
+    } else {
+      console.log(4444444444);
+      post = await Post.create(postData);
+    }
+    console.log(5555555);
 
     if (!post) {
-      return next(new AppError('Unable to create post!', 400));
+      return next(new AppError('Unable to save post!', 400));
     }
-
-    if (post.enumsAreValid(post)) {
-      return next(new AppError('Invalid categories!', 400));
-    }
-
-    post.save();
 
     res.status(200).json({
       status: 'success',

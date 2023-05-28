@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, Dispatch } from 'react';
+import { FC, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../../components/common/Button/Button.component';
@@ -15,28 +15,38 @@ import { IReviewPost } from '../../../types';
 import { ButtonType } from '../../../components/common/Button/button.types';
 
 import * as S from './givePreview.styles';
+import { useDispatch } from 'react-redux';
+import { clearGiveFormValues } from '../../../store/giveFormValues/giveFormValuesSlice';
+import { queryClient } from '../../../main';
 
 interface GivePreviewProps {
-  formData: IGivePreviewFormData;
-  setShowPreview: Dispatch<React.SetStateAction<boolean>>;
+  formValues: IGivePreviewFormData;
+  setFormValues: Dispatch<SetStateAction<IGivePreviewFormData>>;
+  setShowPreview: Dispatch<SetStateAction<boolean>>;
 }
 
-const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
+const GivePreview: FC<GivePreviewProps> = ({
+  formValues,
+  setFormValues,
+  setShowPreview,
+}) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [imgSrcArray, setImgSrcArray] = useState<string[]>([]);
+  const [fileUrls, setFileUrls] = useState<string[]>([]);
   const [postData, setPostData] = useState<IReviewPost | null>(null);
 
   const { mutate, isLoading, isSuccess, isError } = useCreateNewPost();
 
   const createPostData = (): IReviewPost => {
     const post = {
-      ...formData,
+      ...formValues,
       createdAt: new Date(Date.now()).toString(),
       location: {
         city: 'Stockholm',
       },
       images: imgSrcArray,
-      itemCount: parseInt(formData.itemCount),
+      itemCount: parseInt(formValues.itemCount),
       distance: 0,
       _id: '',
     };
@@ -44,18 +54,22 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
   };
 
   useEffect(() => {
-    if (!formData) return;
+    if (!formValues) return;
 
     const newPostData = createPostData();
     setPostData(newPostData);
   }, [imgSrcArray]);
 
   useEffect(() => {
-    if (!formData.images) return;
+    if (!formValues || imgSrcArray.length) return;
+    if (!formValues.images.length) {
+      setImgSrcArray(formValues.imgUrls);
+      return;
+    }
 
     const promises: Promise<string>[] = [];
 
-    formData.images.forEach(img => {
+    formValues.images.forEach(img => {
       const reader = new FileReader();
 
       if (!img || !img.type.startsWith('image/')) return;
@@ -71,27 +85,54 @@ const GivePreview: FC<GivePreviewProps> = ({ formData, setShowPreview }) => {
       );
 
       Promise.all(promises).then(results => {
-        setImgSrcArray(results);
+        setFileUrls(results);
+        setImgSrcArray([...results, ...formValues.imgUrls]);
       });
     });
-  }, [formData.images]);
+  }, [formValues]);
 
   const createPost = (): void => {
-    const form = getFormData(formData);
+    const form = getFormData(formValues);
 
     mutate(form);
   };
 
-  const setPrimaryImage = (index: number) => {
-    const newArray = moveToFrontOfArray(index, formData.images) as File[];
-    formData.images = newArray;
+  const setPrimaryImage = (imageUrl: string) => {
+    if (formValues.imgUrls.includes(imageUrl)) {
+      const index = formValues.imgUrls.indexOf(imageUrl);
+      const newArray = moveToFrontOfArray(
+        index,
+        formValues.imgUrls
+      ) as string[];
+      setFormValues({
+        ...formValues,
+        imgUrls: newArray,
+        frontImageArray: 'imgUrls',
+      });
+    } else if (fileUrls.includes(imageUrl)) {
+      console.log('images');
+
+      const index = fileUrls.indexOf(imageUrl);
+      const newArray = moveToFrontOfArray(index, formValues.images) as File[];
+      setFormValues({
+        ...formValues,
+        images: newArray,
+        frontImageArray: 'images',
+      });
+    }
+  };
+  const reset = () => {
+    dispatch(clearGiveFormValues);
+    queryClient.refetchQueries(['fetchPostById']);
   };
 
   const goToHome = () => {
+    reset();
     navigate('/');
   };
 
   const resetGive = () => {
+    reset();
     window.location.reload();
   };
 
