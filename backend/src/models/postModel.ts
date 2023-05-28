@@ -44,6 +44,7 @@ export interface PostDocumentWithoutEnum extends mongoose.Document {
   user: mongoose.Schema.Types.ObjectId;
   userName: string;
   location: ILocationData;
+  id: string;
   enumsAreValid: (post: IPostDocumentWithEnums) => boolean;
 }
 
@@ -113,6 +114,7 @@ const postSchema = new mongoose.Schema<IPostDocument>(
       coordinates: [Number],
       city: String,
     },
+    id: String,
   },
   {
     toJSON: { virtuals: true },

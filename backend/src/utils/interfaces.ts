@@ -4,7 +4,6 @@ import { IPostDocument } from '../models/postModel';
 export interface IStringObject {
   [key: string]: string | undefined;
 }
-
 export interface INumberObject {
   [key: string]: number | undefined;
 }

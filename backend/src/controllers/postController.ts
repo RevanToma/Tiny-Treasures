@@ -123,18 +123,13 @@ export const getPost = catchAsync(
   ): Promise<void> => {
     const { postId } = req.params;
 
-    // const location: LocationData | null = req.user.location;
-    console.log('POSTID', postId);
+    const location: ILocationData | null = req.user.location;
 
-    const pipeline: PipelineStage[] = [
-      {
-        $match: { _id: new mongoose.Types.ObjectId(postId) },
-      },
-    ];
+    const query = { _id: postId };
 
-    //if (location) pipeline.unshift(distanceFrom(location));
+    const pipeline = new PostFeatures(query, location).distanceFrom().filter();
 
-    const post = await Post.aggregate(pipeline);
+    const post = await Post.aggregate(pipeline.stages);
 
     if (!post) {
       return next(new AppError('No post found!', 400));

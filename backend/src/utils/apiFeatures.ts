@@ -1,4 +1,4 @@
-import { PipelineStage } from 'mongoose';
+import mongoose, { PipelineStage } from 'mongoose';
 import { ILocationData, IStringObject } from './interfaces';
 
 interface ProjectStage {
@@ -15,16 +15,23 @@ export class PostFeatures {
   ) {}
 
   distanceFrom(): this {
-    if (!this.userLocation) return this;
-    const geoNearStage: PipelineStage.GeoNear = {
-      $geoNear: {
-        near: this.userLocation,
-        distanceField: 'distance',
-        spherical: true,
-        distanceMultiplier: 0.001,
+    if (!this.userLocation?.coordinates.length) return this;
+    const geoNearStages: PipelineStage[] = [
+      {
+        $geoNear: {
+          near: this.userLocation,
+          distanceField: 'distance',
+          spherical: true,
+          distanceMultiplier: 0.001,
+        },
       },
-    };
-    this.stages.push(geoNearStage);
+      {
+        $addFields: {
+          distance: { $round: ['$distance'] },
+        },
+      },
+    ];
+    this.stages.push(...geoNearStages);
     return this;
   }
 
@@ -39,7 +46,12 @@ export class PostFeatures {
       if (value.includes(',')) {
         matchStage.$match[key] = { $in: value.split(',') };
       } else {
-        matchStage.$match[key] = key === 'itemCount' ? Number(value) : value;
+        matchStage.$match[key] =
+          key === 'itemCount'
+            ? Number(value)
+            : key === '_id'
+            ? new mongoose.Types.ObjectId(value)
+            : value;
       }
     });
     this.stages.push(matchStage);

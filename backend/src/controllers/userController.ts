@@ -5,7 +5,6 @@ import User, { UserDocument } from '../models/userModel';
 import { decodeToken, getAccessToken } from './authController';
 import AppError from '../utils/appError';
 import Post from '../models/postModel';
-import mongoose from 'mongoose';
 import { IStringObject } from '../utils/interfaces';
 
 // HELPERS

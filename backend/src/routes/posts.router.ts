@@ -17,9 +17,5 @@ postsRouter
 
 postsRouter
   .route('/:postId')
-  .get(postController.getPost)
-  .post(
-    userController.attatchUserToReq,
-    authController.protect,
-    userController.updateFavouritePosts
-  );
+  .get(userController.attatchUserToReq, postController.getPost)
+  .post(authController.protect, userController.updateFavouritePosts);
