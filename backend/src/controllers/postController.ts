@@ -168,7 +168,6 @@ export const createPost = catchAsync(
       : [];
 
     const imgUrls = setImgUrls(req.body.imgUrls);
-    console.log(imgUrls);
 
     const images =
       req.body.frontImageArray === 'imgUrls'
@@ -193,19 +192,6 @@ export const createPost = catchAsync(
       userName: req.user.name,
     };
 
-    // const post: IPostDocumentWithEnums = await new Post(postData).populate(
-    //   'enums'
-    // );
-
-    // if (!post) {
-    //   return next(new AppError('Unable to create post!', 400));
-    // }
-
-    // if (post.enumsAreValid(post)) {
-    //   return next(new AppError('Invalid categories!', 400));
-    // }
-
-    // post.save();
     let post;
     if (id) {
       console.log(333333333);
@@ -225,6 +211,22 @@ export const createPost = catchAsync(
       data: {
         data: post,
       },
+    });
+  }
+);
+
+export const deletePost = catchAsync(
+  async (req: CustomRequest<null>, res: Response, Next: NextFunction) => {
+    const id = req.params.postId;
+
+    const post = await Post.findByIdAndDelete(id);
+
+    if (!post) {
+      return new AppError('There was a problem deleting your post!', 400);
+    }
+
+    res.status(204).json({
+      status: 'success',
     });
   }
 );

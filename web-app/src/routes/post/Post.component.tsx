@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import { ButtonType } from '../../components/common/Button/button.types';
 import { useQueryClient } from '@tanstack/react-query';
 import { IChatRoom } from '../../types';
-import { fetchChats } from '../../api/requests';
+import { deletePost, fetchChats } from '../../api/requests';
 import Spinner from '../../components/common/spinner/spinner.component';
 import { getFormValuesFromPost } from './post.helpers';
 import { useDispatch } from 'react-redux';
@@ -57,6 +57,13 @@ const Post: React.FC = () => {
     navigate(`/giveaway/${postId}`);
   };
 
+  const handleRemovePost = () => {
+    alert('Are you sure that you want to remove this post?');
+
+    deletePost(postId);
+    window.history.back();
+  };
+
   return (
     <Box padding="2.4rem" gap="3rem" backgroundColor="##F3F0E6">
       <GoBackNav title="Item" />
@@ -69,9 +76,20 @@ const Post: React.FC = () => {
           <PostCardLarge post={post} />
           <Box alignItems="center">
             {post.user === user?._id ? (
-              <Button onClick={handleEditPost} buttonType={ButtonType.Primary}>
-                Edit
-              </Button>
+              <Box gap="2rem">
+                <Button
+                  onClick={handleEditPost}
+                  buttonType={ButtonType.Secondary}
+                >
+                  Edit
+                </Button>
+                <Button
+                  onClick={handleRemovePost}
+                  buttonType={ButtonType.Primary}
+                >
+                  Remove
+                </Button>
+              </Box>
             ) : (
               <Button
                 onClick={goToChat}

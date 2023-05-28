@@ -220,3 +220,7 @@ export const postCreatePost = async (data: FormData) => {
     withCredentials: true,
   });
 };
+
+export const deletePost = async (id: string) => {
+  const res = await api.delete(`${apiUrl}/posts/${id}`);
+};
