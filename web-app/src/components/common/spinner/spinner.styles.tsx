@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components';
-import { theme } from '../../../styles/themes';
+import styled, { css } from "styled-components";
+import { theme } from "../../../styles/themes";
 
 const largeSpinner = css`
   height: 8.6rem;
@@ -26,9 +26,9 @@ export const SpinnerContainer = styled.div<ISpinnerContainerProps>`
   align-items: center;
   gap: 2rem;
   margin: 0 auto;
-  /* padding-top: 20rem; */
+  padding-top: 20rem;
   div {
-    ${({ size }) => (size === 'large' ? largeSpinner : defaultSpinner)}
+    ${({ size }) => (size === "large" ? largeSpinner : defaultSpinner)}
     border-radius: 50%;
     animation: rotation 0.8s linear infinite;
 
