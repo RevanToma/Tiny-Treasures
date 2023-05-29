@@ -1,26 +1,26 @@
-import express from "express";
-import passport from "passport";
-import * as authController from "../controllers/authController";
-import { CustomRequest } from "../utils/expressInterfaces";
+import express from 'express';
+import passport from 'passport';
+import * as authController from '../controllers/authController';
+import { CustomRequest } from '../utils/expressInterfaces';
 
 const router = express.Router();
 
 router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  '/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
 router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { session: false }),
+  '/auth/google/callback',
+  passport.authenticate('google', { session: false, successFlash: true }),
   authController.googleAuthCallback
 );
 
-router.get("/", authController.protect, (req, res) => {
-  console.log("success");
+router.get('/', authController.protect, (req, res) => {
+  console.log('success');
   res.send(`logged in! ${req.user}`);
 });
 
-router.get("/getUser", authController.protect, authController.sendUser);
+router.get('/getUser', authController.protect, authController.sendUser);
 
 export default router;
