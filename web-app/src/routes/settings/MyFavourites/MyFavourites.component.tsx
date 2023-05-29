@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { selectUserFavouritePosts } from "../../../store/user/userSelectors";
 
 const MyFavourites: React.FC = () => {
-  const userFavorites = useSelector(selectUserFavouritePosts);
   const [favPosts, setFavPosts] = useState([]);
   const userFavPosts = useSelector(selectUserFavouritePosts);
 
