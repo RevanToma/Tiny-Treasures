@@ -201,6 +201,7 @@ export const fetchUsersPosts = async () => {
 export const fetchtFavoritePosts = async () => {
   const { data } = await api.get('/users/favoritePosts');
   checkForError(data);
+  console.log(data.data.favorites);
 
   return data.data.favorites;
 };

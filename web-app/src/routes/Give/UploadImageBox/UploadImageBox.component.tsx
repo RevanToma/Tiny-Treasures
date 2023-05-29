@@ -131,7 +131,7 @@ const UploadImageBox: FC<UploadImageBoxProps> = ({
         type="file"
         multiple
       />
-      {imgUrls.length === 0 && imgFilesRef.current.length > 0 && (
+      {imgUrls.length === 0 && imgFilesRef.current.length === 0 && (
         <Box marginBottom="2.4rem">
           <FaRegImages color={theme.color.placeholderText} size={72} />
         </Box>

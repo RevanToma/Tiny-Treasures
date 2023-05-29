@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   IChatRoom,
-  IGeoJson,
   ISignInInfo,
   ISignUpInfo,
-  IStringObj,
   IUpdateData,
   IUpdateEmailProps,
   IUpdatePasswordProps,
