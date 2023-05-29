@@ -12,17 +12,7 @@ export const MainImg = styled.img`
   width: 100%;
 `;
 
-export const SearchInput = styled.input`
-  &:focus {
-    outline: 3px solid ${theme.color.grayDark};
-    outline-offset: 2px;
-  }
-
-  &::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-    appearance: none;
-  }
-`;
+export const SearchInput = styled.input``;
 
 export const SearchWrapper = styled.div`
   display: flex;
@@ -46,7 +36,7 @@ export const SearchWrapper = styled.div`
     border: none;
 
     &:focus {
-      outline: 3px solid ${theme.color.grayDark};
+      outline: 3px solid ${theme.color.primary};
       outline-offset: 2px;
     }
     border-radius: 4rem;
