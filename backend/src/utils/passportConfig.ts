@@ -1,30 +1,34 @@
+import dotenv from 'dotenv'
+
 import {
   Strategy as GoogleStrategy,
   StrategyOptionsWithRequest,
   VerifyCallback,
-} from 'passport-google-oauth2';
-import User from '../models/userModel';
-import passport from 'passport';
-import { Request } from 'express';
+} from 'passport-google-oauth2'
+import User from '../models/userModel'
+import passport from 'passport'
+import { Request } from 'express'
+
+dotenv.config({ path: 'config.env' })
 
 interface IName {
-  familyName: string;
-  givenName: string;
-  middleName: string;
+  familyName: string
+  givenName: string
+  middleName: string
 }
 
 interface IEmails {
-  value: string;
-  type: string;
+  value: string
+  type: string
 }
 
 interface IUserProfile {
-  provider: string;
-  id: string;
-  displayName: string;
-  name: IName;
-  emails: IEmails[];
-  photos: string[];
+  provider: string
+  id: string
+  displayName: string
+  name: IName
+  emails: IEmails[]
+  photos: string[]
 }
 
 const AUTH_OPTIONS: StrategyOptionsWithRequest = {
@@ -33,7 +37,7 @@ const AUTH_OPTIONS: StrategyOptionsWithRequest = {
   // FIXME:  PROD
   callbackURL: 'http://localhost:8000/auth/google/callback',
   passReqToCallback: true,
-};
+}
 
 const createNewUserInfo = (profile: IUserProfile) => {
   return {
@@ -41,21 +45,21 @@ const createNewUserInfo = (profile: IUserProfile) => {
     googleId: profile.id,
     name: profile.displayName,
     email: profile.emails[0].value,
-  };
-};
+  }
+}
 
 const getOrCreateUser = async (profile: IUserProfile, done: VerifyCallback) => {
-  let existingUser = await User.findOne({ googleId: profile.id });
+  let existingUser = await User.findOne({ googleId: profile.id })
 
   if (existingUser) {
-    return done(null, existingUser);
+    return done(null, existingUser)
   }
 
-  const newUserInfo = createNewUserInfo(profile);
-  const newUser = await User.create(newUserInfo);
+  const newUserInfo = createNewUserInfo(profile)
+  const newUser = await User.create(newUserInfo)
   // await newUser.save();
-  return done(null, newUser);
-};
+  return done(null, newUser)
+}
 
 const verifyCallback = async (
   request: Request,
@@ -65,12 +69,12 @@ const verifyCallback = async (
   done: VerifyCallback
 ): Promise<void> => {
   try {
-    getOrCreateUser(profile, done);
+    getOrCreateUser(profile, done)
   } catch (error) {
-    return done(error, false);
+    return done(error, false)
   }
-};
+}
 
 export const passportConfig = (passport: passport.PassportStatic) => {
-  passport.use(new GoogleStrategy(AUTH_OPTIONS, verifyCallback));
-};
+  passport.use(new GoogleStrategy(AUTH_OPTIONS, verifyCallback))
+}

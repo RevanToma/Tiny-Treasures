@@ -1,12 +1,9 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { theme } from '../../styles/themes'
 
-interface NavTextProps {
-  active: boolean
-}
 interface NavLinkProps {
-  active: string
+  active: boolean
   isSignedIn?: boolean
 }
 export const NavbarStyle = styled.nav`
@@ -16,52 +13,31 @@ export const NavbarStyle = styled.nav`
   background-color: #ffffff;
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px 10px 0px 0px;
-  font-family: Arial, Helvetica, sans-serif;
-`
-
-export const NavText = styled.p<NavTextProps>`
-  ${theme.type.navbarBold}
-  margin: 0;
-  ${({ active }) =>
-    active &&
-    css`
-      color: ${theme.color.primary};
-    `}
 `
 
 export const NavLink = styled(Link)<NavLinkProps>`
-  color: #505050;
-  text-decoration: none;
+  color: ${({ active }) => (active ? theme.color.primary : '#505050')};
 
   &:hover,
   &:focus {
     color: ${theme.color.primary};
   }
 
-  ${({ active }) =>
-    active === 'true' ? `color: ${theme.color.primary};` : ''};
+  p {
+    ${theme.type.navbarBold}
+    color: ${({ active }) => active && theme.color.primary};
+  }
 `
 
-export const NavLinkNotSignedIn = styled(NavLink).attrs<{
-  isSignedIn: boolean
-}>(({ isSignedIn }) => ({
-  onClick: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (!isSignedIn) {
-      e.preventDefault()
-    }
-  },
-}))<NavLinkProps>`
-  ${({ isSignedIn }) =>
-    isSignedIn
-      ? css`
-          filter: '';
-        `
-      : css`
-          filter: brightness(250%);
-        `}
+export const NavLinkNotSignedIn = styled(NavLink)<NavLinkProps>`
+  color: ${({ active }) => (active ? theme.color.primary : '')};
+  filter: ${({ isSignedIn }) => (isSignedIn ? '' : ' brightness(250%)')};
 
-  ${({ active, isSignedIn }) =>
-    active === 'true' && isSignedIn ? `color: ${theme.color.primary};` : ''};
+  &:hover,
+  &:focus {
+    color: ${({ isSignedIn }) =>
+      isSignedIn ? theme.color.primary : '#505050'};
+  }
 `
 
 export const ChatIcon = styled.div`

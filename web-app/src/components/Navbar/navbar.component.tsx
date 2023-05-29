@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import * as S from './navbar.style'
 import Box from '../../components/common/Box/Box'
 
@@ -14,11 +14,6 @@ const Navbar: React.FC = () => {
   const isSignedIn = useSelector(selectIsSignedIn)
   const location = useLocation()
   const currentPath = location.pathname
-  const [activeLink, setActiveLink] = useState<string>(currentPath)
-
-  const handleNavItemClick = (Link: string) => {
-    setActiveLink(Link)
-  }
 
   return (
     <S.NavbarStyle>
@@ -28,44 +23,38 @@ const Navbar: React.FC = () => {
         justifyContent="space-around"
         margin="0"
       >
-        <S.NavLink
-          to="/"
-          onClick={() => handleNavItemClick('home')}
-          active={currentPath === '/' ? 'true' : 'false'}
-        >
+        <S.NavLink to="/" active={currentPath === '/'}>
           <Box alignItems="center" gap="5px">
             <img src={Logo} />
-            <S.NavText active={activeLink === 'home'}>Home</S.NavText>
+            <p>Home</p>
           </Box>
         </S.NavLink>
+
         <S.NavLinkNotSignedIn
-          to="/account/myFavourites"
-          onClick={() => handleNavItemClick('myFavourites')}
-          active={currentPath === '/account/myFavourites' ? 'true' : 'false'}
+          to={isSignedIn ? '/account/myFavourites' : '#'}
+          active={currentPath === '/account/myFavourites'}
           isSignedIn={isSignedIn}
         >
           <Box alignItems="center" gap="5px">
             <FaHeart size={ICON_SIZE} />
-            <S.NavText active={activeLink === 'myFavourites'}>
-              Favourites
-            </S.NavText>
+            <p>Favourites</p>
           </Box>
         </S.NavLinkNotSignedIn>
+
         <S.NavLinkNotSignedIn
-          to="/giveaway"
-          onClick={() => handleNavItemClick('giveaway')}
-          active={currentPath === '/giveaway' ? 'true' : 'false'}
+          to={isSignedIn ? '/giveaway' : '#'}
+          active={currentPath === '/giveaway'}
           isSignedIn={isSignedIn}
         >
           <Box alignItems="center" gap="5px">
             <FaPlus size={ICON_SIZE} />
-            <S.NavText active={activeLink === 'giveaway'}>Upload</S.NavText>
+            <p>Upload</p>
           </Box>
         </S.NavLinkNotSignedIn>
+
         <S.NavLinkNotSignedIn
-          to="/chat"
-          onClick={() => handleNavItemClick('Messages')}
-          active={currentPath === '/chat' ? 'true' : 'false'}
+          to={isSignedIn ? '/chat' : '#'}
+          active={currentPath === '/chat'}
           isSignedIn={isSignedIn}
         >
           <Box alignItems="center" gap="5px">
@@ -73,19 +62,17 @@ const Navbar: React.FC = () => {
               <FaComment size={ICON_SIZE} />
               <S.Notification>3+</S.Notification>
             </S.ChatIcon>
-            <S.NavText active={activeLink === 'Messages'}>Messages</S.NavText>
+            <p>Messages</p>
           </Box>
         </S.NavLinkNotSignedIn>
+
         <S.NavLink
           to={isSignedIn ? '/account' : '/signin'}
-          onClick={() => handleNavItemClick('account')}
-          active={currentPath === '/account' ? 'true' : 'false'}
+          active={currentPath === '/account'}
         >
           <Box alignItems="center" gap="5px">
             <FaUser size={ICON_SIZE} />
-            <S.NavText active={activeLink === 'account'}>
-              {isSignedIn ? 'Account' : 'Sign In'}
-            </S.NavText>
+            <p>{isSignedIn ? 'Account' : 'Sign In'}</p>
           </Box>
         </S.NavLink>
       </Box>
