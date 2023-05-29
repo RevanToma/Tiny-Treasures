@@ -1,9 +1,9 @@
-import { NextFunction, Response } from 'express';
-import { catchAsync } from '../utils/catchAsync';
-import { CustomRequest } from '../utils/expressInterfaces';
-import axios from 'axios';
-import AppError from '../utils/appError';
-import { handleAxiosError } from '../utils/axiosErrorHandler';
+import { NextFunction, Response } from "express";
+import { catchAsync } from "../utils/catchAsync";
+import { CustomRequest } from "../utils/expressInterfaces";
+import axios from "axios";
+import AppError from "../utils/appError";
+import { handleAxiosError } from "../utils/axiosErrorHandler";
 
 export const getCityFromCoords = catchAsync(
   async (
@@ -19,15 +19,15 @@ export const getCityFromCoords = catchAsync(
 
     const response = await axios
       .get(url)
-      .catch(error => handleAxiosError(error, next));
+      .catch((error) => handleAxiosError(error, next));
     if (!response) {
-      return next(new AppError('An error occured', 400));
+      return next(new AppError("An error occured", 400));
     }
 
     const { city } = response.data;
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         data: city,
       },
@@ -48,10 +48,10 @@ export const getCityFromAddress = catchAsync(
 
     const response = await axios
       .get(url)
-      .catch(error => handleAxiosError(error, next));
+      .catch((error) => handleAxiosError(error, next));
 
     if (!response) {
-      return next(new AppError('An error occured', 400));
+      return next(new AppError("An error occured", 400));
     }
     const city = response.data.standard.city;
     const lat = response.data.latt;
@@ -64,7 +64,7 @@ export const getCityFromAddress = catchAsync(
     };
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         data: location,
       },
