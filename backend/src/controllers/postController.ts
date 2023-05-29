@@ -124,7 +124,7 @@ export const getPost = catchAsync(
   ): Promise<void> => {
     const { postId } = req.params;
 
-    const location: ILocationData | null = req.user.location;
+    const location: ILocationData | null = req.user?.location;
 
     const query = { _id: postId };
 

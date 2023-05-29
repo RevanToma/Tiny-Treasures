@@ -7,6 +7,7 @@ import { addPostToFavourite } from '../../../../store/user/userSlice';
 import { FC, useState } from 'react';
 import { theme } from '../../../../styles/themes';
 import Box from '../../../../components/common/Box/Box';
+import { UnfilledHeart } from './heart.styles';
 
 interface IHeartProps {
   postId: string;
@@ -34,8 +35,10 @@ const HeartIcon: FC<IHeartProps> = ({ postId, disabled = false }) => {
       {isFavorite ? (
         <FaHeart color={theme.color.primaryBlue} size={35} />
       ) : (
-        <FaHeart color={theme.color.primaryOffWhite} size={35} />
-        // <FaRegHeart color={theme.color.primaryBlue} size={35} />
+        <UnfilledHeart>
+          <FaHeart color={theme.color.primaryOffWhite} size={35} />
+          <FaRegHeart color={theme.color.primaryBlue} size={35} />
+        </UnfilledHeart>
       )}
     </Box>
   );
