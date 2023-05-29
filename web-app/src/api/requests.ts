@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from "axios";
 import {
   IEnum,
   IChatRoom,
@@ -9,9 +9,9 @@ import {
   IStringObj,
   IUpdateEmailProps,
   IUpdatePasswordProps,
-} from '../types';
-import api from './index';
-import { apiUrl, geocodeUrl, serverRoute } from '../utils/urls/serverUrls';
+} from "../types";
+import api from "./index";
+import { apiUrl, geocodeUrl, serverRoute } from "../utils/urls/serverUrls";
 
 export interface ResponseWithData<T> {
   status: string;
@@ -33,8 +33,8 @@ export const checkForError = (
     | ResponseWithData<IPost[] | IPostQueryResult[] | IEnum[]>
     | ResponseWithError
 ): void => {
-  if (data.status === 'error' || data.status === 'fail') {
-    throw new Error('Something went wrong!');
+  if (data.status === "error" || data.status === "fail") {
+    throw new Error("Something went wrong!");
   }
 };
 
@@ -64,7 +64,7 @@ export const fetchChatById = async (id: any) => {
 };
 
 export const ApiPostSignInUser = async (email: string, password: string) => {
-  const { data } = await api.post('/users/signin', {
+  const { data } = await api.post("/users/signin", {
     email,
     password,
   });
@@ -79,7 +79,7 @@ export const ApiPostSignUpUser = async ({
   password,
   passwordConfirm,
 }: ISignUpInfo) => {
-  const { data } = await api.post('users/signup', {
+  const { data } = await api.post("users/signup", {
     name,
     email,
     confirmEmail,
@@ -98,11 +98,11 @@ type getPostParams = {
 
 export const fetchPosts = async ({
   pageParam = 1,
-  query = '',
+  query = "",
   searchQuery,
 }: getPostParams): Promise<IPostQueryResult> => {
   const limit = 20;
-  let urlQuery = 'posts/?';
+  let urlQuery = "posts/?";
   if (pageParam) {
     urlQuery += `&page=${pageParam}&limit=${limit}&${query}`;
   }
@@ -124,7 +124,7 @@ export const fetchPostById = async (id: string | undefined) => {
 };
 
 export const signOutUserAsync = async () => {
-  await api.post('users/signout');
+  await api.post("users/signout");
   return;
 };
 
@@ -135,13 +135,13 @@ export const fetchEnums = async () => {
 };
 
 export const getUserFromJwt = async () => {
-  const { data } = await api.get('/users/checkLoggedIn');
+  const { data } = await api.get("/users/checkLoggedIn");
   // console.log('DATA FROM CALL', data.data.data);
   return data.data.data;
 };
 
 export const patchUpdateUser = async ({ newData, field }: IUpdateData) => {
-  const res = await api.patch('users/updateMe', {
+  const res = await api.patch("users/updateMe", {
     [field]: newData,
   });
   return res.data.data.data;
@@ -151,7 +151,7 @@ export const patchUpdateEmail = async ({
   newEmail,
   password,
 }: IUpdateEmailProps) => {
-  const res = await api.patch('/users/updateEmail', {
+  const res = await api.patch("/users/updateEmail", {
     newEmail,
     password,
   });
@@ -162,7 +162,7 @@ export const patchUpdateEmail = async ({
 export const patchUpdatePassword = async (
   passwordData: IUpdatePasswordProps
 ) => {
-  const res = await api.patch('/users/updatePassword', passwordData);
+  const res = await api.patch("/users/updatePassword", passwordData);
   checkForError(res.data);
   return res.data.data.data;
 };
@@ -184,7 +184,7 @@ export const getCityFromCoords = async (lat: number, lng: number) => {
 
 export const getAccessToken = async () => {
   const { data } = await axios.get(serverRoute.refreshToken, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
     withCredentials: true,
   }); //await api.get("/users/refresh-token");
   checkForError(data);
@@ -193,15 +193,15 @@ export const getAccessToken = async () => {
 };
 
 export const fetchUsersPosts = async () => {
-  const { data } = await api.get('/users/posts');
+  const { data } = await api.get("/users/posts");
   checkForError(data);
   return data.data.userPosts;
 };
 
 export const fetchtFavoritePosts = async () => {
-  const { data } = await api.get('/users/favoritePosts');
+  const { data } = await api.get("/users/favoritePosts");
   checkForError(data);
-  console.log(data.data.favorites);
+  // console.log(data.data.favorites);
 
   return data.data.favorites;
 };
@@ -216,7 +216,7 @@ export const addPostToUserFavourite = async (postId: string) => {
 export const postCreatePost = async (data: FormData) => {
   await axios.post(`${apiUrl}/posts`, data, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      "Content-Type": "multipart/form-data",
     },
     withCredentials: true,
   });

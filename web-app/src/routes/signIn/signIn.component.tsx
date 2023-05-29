@@ -74,7 +74,7 @@ const SignIn: React.FC = () => {
             </Box>
 
             <S.TextContainer>
-              <p>Forgot your password?</p>
+              <a>Forgot your aassword?</a>
             </S.TextContainer>
             <Box gap="2rem">
               <Button buttonType={ButtonType.SignIn}>Sign In</Button>

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   IChatRoom,
   ISignInInfo,
@@ -8,8 +8,8 @@ import {
   IUpdatePasswordProps,
   IUser,
   IUserState,
-} from '../../types';
-import api from '../../api';
+} from "../../types";
+
 import {
   addPostToUserFavourite,
   ApiPostSignInUser,
@@ -19,18 +19,18 @@ import {
   patchUpdatePassword,
   patchUpdateUser,
   signOutUserAsync,
-} from '../../api/requests';
-import { Socket } from '../../Sockets/Message.socket';
+} from "../../api/requests";
+import { Socket } from "../../Sockets/Message.socket";
 
 const initialState: IUserState = {
   user: null,
   isSignedIn: false,
   currentChatRoom: undefined,
-  accessToken: '',
+  accessToken: "",
 };
 
 export const addPostToFavourite = createAsyncThunk(
-  'user/addPostToFavourite',
+  "user/addPostToFavourite",
   async (postId: string) => {
     const updatedFavorites = await addPostToUserFavourite(postId);
     return updatedFavorites;
@@ -38,7 +38,7 @@ export const addPostToFavourite = createAsyncThunk(
 );
 
 export const updateUserAsync = createAsyncThunk(
-  'user/updateUser',
+  "user/updateUser",
   async (data: IUpdateData) => {
     const user = patchUpdateUser(data);
     return user;
@@ -46,7 +46,7 @@ export const updateUserAsync = createAsyncThunk(
 );
 
 export const updateEmailAsync = createAsyncThunk(
-  'user/updateEmail',
+  "user/updateEmail",
   async (data: IUpdateEmailProps) => {
     const user = patchUpdateEmail(data);
     return user;
@@ -54,7 +54,7 @@ export const updateEmailAsync = createAsyncThunk(
 );
 
 export const updatePasswordAsync = createAsyncThunk(
-  'user/updatePassword',
+  "user/updatePassword",
   async (data: IUpdatePasswordProps) => {
     const user = patchUpdatePassword(data);
     return user;
@@ -62,7 +62,7 @@ export const updatePasswordAsync = createAsyncThunk(
 );
 
 export const signInUser = createAsyncThunk(
-  'user/signInUser',
+  "user/signInUser",
   async ({ email, password }: ISignInInfo) => {
     const user: IUser = await ApiPostSignInUser(email, password);
 
@@ -73,7 +73,7 @@ export const signInUser = createAsyncThunk(
 );
 
 export const signUpUser = createAsyncThunk(
-  'user/signUpUser',
+  "user/signUpUser",
   async (userData: ISignUpInfo) => {
     const user: IUser = await ApiPostSignUpUser(userData);
 
@@ -83,14 +83,14 @@ export const signUpUser = createAsyncThunk(
   }
 );
 
-export const signOutUser = createAsyncThunk('user/signOutUser', async () => {
+export const signOutUser = createAsyncThunk("user/signOutUser", async () => {
   await signOutUserAsync();
 
   return;
 });
 
 export const refreshAccessToken = createAsyncThunk(
-  'users/refreshAccessToken',
+  "users/refreshAccessToken",
   async () => {
     const data = await getAccessToken();
     if (!data) return;
@@ -100,14 +100,14 @@ export const refreshAccessToken = createAsyncThunk(
   }
 );
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
     setCurrentChatRoom: (state, { payload }: PayloadAction<IChatRoom>) => {
       state.currentChatRoom = payload;
     },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder.addCase(updateUserAsync.fulfilled, (state, { payload }) => {
       state.user = payload;
     });
@@ -139,10 +139,10 @@ const userSlice = createSlice({
         state.isSignedIn = true;
       }
     });
-    builder.addCase(signOutUser.fulfilled, state => {
+    builder.addCase(signOutUser.fulfilled, (state) => {
       state.user = null;
       state.isSignedIn = false;
-      state.accessToken = '';
+      state.accessToken = "";
     });
 
     builder.addCase(addPostToFavourite.fulfilled, (state, { payload }) => {

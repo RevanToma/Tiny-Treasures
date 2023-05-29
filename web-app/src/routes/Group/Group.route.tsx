@@ -1,33 +1,34 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import * as S from './group.styles';
-import { useEffect, useRef } from 'react';
-import Button from '../../components/common/Button/Button.component';
-import { ButtonType } from '../../components/common/Button/button.types';
-import PostList from '../../components/common/PostList/PostList.component';
-import { theme } from '../../styles/themes';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import FilterPopup from './FilterPopup/FilterPopup.component';
+import * as S from "./group.styles";
+import { useEffect, useRef } from "react";
+import Button from "../../components/common/Button/Button.component";
+import { ButtonType } from "../../components/common/Button/button.types";
+import PostList from "../../components/common/PostList/PostList.component";
+import { theme } from "../../styles/themes";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import FilterPopup from "./FilterPopup/FilterPopup.component";
 
-import { imgUrls } from '../../utils/urls/imgUrls';
+import { imgUrls } from "../../utils/urls/imgUrls";
 import {
   selectQuery,
   selectTempQueryData,
-} from '../../store/query/query.selectors';
-import { fetchPosts } from '../../api/requests';
+} from "../../store/query/query.selectors";
+import { fetchPosts } from "../../api/requests";
 import {
   initialQueryData,
   setQuery,
   setQueryData,
   setTempQueryData,
-} from '../../store/query/querySlice';
-import Box from '../../components/common/Box/Box';
-import { useEnums } from '../../hooks/useEnums';
-import GroupNavBar from './GroupNavBar/GroupNavBar.component';
-import { goToGroupPage } from '../../utils/helpers';
-
+} from "../../store/query/querySlice";
+import Box from "../../components/common/Box/Box";
+import { useEnums } from "../../hooks/useEnums";
+import GroupNavBar from "./GroupNavBar/GroupNavBar.component";
+import { goToGroupPage } from "../../utils/helpers";
+import LogoNavbar from "../../assets/LogoNavbar.svg";
+import { FaSearch } from "react-icons/fa";
 const Group: React.FC = () => {
   const { group } = useParams();
   const dispatch = useDispatch();
@@ -51,9 +52,9 @@ const Group: React.FC = () => {
     isFetchingNextPage,
     refetch: refetchPosts,
   } = useInfiniteQuery({
-    queryKey: ['posts', query],
+    queryKey: ["posts", query],
     queryFn: ({ pageParam }) => fetchPosts({ pageParam, query, searchQuery }),
-    getNextPageParam: lastPage => {
+    getNextPageParam: (lastPage) => {
       if (!lastPage) return undefined;
       const nextPage = lastPage.metadata.nextPage;
       const totalPages = lastPage.metadata.totalPages;
@@ -66,7 +67,7 @@ const Group: React.FC = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         if (entries[0].isIntersecting) {
           fetchNextPage();
         }
@@ -82,15 +83,15 @@ const Group: React.FC = () => {
   }, [LoadMoreButton.current]);
 
   const getFilterResults = () => {
-    const typeOfItemsString = tempQueryData.TypeOfItems.join(',');
-    const sizesString = tempQueryData.Sizes.join(',');
-    const ageString = tempQueryData.Age.join(',');
+    const typeOfItemsString = tempQueryData.TypeOfItems.join(",");
+    const sizesString = tempQueryData.Sizes.join(",");
+    const ageString = tempQueryData.Age.join(",");
     const sortString =
-      tempQueryData.Sort[0] === 'Most Recent'
-        ? '-createdAt'
-        : tempQueryData.Sort[0] === 'Distance'
-        ? 'distance'
-        : '';
+      tempQueryData.Sort[0] === "Most Recent"
+        ? "-createdAt"
+        : tempQueryData.Sort[0] === "Distance"
+        ? "distance"
+        : "";
 
     let newQuery = `group=${group}`;
 
@@ -151,21 +152,18 @@ const Group: React.FC = () => {
           gap="2rem"
           backgroundColor={theme.color.primaryOffWhite}
         >
-          <Box
-            width="100%"
-            alignItems="center"
-            flexDirection="row"
-            padding="20px"
-          >
+          <S.SearchWrapper>
+            <img src={LogoNavbar} />
             <S.SearchInput
               type="search"
-              placeholder="Search"
-              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="search..."
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Button onClick={handleSearch} buttonType={ButtonType.SmallGreen}>
+            <FaSearch size={25} onClick={handleSearch} color="#808080" />
+            {/* <Button onClick={handleSearch} buttonType={ButtonType.SmallGreen}>
               Search
-            </Button>
-          </Box>
+            </Button> */}
+          </S.SearchWrapper>
           <GroupNavBar
             handleChangeGroup={handleChangeGroup}
             items={enums && enums.main}
@@ -205,10 +203,10 @@ const Group: React.FC = () => {
             <div ref={LoadMoreButton}>
               <Button buttonType={buttonType} onClick={() => fetchNextPage()}>
                 {isFetchingNextPage || isLoading
-                  ? 'Loading more...'
+                  ? "Loading more..."
                   : isError
-                  ? 'Error!'
-                  : 'No more posts!'}
+                  ? "Error!"
+                  : "No more posts!"}
               </Button>
               {error instanceof Error && <p> error.message</p>}
             </div>
