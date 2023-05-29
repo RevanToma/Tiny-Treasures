@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import path from 'path';
+import helmet from 'helmet';
 
 import { postsRouter } from './routes/posts.router';
 import { userRouter } from './routes/user.router';
@@ -21,6 +22,8 @@ dotenv.config({ path: `${__dirname}/../config.env` });
 passportConfig(passport);
 
 export const app = express();
+
+app.use(helmet({ crossOriginResourcePolicy: false }));
 
 // MIDDLEWARE
 app.use(passport.initialize());
