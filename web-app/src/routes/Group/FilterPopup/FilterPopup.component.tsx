@@ -1,30 +1,30 @@
-import { FC, useEffect } from 'react';
-import Button from '../../../components/common/Button/Button.component';
-import { ButtonType } from '../../../components/common/Button/button.types';
-import { useDispatch, useSelector } from 'react-redux';
-import { FaTimes } from 'react-icons/fa';
-import { filterAges, filterItems } from '../group.helpers';
-import { Divider } from '../../Home/home.styles';
-import { theme } from '../../../styles/themes';
+import { FC, useEffect } from "react";
+import Button from "../../../components/common/Button/Button.component";
+import { ButtonType } from "../../../components/common/Button/button.types";
+import { useDispatch, useSelector } from "react-redux";
+import { FaTimes } from "react-icons/fa";
+import { filterAges, filterItems } from "../group.helpers";
+import { Divider } from "../../Home/home.styles";
+import { theme } from "../../../styles/themes";
 import {
   selectQueryData,
   selectTempQueryData,
-} from '../../../store/query/query.selectors';
+} from "../../../store/query/query.selectors";
 import {
   QueryData,
   initialQueryData,
   setTempQueryData,
-} from '../../../store/query/querySlice';
-import Box from '../../../components/common/Box/Box';
-import { CheckboxContainer } from '../../../components/common/CheckboxList/checkboxList.styles';
-import CheckboxList from '../../../components/common/CheckboxList/CheckboxList.component';
-import { ages, conditions } from '../../../utils/enums';
-import { capitalize } from '../../../utils/helpers';
-import { getQueryDataName } from '../../../components/common/CheckboxList/checkboxList.helpers';
+} from "../../../store/query/querySlice";
+import Box from "../../../components/common/Box/Box";
+import { CheckboxContainer } from "../../../components/common/CheckboxList/checkboxList.styles";
+import CheckboxList from "../../../components/common/CheckboxList/CheckboxList.component";
+import { ages, conditions } from "../../../utils/enums";
+import { capitalize } from "../../../utils/helpers";
+import { getQueryDataName } from "../../../components/common/CheckboxList/checkboxList.helpers";
 
 export enum CheckboxSizes {
-  Small = 'small',
-  Large = 'large',
+  Small = "small",
+  Large = "large",
 }
 
 interface FilterPopupProps {
@@ -65,7 +65,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
   ) => {
     const newData = getNewQueryData();
 
-    if (category === 'Sort') {
+    if (category === "Sort") {
       newData.Sort = [];
     }
 
@@ -144,8 +144,8 @@ const FilterPopup: FC<FilterPopupProps> = ({
           getIsChecked={getIsChecked}
         />
         <Divider />
-        {groupName === 'clothes' ? (
-          filterAges.map(group => (
+        {groupName === "clothes" ? (
+          filterAges.map((group) => (
             <CheckboxList
               key={group.name}
               name={group.name}
@@ -175,7 +175,7 @@ const FilterPopup: FC<FilterPopupProps> = ({
         <Divider />
         <CheckboxList
           name="Sort"
-          items={['Most Recent', 'Distance']}
+          items={["Most Recent", "Distance"]}
           setOptions={handleOptions}
           size={CheckboxSizes.Large}
           getIsChecked={getIsChecked}

@@ -1,7 +1,7 @@
-import { FC } from 'react';
-import { FaChevronLeft } from 'react-icons/fa';
-import { Title } from './goBackNav.styles';
-import Box from '../Box/Box';
+import { FC } from "react";
+import { FaChevronLeft } from "react-icons/fa";
+import { Title } from "./goBackNav.styles";
+import Box from "../Box/Box";
 
 interface GoBackNavProps {
   title: string;
@@ -28,7 +28,11 @@ const GoBackNav: FC<GoBackNavProps> = ({ title, size }) => {
         height="6rem"
         onClick={() => window.history.back()}
       >
-        <FaChevronLeft size={size ? size : 26} color="#646464" />
+        <FaChevronLeft
+          size={size ? size : 26}
+          color="#646464"
+          cursor="pointer"
+        />
       </Box>
       <Title color="#646464">{title}</Title>
     </Box>
