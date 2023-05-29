@@ -3,8 +3,11 @@ import { fetchtFavoritePosts } from '../../../api/requests';
 import Box from '../../../components/common/Box/Box';
 import GoBackNav from '../../../components/common/GoBackNav/GoBackNav.component';
 import PostList from '../../../components/common/PostList/PostList.component';
+import { useSelector } from 'react-redux';
+import { selectUserFavouritePosts } from '../../../store/user/userSelectors';
 
 const MyFavourites: React.FC = () => {
+  const userFavorites = useSelector(selectUserFavouritePosts);
   const [favPosts, setFavPosts] = useState([]);
 
   useEffect(() => {
@@ -14,7 +17,7 @@ const MyFavourites: React.FC = () => {
     };
 
     fetchFav();
-  }, []);
+  }, [userFavorites]);
 
   return (
     <Box width="100%">

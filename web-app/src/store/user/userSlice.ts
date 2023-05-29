@@ -1,10 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   IChatRoom,
-  IGeoJson,
   ISignInInfo,
   ISignUpInfo,
-  IStringObj,
   IUpdateData,
   IUpdateEmailProps,
   IUpdatePasswordProps,
@@ -16,7 +14,6 @@ import {
   addPostToUserFavourite,
   ApiPostSignInUser,
   ApiPostSignUpUser,
-  fetchtFavoritePosts,
   getAccessToken,
   patchUpdateEmail,
   patchUpdatePassword,
@@ -31,14 +28,6 @@ const initialState: IUserState = {
   currentChatRoom: undefined,
   accessToken: '',
 };
-
-export const fetchFavoritePosts = createAsyncThunk(
-  'user/fetchFavoritePosts',
-  async () => {
-    const favorites = await fetchtFavoritePosts();
-    return favorites;
-  }
-);
 
 export const addPostToFavourite = createAsyncThunk(
   'user/addPostToFavourite',
@@ -155,9 +144,7 @@ const userSlice = createSlice({
       state.isSignedIn = false;
       state.accessToken = '';
     });
-    builder.addCase(fetchFavoritePosts.fulfilled, (state, { payload }) => {
-      state.user.favorites = payload;
-    });
+
     builder.addCase(addPostToFavourite.fulfilled, (state, { payload }) => {
       state.user.favorites = payload;
     });
