@@ -1,13 +1,13 @@
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-import { useAppDispatch } from '../../../../hooks/useDispatch';
-import { useSelector } from 'react-redux';
-import { selectUser } from '../../../../store/user/userSelectors';
-import { addPostToFavourite } from '../../../../store/user/userSlice';
-import { FC, useState } from 'react';
-import { theme } from '../../../../styles/themes';
-import Box from '../../../../components/common/Box/Box';
-import { UnfilledHeart } from './heart.styles';
+import { useAppDispatch } from "../../../../hooks/useDispatch";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../store/user/userSelectors";
+import { addPostToFavourite } from "../../../../store/user/userSlice";
+import { FC, useState } from "react";
+import { theme } from "../../../../styles/themes";
+import Box from "../../../../components/common/Box/Box";
+import { UnfilledHeart } from "./heart.styles";
 
 interface IHeartProps {
   postId: string;
