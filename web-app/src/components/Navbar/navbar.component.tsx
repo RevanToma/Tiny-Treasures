@@ -7,6 +7,7 @@ import Logo from '../../assets/LogoNavbar.svg'
 import { useSelector } from 'react-redux'
 import { selectIsSignedIn } from '../../store/user/userSelectors'
 import { useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const ICON_SIZE = 21
 
@@ -23,57 +24,63 @@ const Navbar: React.FC = () => {
         justifyContent="space-around"
         margin="0"
       >
-        <S.NavLink to="/" active={currentPath === '/'}>
-          <Box alignItems="center" gap="5px">
-            <img src={Logo} />
-            <p>Home</p>
-          </Box>
+        <S.NavLink active={currentPath === '/'}>
+          <Link to="/">
+            <Box alignItems="center" gap="5px">
+              <img src={Logo} />
+              <p>Home</p>
+            </Box>
+          </Link>
         </S.NavLink>
 
         <S.NavLinkNotSignedIn
-          to={isSignedIn ? '/account/myFavourites' : '#'}
+          isSignedIn={isSignedIn}
           active={currentPath === '/account/myFavourites'}
-          isSignedIn={isSignedIn}
         >
-          <Box alignItems="center" gap="5px">
-            <FaHeart size={ICON_SIZE} />
-            <p>Favourites</p>
-          </Box>
+          <Link to={isSignedIn ? '/account/myFavourites' : '#'}>
+            <Box alignItems="center" gap="5px">
+              <FaHeart size={ICON_SIZE} />
+              <p>Favourites</p>
+            </Box>
+          </Link>
         </S.NavLinkNotSignedIn>
 
         <S.NavLinkNotSignedIn
-          to={isSignedIn ? '/giveaway' : '#'}
+          isSignedIn={isSignedIn}
           active={currentPath === '/giveaway'}
-          isSignedIn={isSignedIn}
         >
-          <Box alignItems="center" gap="5px">
-            <FaPlus size={ICON_SIZE} />
-            <p>Upload</p>
-          </Box>
+          <Link to={isSignedIn ? '/giveaway' : '#'}>
+            <Box alignItems="center" gap="5px">
+              <FaPlus size={ICON_SIZE} />
+              <p>Upload</p>
+            </Box>
+          </Link>
         </S.NavLinkNotSignedIn>
 
         <S.NavLinkNotSignedIn
-          to={isSignedIn ? '/chat' : '#'}
-          active={currentPath === '/chat'}
           isSignedIn={isSignedIn}
+          active={currentPath === '/chat'}
         >
-          <Box alignItems="center" gap="5px">
-            <S.ChatIcon>
-              <FaComment size={ICON_SIZE} />
-              <S.Notification>3+</S.Notification>
-            </S.ChatIcon>
-            <p>Messages</p>
-          </Box>
+          <Link to={isSignedIn ? '/chat' : '#'}>
+            <Box alignItems="center" gap="5px">
+              <S.ChatIcon>
+                <FaComment size={ICON_SIZE} />
+                <S.Notification>3</S.Notification>
+              </S.ChatIcon>
+              <p>Messages</p>
+            </Box>
+          </Link>
         </S.NavLinkNotSignedIn>
 
         <S.NavLink
-          to={isSignedIn ? '/account' : '/signin'}
-          active={currentPath === '/account'}
+          active={currentPath === '/account' || currentPath === '/signin'}
         >
-          <Box alignItems="center" gap="5px">
-            <FaUser size={ICON_SIZE} />
-            <p>{isSignedIn ? 'Account' : 'Sign In'}</p>
-          </Box>
+          <Link to={isSignedIn ? '/account' : '/signin'}>
+            <Box alignItems="center" gap="5px">
+              <FaUser size={ICON_SIZE} />
+              <p>{isSignedIn ? 'Account' : 'Sign In'}</p>
+            </Box>
+          </Link>
         </S.NavLink>
       </Box>
     </S.NavbarStyle>
