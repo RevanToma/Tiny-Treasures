@@ -1,23 +1,24 @@
-import styled from 'styled-components';
-import Box from '../Box/Box';
-import { theme } from '../../../styles/themes';
+import styled from 'styled-components'
+import Box from '../Box/Box'
+import { theme } from '../../../styles/themes'
 
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
-`;
+`
 
 export const ImageBox = styled.div`
   width: 100%;
 
   img {
     object-fit: cover;
-    width: 100%;
+    max-width: 17rem;
+
     aspect-ratio: 1 / 1;
     border-radius: ${theme.radius.image};
   }
-`;
+`
 
 export const Wrapper = styled(Box)`
   position: relative;
@@ -46,4 +47,4 @@ export const Wrapper = styled(Box)`
     right: 0;
     margin: 1.5rem;
   }
-`;
+`

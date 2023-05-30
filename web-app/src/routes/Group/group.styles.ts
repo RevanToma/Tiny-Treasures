@@ -1,18 +1,18 @@
-import styled from "styled-components";
-import { theme } from "../../styles/themes";
+import styled from 'styled-components'
+import { theme } from '../../styles/themes'
 
 export const PostListContainer = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-`;
+`
 
 export const MainImg = styled.img`
   width: 100%;
-`;
+`
 
-export const SearchInput = styled.input``;
+export const SearchInput = styled.input``
 
 export const SearchWrapper = styled.div`
   display: flex;
@@ -48,4 +48,4 @@ export const SearchWrapper = styled.div`
     transform: translateX(-130%);
     margin: 1rem;
   }
-`;
+`

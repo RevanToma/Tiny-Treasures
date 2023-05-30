@@ -1,46 +1,46 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-import * as S from "./group.styles";
-import { useEffect, useRef } from "react";
-import Button from "../../components/common/Button/Button.component";
-import { ButtonType } from "../../components/common/Button/button.types";
-import PostList from "../../components/common/PostList/PostList.component";
-import { theme } from "../../styles/themes";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import FilterPopup from "./FilterPopup/FilterPopup.component";
+import * as S from './group.styles'
+import { useEffect, useRef } from 'react'
+import Button from '../../components/common/Button/Button.component'
+import { ButtonType } from '../../components/common/Button/button.types'
+import PostList from '../../components/common/PostList/PostList.component'
+import { theme } from '../../styles/themes'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import FilterPopup from './FilterPopup/FilterPopup.component'
 
-import { imgUrls } from "../../utils/urls/imgUrls";
+import { imgUrls } from '../../utils/urls/imgUrls'
 import {
   selectQuery,
   selectTempQueryData,
-} from "../../store/query/query.selectors";
-import { fetchPosts } from "../../api/requests";
+} from '../../store/query/query.selectors'
+import { fetchPosts } from '../../api/requests'
 import {
   initialQueryData,
   setQuery,
   setQueryData,
   setTempQueryData,
-} from "../../store/query/querySlice";
-import Box from "../../components/common/Box/Box";
-import { useEnums } from "../../hooks/useEnums";
-import GroupNavBar from "./GroupNavBar/GroupNavBar.component";
-import { goToGroupPage } from "../../utils/helpers";
-import LogoNavbar from "../../assets/LogoNavbar.svg";
-import { FaSearch } from "react-icons/fa";
+} from '../../store/query/querySlice'
+import Box from '../../components/common/Box/Box'
+import { useEnums } from '../../hooks/useEnums'
+import GroupNavBar from './GroupNavBar/GroupNavBar.component'
+import { goToGroupPage } from '../../utils/helpers'
+import LogoNavbar from '../../assets/LogoNavbar.svg'
+import { FaSearch } from 'react-icons/fa'
 const Group: React.FC = () => {
-  const { group } = useParams();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { group } = useParams()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const LoadMoreButton = useRef<HTMLDivElement>(null);
-  const [searchQuery, setSearchQuery] = useState<undefined | string>(undefined);
+  const LoadMoreButton = useRef<HTMLDivElement>(null)
+  const [searchQuery, setSearchQuery] = useState<undefined | string>(undefined)
 
-  const [isFitlerPopupOpen, setIsFilterPopupOpen] = useState<boolean>(false);
-  const tempQueryData = useSelector(selectTempQueryData);
-  const query = useSelector(selectQuery);
-  const { data: enums } = useEnums();
+  const [isFitlerPopupOpen, setIsFilterPopupOpen] = useState<boolean>(false)
+  const tempQueryData = useSelector(selectTempQueryData)
+  const query = useSelector(selectQuery)
+  const { data: enums } = useEnums()
 
   const {
     data,
@@ -52,89 +52,89 @@ const Group: React.FC = () => {
     isFetchingNextPage,
     refetch: refetchPosts,
   } = useInfiniteQuery({
-    queryKey: ["posts", query],
+    queryKey: ['posts', query],
     queryFn: ({ pageParam }) => fetchPosts({ pageParam, query, searchQuery }),
     getNextPageParam: (lastPage) => {
-      if (!lastPage) return undefined;
-      const nextPage = lastPage.metadata.nextPage;
-      const totalPages = lastPage.metadata.totalPages;
+      if (!lastPage) return undefined
+      const nextPage = lastPage.metadata.nextPage
+      const totalPages = lastPage.metadata.totalPages
 
-      return nextPage <= totalPages ? nextPage : undefined;
+      return nextPage <= totalPages ? nextPage : undefined
     },
     staleTime: 3 * 60 * 1000,
     enabled: !!query,
-  });
+  })
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          fetchNextPage();
+          fetchNextPage()
         }
       },
       { threshold: 1 }
-    );
+    )
 
     if (LoadMoreButton.current) {
-      observer.observe(LoadMoreButton.current);
+      observer.observe(LoadMoreButton.current)
     }
 
-    return () => observer.disconnect();
-  }, [LoadMoreButton.current]);
+    return () => observer.disconnect()
+  }, [LoadMoreButton.current])
 
   const getFilterResults = () => {
-    const typeOfItemsString = tempQueryData.TypeOfItems.join(",");
-    const sizesString = tempQueryData.Sizes.join(",");
-    const ageString = tempQueryData.Age.join(",");
+    const typeOfItemsString = tempQueryData.TypeOfItems.join(',')
+    const sizesString = tempQueryData.Sizes.join(',')
+    const ageString = tempQueryData.Age.join(',')
     const sortString =
-      tempQueryData.Sort[0] === "Most Recent"
-        ? "-createdAt"
-        : tempQueryData.Sort[0] === "Distance"
-        ? "distance"
-        : "";
+      tempQueryData.Sort[0] === 'Most Recent'
+        ? '-createdAt'
+        : tempQueryData.Sort[0] === 'Distance'
+        ? 'distance'
+        : ''
 
-    let newQuery = `group=${group}`;
+    let newQuery = `group=${group}`
 
     if (typeOfItemsString.length) {
-      newQuery += `&typeOfItems=${typeOfItemsString}`;
+      newQuery += `&typeOfItems=${typeOfItemsString}`
     }
 
     if (sizesString.length) {
-      newQuery += `&sizes=${sizesString}`;
+      newQuery += `&sizes=${sizesString}`
     }
 
     if (ageString.length) {
-      newQuery += `&age=${ageString}`;
+      newQuery += `&age=${ageString}`
     }
     if (sortString.length) {
-      newQuery += `&sort=${sortString}`;
+      newQuery += `&sort=${sortString}`
     }
 
-    dispatch(setQuery(newQuery));
-    dispatch(setQueryData(tempQueryData));
-    dispatch(setTempQueryData(initialQueryData));
-    setIsFilterPopupOpen(false);
-  };
+    dispatch(setQuery(newQuery))
+    dispatch(setQueryData(tempQueryData))
+    dispatch(setTempQueryData(initialQueryData))
+    setIsFilterPopupOpen(false)
+  }
 
   const handleCancelFiltering = () => {
-    dispatch(setTempQueryData(initialQueryData));
-    setIsFilterPopupOpen(false);
-  };
+    dispatch(setTempQueryData(initialQueryData))
+    setIsFilterPopupOpen(false)
+  }
 
   const handleSearch = () => {
-    refetchPosts();
-  };
+    refetchPosts()
+  }
 
   const handleChangeGroup = (item: string) => {
-    goToGroupPage(dispatch, navigate, item);
-  };
+    goToGroupPage(dispatch, navigate, item)
+  }
 
   const buttonType =
     isFetchingNextPage || isLoading
       ? ButtonType.SmallYellow
       : !hasNextPage || isFetchingNextPage
       ? ButtonType.Tertiary
-      : ButtonType.SmallGreen;
+      : ButtonType.SmallGreen
 
   return (
     <>
@@ -169,12 +169,7 @@ const Group: React.FC = () => {
             items={enums && enums.main}
             currentItem={group}
           />
-          <Box
-            width="100%"
-            objectFit="contain"
-            maxHeight="30rem"
-            justifyContent="center"
-          >
+          <Box objectFit="contain" maxHeight="30rem" justifyContent="center">
             <S.MainImg src={imgUrls.clothesMain} alt="Clothes" />
           </Box>
           <Box
@@ -203,10 +198,10 @@ const Group: React.FC = () => {
             <div ref={LoadMoreButton}>
               <Button buttonType={buttonType} onClick={() => fetchNextPage()}>
                 {isFetchingNextPage || isLoading
-                  ? "Loading more..."
+                  ? 'Loading more...'
                   : isError
-                  ? "Error!"
-                  : "No more posts!"}
+                  ? 'Error!'
+                  : 'No more posts!'}
               </Button>
               {error instanceof Error && <p> error.message</p>}
             </div>
@@ -214,7 +209,7 @@ const Group: React.FC = () => {
         </Box>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Group;
+export default Group
