@@ -34,9 +34,10 @@ Our project is an application developed as a part of our school project under th
 
 ## Contributors
 
-- [Revan Toma](https://github.com/RevanToma)
-- [Joar Taylor](https://github.com/JoarTaylor)
-- [Lukas Johansson](https://github.com/LukuxDev)
+- [Revan Toma (Fullstack dev)](https://github.com/RevanToma)
+- [Joar Taylor (Fullstack dev)](https://github.com/JoarTaylor)
+- [Lukas Johansson (Fullstack dev)](https://github.com/LukuxDev)
+- [Ryan Iguchi (Fullstack dev)](https://github.com/Ryiguchi)
 - [Omar Abubeker (Designer)](https://github.com/omarabubeker)
 - [Paul Evans (Designer)](https://github.com/PaulEvans78)
 - [Amir Ali (DevOps)](https://github.com/amirali108)
