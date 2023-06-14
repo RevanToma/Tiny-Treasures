@@ -1,4 +1,4 @@
-# ![Logo](./backend//public//photos/logo-1.png) Tiny-Tresures
+# ![Logo](./backend//public//photos/logo-1.png)
 
 Our project is an application developed as a part of our school project under the theme 'Green Tech'. Our group main idea is to allow people to give away children's items like clothes, toys, bikes, etc., that are no longer needed. The purpose of this project is not only to promote sustainability but also to assist families in need.
 
