@@ -1,16 +1,17 @@
-import { FC } from 'react';
-import { useSelector } from 'react-redux';
-import * as S from './checkboxList.styles';
-import { CheckboxSizes } from '../../../routes/Category/FilterPopup/FilterPopup.component';
-import { selectTempQueryData } from '../../../store/query/query.selectors';
-import Box from '../Box/Box';
+import { FC } from 'react'
+import * as S from './checkboxList.styles'
+import { CheckboxSizes } from '../../../routes/Group/FilterPopup/FilterPopup.component'
+
+import Box from '../Box/Box'
+import { getQueryDataName } from './checkboxList.helpers'
 
 interface CheckboxListProps {
-  label?: string;
-  name: string;
-  items: string[];
-  size: CheckboxSizes;
-  setOptions: (name: string, item: string, isChecked: boolean) => void;
+  label?: string
+  name: string
+  items: string[]
+  size: CheckboxSizes
+  getIsChecked: (name: string, item: string) => boolean
+  setOptions: (name: string, item: string, isChecked: boolean) => void
 }
 
 const CheckboxList: FC<CheckboxListProps> = ({
@@ -19,19 +20,10 @@ const CheckboxList: FC<CheckboxListProps> = ({
   items,
   setOptions,
   size,
+  getIsChecked,
 }) => {
-  const tempQueryData = useSelector(selectTempQueryData);
-
-  const getQueryDataName = () => {
-    return name.startsWith('Age') ? 'Age' : name;
-  };
-
   return (
-    <S.Wrapper
-      alignItems="center"
-      gap="3rem"
-      // padding="2rem"
-    >
+    <S.Wrapper alignItems="center" gap="3rem">
       <h2>{label}</h2>
       <Box
         display="grid"
@@ -43,20 +35,21 @@ const CheckboxList: FC<CheckboxListProps> = ({
         width="fit-content"
       >
         {items &&
-          items.map(item => (
+          items.map((item) => (
             <S.CheckboxContainer
               size={size}
               key={item}
-              selected={tempQueryData[getQueryDataName()].includes(item)}
+              selected={getIsChecked(name, item)}
             >
               <input
-                onChange={e =>
-                  setOptions(getQueryDataName(), item, e.target.checked)
+                onChange={(e) =>
+                  setOptions(getQueryDataName(name), item, e.target.checked)
                 }
                 key={item}
                 name={item}
                 type="checkbox"
-                checked={tempQueryData[getQueryDataName()].includes(item)}
+                checked={getIsChecked(name, item)}
+                // checked={tempQueryData[getQueryDataName()].includes(item)}
               />
 
               <p>{item}</p>
@@ -64,7 +57,7 @@ const CheckboxList: FC<CheckboxListProps> = ({
           ))}
       </Box>
     </S.Wrapper>
-  );
-};
+  )
+}
 
-export default CheckboxList;
+export default CheckboxList

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { IChatRoom } from "../../../types";
 import { useChats } from "../../../hooks/useChats";
 import * as S from "./styled";
@@ -7,7 +6,7 @@ import { setCurrentChatRoom } from "../../../store/user/userSlice";
 import Spinner from "../../common/spinner/spinner.component";
 import ChatListCard from "./ChatListCard/ChatListCard";
 import { useNavigate } from "react-router-dom";
-import { usePost } from "../../../hooks/usePost";
+import Box from "../../common/Box/Box";
 
 type ChatRoomListProps = {
   userId: string;
@@ -49,7 +48,12 @@ const ChatRoomList: React.FC<ChatRoomListProps> = ({ userId }) => {
     );
   });
 
-  return <S.ChatListContainer>{chatList}</S.ChatListContainer>;
+  return (
+    <Box width="100%" marginTop="20px">
+      <h1>Messages</h1>
+      <S.ChatListContainer>{chatList}</S.ChatListContainer>
+    </Box>
+  );
 };
 
 export default ChatRoomList;

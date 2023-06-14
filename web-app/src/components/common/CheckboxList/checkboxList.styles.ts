@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import { CheckboxSizes } from '../../../routes/Category/FilterPopup/FilterPopup.component';
-import Box from '../Box/Box';
+import styled from "styled-components";
+import { CheckboxSizes } from "../../../routes/Group/FilterPopup/FilterPopup.component";
+import Box from "../Box/Box";
 import {
   filterCheckboxLarge,
   filterCheckboxSmall,
   selectedStyle,
   theme,
-} from '../../../styles/themes';
+} from "../../../styles/themes";
 
 interface CheckboxContainerProps {
   size: CheckboxSizes;
@@ -15,7 +15,8 @@ interface CheckboxContainerProps {
 
 export const Wrapper = styled(Box)`
   h2 {
-    ${theme.type.h5}
+    ${theme.type.h6}
+    color: #646464
   }
 `;
 

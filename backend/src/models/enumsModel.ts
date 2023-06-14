@@ -15,5 +15,3 @@ const enumSchema = new mongoose.Schema<EnumDocument>({
 
 const Enum = mongoose.model<EnumDocument>('Enum', enumSchema);
 export default Enum;
-
-// enums: 6452654bfc9f011ef64dd9e1

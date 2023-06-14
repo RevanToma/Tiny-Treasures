@@ -4,7 +4,7 @@ import { fetchPostById } from '../api/requests';
 export const usePost = (id: string | undefined) => {
   return useQuery({
     queryFn: () => fetchPostById(id),
-    queryKey: [fetchPostById.name],
+    queryKey: ['post', id],
     enabled: !!id && id.length > 1,
   });
 };

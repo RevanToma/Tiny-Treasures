@@ -1,14 +1,23 @@
 import { NextFunction, Response } from 'express';
-import Post, { PostDocument, PostDocumentWithEnums } from '../models/postModel';
+import Post, {
+  IPostDocument,
+  IPostDocumentWithEnums,
+} from '../models/postModel';
 import { catchAsync } from '../utils/catchAsync';
 import { PostFeatures } from '../utils/apiFeatures';
 import { CustomRequest } from '../utils/expressInterfaces';
 import AppError from '../utils/appError';
-import { LocationData, NumberObject, StringObject } from '../utils/interfaces';
+import {
+  ILocationData,
+  INumberObject,
+  IPostReqBody,
+  IStringObject,
+} from '../utils/interfaces';
 import mongoose, { PipelineStage } from 'mongoose';
 import multer from 'multer';
 import sharp from 'sharp';
 import '../models/enumsModel';
+import User from '../models/userModel';
 
 // multer adds a body to the request object with the values of the form field.  If not using default FF, must create new form and all values on client side.
 // req.file will hold the file, req.body will hold the text fields
@@ -24,10 +33,10 @@ import '../models/enumsModel';
 // buffer	A Buffer of the entire file	MemoryStorage
 
 // where to store files.  Since we want to resize them, we save to buffer
-const multerStorage = multer.memoryStorage();
+const storage = multer.memoryStorage();
 // determins which files to save
-const multerFilter = (
-  req: CustomRequest,
+const fileFilter = (
+  req: CustomRequest<IPostReqBody>,
   file: Express.Multer.File,
   cb: multer.FileFilterCallback
 ): void => {
@@ -38,25 +47,25 @@ const multerFilter = (
   }
 };
 // can use a limit option to limit the data
-const multerLimits: NumberObject = {
+const limits: INumberObject = {
   fileSize: 4000000,
   files: 5,
-  fields: 10,
+  fields: 15,
   parts: 15,
   headerPairs: 100,
 };
 
 const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter,
-  limits: multerLimits,
+  storage,
+  fileFilter,
+  limits,
 });
 
-export const uploadPhotos = upload.array('photos', 5);
+export const uploadPhotos = upload.array('photos', 4);
 
 export const resizePhoto = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IPostReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
@@ -81,11 +90,11 @@ export const resizePhoto = catchAsync(
 
 export const getAllPosts = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const query: StringObject = req.query;
+    const query: IStringObject = req.query;
 
     const pipeline = new PostFeatures(query, req.user?.location)
       .distanceFrom()
@@ -95,7 +104,7 @@ export const getAllPosts = catchAsync(
       .limitFields()
       .countAndPaginate();
 
-    const posts: PostDocument[] = await Post.aggregate(pipeline.stages);
+    const posts: IPostDocument[] = await Post.aggregate(pipeline.stages);
 
     res.status(200).json({
       status: 'success',
@@ -109,24 +118,19 @@ export const getAllPosts = catchAsync(
 
 export const getPost = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<null>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     const { postId } = req.params;
 
-    // const location: LocationData | null = req.user.location;
-    console.log('POSTID', postId);
+    const location: ILocationData | null = req.user?.location;
 
-    const pipeline: PipelineStage[] = [
-      {
-        $match: { _id: new mongoose.Types.ObjectId(postId) },
-      },
-    ];
+    const query = { _id: postId };
 
-    //if (location) pipeline.unshift(distanceFrom(location));
+    const pipeline = new PostFeatures(query, location).distanceFrom().filter();
 
-    const post = await Post.aggregate(pipeline);
+    const post = await Post.aggregate(pipeline.stages);
 
     if (!post) {
       return next(new AppError('No post found!', 400));
@@ -141,52 +145,88 @@ export const getPost = catchAsync(
   }
 );
 
+const setImgUrls = (imgUrls: undefined | string | string[]): string[] => {
+  if (!imgUrls) {
+    return [];
+  } else if (typeof imgUrls === 'string') {
+    return [imgUrls];
+  } else {
+    return [...imgUrls];
+  }
+};
+
 export const createPost = catchAsync(
   async (
-    req: CustomRequest,
+    req: CustomRequest<IPostReqBody>,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    const images = req.filenames
-      ? [...req.filenames].map(fileName => `/photos/posts/${fileName}`)
+    const newImages = req.filenames
+      ? [...req.filenames].map(
+          fileName => `${process.env.BASE_URL}/photos/posts/${fileName}`
+        )
       : [];
+
+    const imgUrls = setImgUrls(req.body.imgUrls);
+
+    const images =
+      req.body.frontImageArray === 'imgUrls'
+        ? [...imgUrls, ...newImages]
+        : [...newImages, ...imgUrls];
 
     const itemCount = req.body.itemCount && parseInt(req.body.itemCount);
 
+    const { title, description, sizes, group, typeOfItems, condition, id } =
+      req.body;
+
     const postData = {
-      title: req.body.title,
-      description: req.body.description,
+      title,
+      description,
       itemCount,
-      size: req.body.size,
-      mainCategory: req.body.mainCategory,
-      subCategory: req.body.subCategory,
-      enums: req.body.enums,
-      condition: req.body.condition,
+      sizes,
+      group,
+      typeOfItems,
+      condition,
       images,
       user: req.user.id,
-      userName: req.body.name,
+      userName: req.user.name,
     };
-    const x = await new Post(postData).populate('enums');
 
-    const post: PostDocumentWithEnums = await new Post(postData).populate(
-      'enums'
-    );
+    let post;
+    if (id) {
+      console.log(333333333);
+      post = await Post.findByIdAndUpdate(id, postData).populate('enums');
+    } else {
+      console.log(4444444444);
+      post = await Post.create(postData);
+    }
+    console.log(5555555);
 
     if (!post) {
-      return next(new AppError('Unable to create post!', 400));
+      return next(new AppError('Unable to save post!', 400));
     }
-
-    if (post.enumsAreValid(post)) {
-      return next(new AppError('Invalid categories!', 400));
-    }
-
-    post.save();
 
     res.status(200).json({
       status: 'success',
       data: {
         data: post,
       },
+    });
+  }
+);
+
+export const deletePost = catchAsync(
+  async (req: CustomRequest<null>, res: Response, Next: NextFunction) => {
+    const id = req.params.postId;
+
+    const post = await Post.findByIdAndDelete(id);
+
+    if (!post) {
+      return new AppError('There was a problem deleting your post!', 400);
+    }
+
+    res.status(204).json({
+      status: 'success',
     });
   }
 );

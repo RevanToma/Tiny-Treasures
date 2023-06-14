@@ -16,6 +16,7 @@ type BoxProps = {
     | "center"
     | "space-between"
     | "space-around"
+    | "space-evenly"
     | "initial"
     | "inherit";
   flexWrap?: "wrap" | "nowrap" | "wrap-reverse";

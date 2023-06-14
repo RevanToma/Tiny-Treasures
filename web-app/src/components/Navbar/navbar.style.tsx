@@ -1,7 +1,10 @@
-import styled from "styled-components";
-import { theme } from "../../styles/themes";
-import { Link } from "react-router-dom";
+import styled from 'styled-components'
+import { theme } from '../../styles/themes'
 
+interface NavLinkProps {
+  active: boolean
+  isSignedIn?: boolean
+}
 export const NavbarStyle = styled.nav`
   width: 100%;
   padding: 12px;
@@ -9,30 +12,40 @@ export const NavbarStyle = styled.nav`
   background-color: #ffffff;
   box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px 10px 0px 0px;
-  font-family: Arial, Helvetica, sans-serif;
-`;
+`
 
-export const NavText = styled.p`
-  margin: 0;
-`;
+export const NavLink = styled.div<NavLinkProps>`
+  a {
+    color: ${({ active }) => (active ? theme.color.primary : '#505050')};
+    ${theme.type.navbarBold}
 
-export const NavLink = styled(Link)`
-  color: #505050;
-  text-decoration: none;
-  &:hover,
-  &:focus {
-    color: #141414;
+    &:hover,
+    &:focus {
+      color: ${theme.color.primary};
+    }
   }
-`;
+`
+
+export const NavLinkNotSignedIn = styled(NavLink)<NavLinkProps>`
+  a {
+    color: ${({ active }) => (active ? theme.color.primary : '')};
+    filter: ${({ isSignedIn }) => (isSignedIn ? '' : 'brightness(250%)')};
+
+    &:hover,
+    &:focus {
+      color: ${({ isSignedIn }) =>
+        isSignedIn ? theme.color.primary : '#505050'};
+    }
+  }
+`
 
 export const ChatIcon = styled.div`
   position: relative;
-`;
+`
 
 export const Notification = styled.div`
   color: white;
 
-  font-family: Arial, Helvetica, sans-serif;
   font-size: 12px;
   text-align: center;
   position: absolute;
@@ -42,4 +55,4 @@ export const Notification = styled.div`
   width: 16px;
   height: 16px;
   border-radius: 100%;
-`;
+`

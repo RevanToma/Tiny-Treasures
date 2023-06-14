@@ -1,8 +1,5 @@
-import React, { useRef, useEffect } from 'react';
 import Box from '../../components/common/Box/Box';
 import { Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectIsSignedIn } from '../../store/user/userSelectors';
 import Navbar from '../../components/Navbar/navbar.component';
 import styled from 'styled-components';
 
@@ -16,13 +13,12 @@ const PageStyle = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
+  background: #f5f5f5;
 `;
 
 type LayoutProps = Record<string, never>;
 
 const Layout: React.FC<LayoutProps> = () => {
-  const userSignedIn = useSelector(selectIsSignedIn);
-
   return (
     <LayoutStyle>
       <Box
@@ -32,16 +28,16 @@ const Layout: React.FC<LayoutProps> = () => {
         justifyContent="space-between"
         margin="0"
       >
-        <div style={{ width: "100%" }} id="chat-post-item-portal"></div>
+        <div style={{ width: '100%' }} id="chat-post-item-portal"></div>
         <PageStyle>
           <Box width="100%">
             <Outlet />
           </Box>
         </PageStyle>
-        <Box width="100%" padding="10px 15px">
-          <div style={{ width: "100%" }} id="chat-input-portal"></div>
+        <Box width="100%" padding="10px 15px" backgroundColor="#F5F5F5">
+          <div style={{ width: '100%' }} id="chat-input-portal"></div>
         </Box>
-        {userSignedIn && <Navbar />}
+        <Navbar />
       </Box>
     </LayoutStyle>
   );

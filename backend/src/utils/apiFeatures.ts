@@ -1,5 +1,5 @@
-import { PipelineStage } from 'mongoose';
-import { LocationData, StringObject } from './interfaces';
+import mongoose, { PipelineStage } from 'mongoose';
+import { ILocationData, IStringObject } from './interfaces';
 
 interface ProjectStage {
   $project: {
@@ -10,21 +10,28 @@ interface ProjectStage {
 export class PostFeatures {
   stages: PipelineStage[] = [];
   constructor(
-    public queryString: StringObject,
-    public userLocation: LocationData | null = null
+    public queryString: IStringObject,
+    public userLocation: ILocationData | null = null
   ) {}
 
   distanceFrom(): this {
-    if (!this.userLocation) return this;
-    const geoNearStage: PipelineStage.GeoNear = {
-      $geoNear: {
-        near: this.userLocation,
-        distanceField: 'distance',
-        spherical: true,
-        distanceMultiplier: 0.001,
+    if (!this.userLocation?.coordinates.length) return this;
+    const geoNearStages: PipelineStage[] = [
+      {
+        $geoNear: {
+          near: this.userLocation,
+          distanceField: 'distance',
+          spherical: true,
+          distanceMultiplier: 0.001,
+        },
       },
-    };
-    this.stages.push(geoNearStage);
+      {
+        $addFields: {
+          distance: { $round: ['$distance'] },
+        },
+      },
+    ];
+    this.stages.push(...geoNearStages);
     return this;
   }
 
@@ -35,7 +42,17 @@ export class PostFeatures {
 
     let matchStage: PipelineStage.Match = { $match: {} };
     Object.entries(queryObj).forEach(([key, value]) => {
-      matchStage.$match[key] = key === 'itemCount' ? Number(value) : value;
+      if (!value) return;
+      if (value.includes(',')) {
+        matchStage.$match[key] = { $in: value.split(',') };
+      } else {
+        matchStage.$match[key] =
+          key === 'itemCount'
+            ? Number(value)
+            : key === '_id'
+            ? new mongoose.Types.ObjectId(value)
+            : value;
+      }
     });
     this.stages.push(matchStage);
     return this;
@@ -65,7 +82,7 @@ export class PostFeatures {
     if (!this.queryString.search) return this;
 
     const term = this.queryString.search;
-
+    console.log('term', term);
     const matchStage = {
       $match: {
         $or: [
@@ -94,6 +111,7 @@ export class PostFeatures {
   };
 
   countAndPaginate(): this {
+    if (!this.queryString.page || !this.queryString.limit) return this;
     const page: number = parseInt(this.queryString.page) || 1;
     const limit: number = parseInt(this.queryString.limit) || 20;
     const skip = (page - 1) * limit;

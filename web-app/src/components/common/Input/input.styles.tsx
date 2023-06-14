@@ -1,11 +1,34 @@
-import styled from "styled-components";
-import { theme } from "../../../styles/themes";
+import styled, { css } from 'styled-components';
+import { theme } from '../../../styles/themes';
 
-export const StyledInput = styled.input`
+const commonStyles = css`
   width: 100%;
-  font-size: 1em;
   border-radius: ${theme.radius.button};
   border: 1px solid #b4b4b4;
-  padding: 7.5px;
   cursor: text;
+  box-shadow: ${theme.shadow};
+  ${theme.type.body}
+
+  &:hover {
+    outline: 1px solid ${theme.color.black};
+  }
+
+  &:active,
+  &:focus {
+    outline: 3px solid ${theme.color.primaryBlue};
+  }
+`;
+
+export const StyledInput = styled.input`
+  ${commonStyles}
+
+  padding: 0 1rem;
+  height: 4.5rem;
+`;
+
+export const StyledTextarea = styled.textarea`
+  ${commonStyles}
+
+  padding: 1rem;
+  height: 18rem;
 `;

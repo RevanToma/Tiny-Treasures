@@ -1,11 +1,7 @@
-import { signSuccess } from "../../store/user/userSlice";
+import { signInUser } from "../../store/user/userSlice";
 import { useState } from "react";
 import { useAppDispatch } from "../../hooks/useDispatch";
-import { useMutation } from "@tanstack/react-query";
-import { ApiPostSignInUser } from "../../api/requests";
-import { AxiosError } from "axios";
-import type { IUser } from "../../types";
-import Spinner from "../../components/common/spinner/spinner.component";
+
 import Logo from "../../assets/logo.svg";
 import Input from "../../components/common/Input/input.component";
 import { InputType } from "../../components/common/Input/input.types";
@@ -17,44 +13,50 @@ import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { SignUpFooter } from "../signUp/SignUp.styles";
 import { ButtonType } from "../../components/common/Button/button.types";
+import Spinner from "../../components/common/spinner/spinner.component";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setIsLoading] = useState(false);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const signInWithEmailMutation = useMutation({
-    mutationFn: ApiPostSignInUser,
-  });
-
-  const signIn = (e: React.FormEvent<HTMLFormElement>) => {
+  const signIn = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    signInWithEmailMutation.mutate(
-      { email, password },
-      {
-        onSuccess: (data: IUser) => {
-          dispatch(signSuccess(data));
-          document.cookie = `jwt=${data.token}`;
-          navigate("/");
-        },
-        onError: (error) => {
-          if (error instanceof AxiosError) alert(error.message);
-        },
-      }
-    );
+
+    if (!password) {
+      alert("Please type in your Password");
+      return;
+    }
+    if (!email) {
+      alert("Please type in your Email");
+      return;
+    }
+    setIsLoading(true);
+    const action = await dispatch(signInUser({ email, password }));
+
+    if (signInUser.rejected.match(action)) {
+      setIsLoading(false);
+      alert("Sign-in failed. Please check your credentials.");
+      return;
+    }
+
+    navigate("/");
   };
   return (
     <div>
-      {signInWithEmailMutation.isLoading ? (
+      {loading ? (
         <Spinner />
       ) : (
         <Box width="80%" margin="auto" gap="3rem">
           <img src={Logo} alt="Tiny Treasures Logo" />
           <S.TextContainer>
-            <Box>
-              <p>Log in or create an account to exchange items for free.</p>
-            </Box>
+            <p>Log in or create an account to exchange items for free.</p>
+          </S.TextContainer>
+          <S.TextContainer>
+            <h5>Log in</h5>
           </S.TextContainer>
           <form onSubmit={signIn}>
             <Box gap="20px">
@@ -72,7 +74,7 @@ const SignIn: React.FC = () => {
             </Box>
 
             <S.TextContainer>
-              <p>Forgot your password?</p>
+              <a>Forgot your aassword?</a>
             </S.TextContainer>
             <Box gap="2rem">
               <Button buttonType={ButtonType.SignIn}>Sign In</Button>
@@ -82,18 +84,16 @@ const SignIn: React.FC = () => {
               >
                 Sign Up
               </Button>
-              <S.TextContainer>
-                <p>or</p>
-              </S.TextContainer>
+              <p>or</p>
             </Box>
           </form>
+          <a href="http://127.0.0.1:8000/auth/google">
+            <S.GoogleButton buttonType={ButtonType.Google}>
+              <FcGoogle size={32} />
+              Continue with Google
+            </S.GoogleButton>
+          </a>
           <SignUpFooter>
-            <a href="http://localhost:8000/auth/google">
-              <S.GoogleButton buttonType={ButtonType.Secondary}>
-                <FcGoogle size={32} />
-                Continue with Google
-              </S.GoogleButton>
-            </a>
             <span>Support</span>
             <span>How it Works</span>
             <span>Reviews</span>

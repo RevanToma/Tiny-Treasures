@@ -1,16 +1,17 @@
 import { FC } from 'react';
 
-import CategorySlider from './CategorySlider/CategorySlider.component';
+import GroupSlider from './GroupSlider/GroupSlider.component';
 
 import * as S from './home.styles';
 import Divider from '../../components/common/Divider/Divider.component';
 import Box from '../../components/common/Box/Box';
 import { queryClient } from '../../main';
-import { Enum } from '../../types';
+import { IEnum } from '../../types';
 import { imgUrls } from '../../utils/urls/imgUrls';
+import IntroSlides from '../../components/IntroSlides/IntroSlides';
 
 const Home: FC = () => {
-  const enums: Enum | undefined = queryClient.getQueryData(['enums']);
+  const enums: IEnum | undefined = queryClient.getQueryData(['enums']);
 
   return (
     <Box gap="2.4rem">
@@ -21,15 +22,12 @@ const Home: FC = () => {
           <p>"Swap online! Sustainable exchange for a greater future!"</p>
         </S.HeroTextBox>
       </Box>
+      <IntroSlides />
       <Box padding="0 3.2rem">
         {enums &&
-          enums.main.map((category, i, arr) => (
-            <Box key={category}>
-              <CategorySlider
-                key={category}
-                category={category}
-                enums={enums}
-              />
+          enums.main.map((group, i, arr) => (
+            <Box key={group}>
+              <GroupSlider key={group} group={group} enums={enums} />
               {i < arr.length - 1 && <Divider />}
             </Box>
           ))}

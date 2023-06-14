@@ -1,26 +1,28 @@
-import React from "react";
-import Box from "../../common/Box/Box";
-import { Post } from "../../../types";
-import * as S from "./styled";
-import { ButtonType } from "../../common/Button/button.types";
-import Button from "../../common/Button/Button.component";
-import { theme } from "../../../styles/themes";
+import React from 'react'
+import Box from '../../common/Box/Box'
+import { IPost } from '../../../types'
+import * as S from './styled'
+import { ButtonType } from '../../common/Button/button.types'
+import Button from '../../common/Button/Button.component'
+import { theme } from '../../../styles/themes'
 
 type ChatPostItemProps = {
-  post: Post;
-  navigateToPost: () => void;
-};
+  post: IPost
+  navigateToPost: () => void
+}
 
 const ChatPostItem: React.FC<ChatPostItemProps> = ({
   post,
   navigateToPost,
 }) => {
   const handleTrade = () => {
-    console.log("trade");
-  };
+    console.log('trade')
+  }
+  console.log(post)
   return (
     <Box width="100%" boxShadow={theme.shadow} padding="30px" gap="20px">
-      <h4>userName</h4>
+      <h4>{post.userName}</h4>
+
       <Box
         width="100%"
         gap="20px"
@@ -38,7 +40,7 @@ const ChatPostItem: React.FC<ChatPostItemProps> = ({
         </Button>
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default ChatPostItem;
+export default ChatPostItem

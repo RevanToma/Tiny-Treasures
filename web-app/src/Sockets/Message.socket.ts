@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import { baseUrl } from "../utils/urls/serverUrls";
 
 export class Socket {
   private static instance: Socket;
@@ -7,7 +8,7 @@ export class Socket {
 
   private constructor(userId: string) {
     console.log("CONNECTING TO SOCKET");
-    this.socketIO = io("http://localhost:8000", {
+    this.socketIO = io(baseUrl, {
       query: {
         userId,
       },

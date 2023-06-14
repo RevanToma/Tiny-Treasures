@@ -1,13 +1,13 @@
 'use strict';
 
-import { Sizes } from '../models/postModel';
-import { Point } from '../utils/interfaces';
+import { ESizes } from '../models/postModel';
+import { EPoint } from '../utils/interfaces';
 
 interface PostData {
   title: string;
   description: string;
-  mainCategory: string | null;
-  subCategories: string[] | null;
+  group: string | null;
+  typeOfItems: string[] | null;
   itemCount: number;
   condition: string;
   createdAt: Date;
@@ -156,7 +156,7 @@ function getRandomNumber() {
 }
 
 function getRandomSize(): string {
-  const sizes = Object.values(Sizes); // Get an array of all the size values
+  const sizes: string[] = Object.values(ESizes); // Get an array of all the size values
   const randomIndex = Math.floor(Math.random() * sizes.length); // Get a random index in the array
   return sizes[randomIndex]; // Return the size at the random index
 }
@@ -176,7 +176,6 @@ function getRandomUser(): string {
     '645cf8d9057875b7c81ffd08',
     '645e67da61a101be69c00017',
     '645e68b061a101be69c0001a',
-    '645e7ad0b490c479f8416795',
   ];
   const randomIndex = Math.floor(Math.random() * users.length); // Get a random index in the array
   return users[randomIndex]; // Return the size at the random index
@@ -231,8 +230,8 @@ const createPostost = (id: number) => {
   const post: PostData = {
     title: getRandomTitle(),
     description: getRandomDescription(),
-    mainCategory: item[0],
-    subCategories: item[1] ? [item[1]] : [],
+    group: item[0],
+    typeOfItems: item[1] ? [item[1]] : [],
     itemCount: getRandomNumber(),
     condition: getRandomCondition(),
     createdAt: getRandomDate(),
@@ -240,7 +239,7 @@ const createPostost = (id: number) => {
     user: getRandomUser(),
     // user: '6457cd486cd32551062a6ca2',
     location: {
-      type: Point.Point,
+      type: EPoint.Point,
       coordinates: getRandomCoordinatesInSweden(),
     },
   };

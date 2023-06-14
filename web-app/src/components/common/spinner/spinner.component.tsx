@@ -1,9 +1,14 @@
-import { SpinnerContainer, StyledSpinner } from './spinner.styles';
+import { SpinnerContainer } from './spinner.styles';
+import { FC } from 'react';
 
-const Spinner = () => {
+interface ISpinnerProps {
+  size?: 'default' | 'large';
+}
+
+const Spinner: FC<ISpinnerProps> = ({ size = 'default' }) => {
   return (
-    <SpinnerContainer role="alert">
-      <StyledSpinner />
+    <SpinnerContainer size={size} role="alert">
+      <div />
     </SpinnerContainer>
   );
 };

@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import Box from '../Box/Box';
 import PostCardMedium from '../PostCardMedium/PostCardMedium.component';
-import { Post } from '../../../types';
+import { IPost } from '../../../types';
 
 interface PostListProps {
-  posts: Post[];
+  posts: IPost[];
 }
 
 const PostList: FC<PostListProps> = ({ posts }) => {

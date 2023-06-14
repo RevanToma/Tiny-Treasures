@@ -1,0 +1,21 @@
+{
+  "name": "tiny-treasures",
+  "version": "1.0.0",
+  "description": "Green Tech is a web-based application that allows users to borrow things from people who don't need them instead of buying them, for a better environment.",
+  "main": "index.js",
+  "scripts": {
+    "start:server": "npm start --prefix backend",
+    "start:client": "npm run dev --prefix web-app",
+    "start": "concurrently npm:start:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RevanToma/Tiny-Treasures.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RevanToma/Tiny-Treasures/issues"
+  },
+  "homepage": "https://github.com/RevanToma/Tiny-Treasures#readme"
+}

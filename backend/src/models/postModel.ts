@@ -2,15 +2,16 @@ import mongoose from 'mongoose';
 import User from './userModel';
 import AppError from '../utils/appError';
 import { EnumDocument } from './enumsModel';
+import { ILocationData } from '../utils/interfaces';
 
-export enum Condition {
-  Used = 'used',
-  Fair = 'fair',
-  Good = 'good',
-  New = 'new',
+export enum ECondition {
+  Used = 'Used',
+  Fair = 'Fair',
+  Good = 'Good',
+  New = 'New',
 }
 
-export enum Sizes {
+export enum ESizes {
   A = '44',
   B = '50/56',
   C = '62/68',
@@ -23,7 +24,7 @@ export enum Sizes {
   J = '146/152',
 }
 
-enum Ages {
+enum EAges {
   A = '0-3',
   B = '4-7',
   C = '8-11',
@@ -33,31 +34,29 @@ export interface PostDocumentWithoutEnum extends mongoose.Document {
   title: string;
   description: string;
   itemCount: number;
-  sizes?: Sizes[];
-  age: Ages;
-  mainCategory: string;
-  subCategories: string[];
-  condition: Condition;
+  sizes?: ESizes[];
+  age: EAges;
+  group: string;
+  typeOfItems: string[];
+  condition: ECondition;
   createdAt: Date;
   images: string[];
   user: mongoose.Schema.Types.ObjectId;
   userName: string;
-  location: {
-    type: string;
-    coordinates: [number, number];
-  };
-  enumsAreValid: (post: PostDocumentWithEnums) => boolean;
+  location: ILocationData;
+  id: string;
+  enumsAreValid: (post: IPostDocumentWithEnums) => boolean;
 }
 
-export interface PostDocument extends PostDocumentWithoutEnum {
+export interface IPostDocument extends PostDocumentWithoutEnum {
   enums: mongoose.Schema.Types.ObjectId;
 }
 
-export interface PostDocumentWithEnums extends PostDocumentWithoutEnum {
+export interface IPostDocumentWithEnums extends PostDocumentWithoutEnum {
   enums: EnumDocument;
 }
 
-const postSchema = new mongoose.Schema<PostDocument>(
+const postSchema = new mongoose.Schema<IPostDocument>(
   {
     title: String,
     description: {
@@ -76,21 +75,21 @@ const postSchema = new mongoose.Schema<PostDocument>(
     enums: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Enum',
-      default: '6452654bfc9f011ef64dd9e1',
+      default: '645369da6fea72cad0792cbd',
     },
-    mainCategory: String,
-    subCategories: [String],
+    group: String,
+    typeOfItems: [String],
     sizes: {
       type: [String],
-      enum: Sizes,
+      enum: ESizes,
     },
     age: {
       type: String,
-      enum: Ages,
+      enum: EAges,
     },
     condition: {
       type: String,
-      enum: Condition,
+      enum: ECondition,
       required: [true, 'Please provide a condition.'],
     },
     createdAt: {
@@ -113,7 +112,9 @@ const postSchema = new mongoose.Schema<PostDocument>(
         enum: ['Point'],
       },
       coordinates: [Number],
+      city: String,
     },
+    id: String,
   },
   {
     toJSON: { virtuals: true },
@@ -121,7 +122,7 @@ const postSchema = new mongoose.Schema<PostDocument>(
   }
 );
 
-postSchema.index({ mainCategory: 1, age: 1 });
+postSchema.index({ typeOfItems: 1, age: 1 });
 
 postSchema.index({ location: '2dsphere' });
 
@@ -132,6 +133,11 @@ postSchema.pre('save', async function (next) {
   }
   this.location = user.location;
 
+  next();
+});
+
+postSchema.pre('save', async function (next) {
+  this.id = this._id;
   next();
 });
 
@@ -163,17 +169,17 @@ postSchema.pre('save', async function (next) {
 //   next();
 // });
 
-postSchema.methods.enumsAreValid = function (post: PostDocumentWithEnums) {
-  const { mainCategory, subCategories } = post;
+postSchema.methods.enumsAreValid = function (post: IPostDocumentWithEnums) {
+  const { group, typeOfItems } = post;
   const { main } = post.enums;
 
   return (
-    main.includes(mainCategory) &&
-    subCategories.reduce((acc, cur) => {
-      return post.enums[mainCategory].includes(cur) ? acc : false;
+    main.includes(group) &&
+    typeOfItems.reduce((acc, cur) => {
+      return post.enums[group].includes(cur) ? acc : false;
     }, true)
   );
 };
 
-const Post = mongoose.model<PostDocument>('Post', postSchema);
+const Post = mongoose.model<IPostDocument>('Post', postSchema);
 export default Post;

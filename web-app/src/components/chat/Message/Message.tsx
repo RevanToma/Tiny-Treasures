@@ -27,14 +27,16 @@ const Message: React.FC<MessageProps> = ({
 
   const firstDateOfDay = firstOfDay ? getFullDate(dateString) : "";
 
+  const sentByMe = user._id === senderId
+
   return (
     <Box width="100%">
       <S.DateText>
         {messageSentTodayAndFirst ? "Today" : firstDateOfDay}
       </S.DateText>
-      <S.MessageContainer sentByMe={user._id === senderId} key={_id}>
+      <S.MessageContainer sentByMe={sentByMe} key={_id}>
         <S.Text>{text}</S.Text>
-        <S.Time>{getHoursAndMinutes(dateString)}</S.Time>
+        <S.Time sentByMe={sentByMe}>{getHoursAndMinutes(dateString)}</S.Time>
       </S.MessageContainer>
     </Box>
   );
