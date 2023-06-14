@@ -2,6 +2,10 @@
 
 Our project is an application developed as a part of our school project under the theme 'Green Tech'. Our group main idea is to allow people to give away children's items like clothes, toys, bikes, etc., that are no longer needed. The purpose of this project is not only to promote sustainability but also to assist families in need.
 
+## Project Status:
+
+Please note that this application is not yet complete. For instance, the trading functionality has not been implemented and the toasts, which would display success, error, or warning messages, have not been added. The team has decided to temporarily halt development on this project in order to expand our knowledge by learning more about databases and other related topics. We might return to this project in the future to add more features and improvements.
+
 ## Project Features
 
 - User Authentication (Sign-in/Sign-up or Google Sign-in)
