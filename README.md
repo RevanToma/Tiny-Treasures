@@ -31,6 +31,7 @@ Our project is an application developed as a part of our school project under th
 - MongoDB
 - Mongoose
 - Passport.js
+- Socket.IO
 
 ## Contributors
 
