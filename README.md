@@ -1,9 +1,42 @@
-# Tiny Treasures
+# ![Logo](./backend//public//photos/logo-1.png) Tiny-Tresures
 
-### Description
+Our project is an application developed as a part of our school project under the theme 'Green Tech'. Our group main idea is to allow people to give away children's items like clothes, toys, bikes, etc., that are no longer needed. The purpose of this project is not only to promote sustainability but also to assist families in need.
 
-Green Tech is a web-based application that allows users to borrow things from people who don't need them instead of buying them, for a better environment.
+## Project Features
 
-https://github.com/RevanToma/Tiny-Treasures
+- User Authentication (Sign-in/Sign-up or Google Sign-in)
+- Browse items uploaded by other users
+- Add items to favorites
+- Upload items for giveaway
+- Private messaging
+- User account settings (change name, email, password, add location, view your uploaded items)
+- Categories for items (clothes, toys, others)
+- Search and filter items by various parameters
+- Sort results by distance or the most recent upload
 
-Made by: Ryan Iguchi, Omar Abubeker, Paul Evans, Revan Toma, Joar Taylor, Lukas Johansson, Amirali Fatehi
+## Tech Stack
+
+### Frontend
+
+- React
+- TypeScript
+- Redux
+- Styled-components
+- Vite
+
+### Backend
+
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- Passport.js
+
+## Contributors
+
+- [Revan Toma](https://github.com/RevanToma)
+- [Joar Taylor](https://github.com/JoarTaylor)
+- [Lukas Johansson](https://github.com/LukuxDev)
+- [Omar Abubeker (Designer)](https://github.com/omarabubeker)
+- [Paul Evans (Designer)](https://github.com/PaulEvans78)
+- [Amir Ali (DevOps)](https://github.com/amirali108)
