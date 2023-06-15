@@ -45,4 +45,4 @@ Please note that this application is not yet complete. For instance, the trading
 - [Ryan Iguchi (Fullstack dev)](https://github.com/Ryiguchi)
 - [Omar Abubeker (Designer)](https://github.com/omarabubeker)
 - [Paul Evans (Designer)](https://github.com/PaulEvans78)
-- [Amir Ali (DevOps)](https://github.com/amirali108)
+- [Amirali Fatehi (DevOps)](https://github.com/amirali108)
